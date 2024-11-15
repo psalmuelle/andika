@@ -34,75 +34,129 @@ const projectTypes = [
 
 export default function CreateProjectPage() {
   const [selectedService, setSelectedService] = useState<String>("");
+  const [step, setStep] = useState<number>(0);
+
   return (
-    <div className="mt-6 px-[3%]">
+    <div className="mt-6 px-[3%] pb-6">
       <div className="text-center">
-        <h1 className="text-base font-semibold">Submit your request</h1>
-        <p>We are here to help </p>
+        <h1 className="text-base font-semibold">
+          Make Request for your technical writings
+        </h1>
+        <p className="mx-auto max-w-xl">
+          We'll ask a little question and everything is going to be okay!
+        </p>
       </div>
 
-      <Card className="mx-auto mt-12 max-w-lg">
-        <CardHeader>
-          <CardTitle className="text-center">
-            Select your desired service
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="grid grid-cols-2 gap-4">
-          {projectTypes.map((projectType) => (
-            <div
-              key={projectType.title}
-              className={`w-full cursor-pointer rounded-md p-2 hover:bg-accent-foreground hover:text-white ${selectedService === projectType.title ? "bg-accent-foreground text-white" : "bg-accent"}`}
-              onClick={() => setSelectedService(projectType.title)}
+      {step === 0 && (
+        <Card className="mx-auto my-12 max-w-lg">
+          <CardHeader>
+            <CardTitle className="text-center">
+              Select your desired service
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="grid grid-cols-2 gap-4">
+            {projectTypes.map((projectType) => (
+              <div
+                key={projectType.title}
+                className={`w-full cursor-pointer rounded-md p-2 hover:bg-accent-foreground hover:text-white ${selectedService === projectType.title ? "bg-accent-foreground text-white" : "bg-accent"}`}
+                onClick={() => setSelectedService(projectType.title)}
+              >
+                <h2 className="mb-2 font-medium">{projectType.title}</h2>
+                <p>{projectType.description}</p>
+              </div>
+            ))}
+          </CardContent>
+          <CardFooter>
+            <Button
+              onClick={() => setStep(1)}
+              className="w-full"
+              disabled={selectedService.length <= 1}
             >
-              <h2 className="mb-2 font-medium">{projectType.title}</h2>
-              <p>{projectType.description}</p>
-            </div>
-          ))}
-        </CardContent>
-        <CardFooter>
-          <Button className="w-full" disabled={selectedService.length <= 1}>
-            Continue
-          </Button>
-        </CardFooter>
-      </Card>
+              Continue
+            </Button>
+          </CardFooter>
+        </Card>
+      )}
 
-      <Card className="mx-auto mt-12 max-w-lg">
-        <CardHeader>
-          <CardTitle className="text-center">Technical Articles</CardTitle>
-        </CardHeader>
-        <CardContent className="">
-          <RequestArticleForm />
-        </CardContent>
-      </Card>
+      {step == 1 && selectedService === "Technical Articles" && (
+        <Card className="mx-auto my-12 max-w-lg">
+          <CardHeader className="flex flex-row items-center gap-3">
+            <Button
+              size={"sm"}
+              variant={"secondary"}
+              onClick={() => setStep(0)}
+            >
+              Back
+            </Button>
+            <CardTitle className="-ml-6 w-full text-center">
+              Technical Articles
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="mt-4">
+            <RequestArticleForm />
+          </CardContent>
+        </Card>
+      )}
 
-      <Card className="mx-auto mt-12 max-w-lg">
-        <CardHeader>
-          <CardTitle className="text-center">API/SDK Documentation</CardTitle>
-        </CardHeader>
-        <CardContent className="">
-          <RequestApiDocForm />
-        </CardContent>
-      </Card>
+      {step == 1 && selectedService === "API/SDK Documentation" && (
+        <Card className="mx-auto my-12 max-w-lg">
+          <CardHeader className="flex flex-row items-center gap-3">
+            <Button
+              size={"sm"}
+              variant={"secondary"}
+              onClick={() => setStep(0)}
+            >
+              Back
+            </Button>
+            <CardTitle className="-ml-6 w-full text-center">
+              API/SDK Documentation
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="mt-4">
+            <RequestApiDocForm />
+          </CardContent>
+        </Card>
+      )}
 
-      <Card className="mx-auto mt-12 max-w-lg">
-        <CardHeader>
-          <CardTitle className="text-center">Whitepaper</CardTitle>
-        </CardHeader>
-        <CardContent className="">
-          <RequestWhitepaperForm />
-        </CardContent>
-      </Card>
+      {step == 1 && selectedService === "Whitepapers" && (
+        <Card className="mx-auto my-12 max-w-lg">
+          <CardHeader className="flex flex-row items-center gap-3">
+            <Button
+              size={"sm"}
+              variant={"secondary"}
+              onClick={() => setStep(0)}
+            >
+              Back
+            </Button>
+            <CardTitle className="-ml-6 w-full text-center">
+              Whitepaper
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="mt-4">
+            <RequestWhitepaperForm />
+          </CardContent>
+        </Card>
+      )}
 
-      <Card className="mx-auto mt-12 max-w-lg">
-        <CardHeader>
-          <CardTitle className="text-center">
-            Editing and Proofreading
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="">
-          <RequestEditingForm />
-        </CardContent>
-      </Card>
+      {step == 1 && selectedService === "Editing and Proofreading" && (
+        <Card className="mx-auto my-12 max-w-lg">
+          <CardHeader className="flex flex-row items-center gap-3">
+            <Button
+              size={"sm"}
+              variant={"secondary"}
+              onClick={() => setStep(0)}
+            >
+              Back
+            </Button>
+            <CardTitle className="-ml-6 w-full text-center">
+              Editing and Proofreading
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="mt-4">
+            <RequestEditingForm />
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

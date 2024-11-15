@@ -15,10 +15,9 @@ import { z } from "zod";
 import { Upload, type UploadProps } from "antd";
 import { Textarea } from "@/components/ui/textarea";
 import { InboxIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
+
 const { Dragger } = Upload;
 
-const fileSchema = z.instanceof(File);
 
 const formSchema = z.object({
   usefulLinks: z.string(),
@@ -41,10 +40,11 @@ export default function RequestEditingForm() {
     name: "file",
     accept: ".doc,.docx,.xml,.pdf,.txt,.md",
     multiple: true,
+    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
     onChange(info) {
-      const main = info.fileList.map((file) => file.originFileObj)
-        console.log(info)
-    }
+      const main = info.fileList.map((file) => file.originFileObj);
+      console.log(info);
+    },
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
@@ -61,7 +61,7 @@ export default function RequestEditingForm() {
               <FormLabel>Upload Writeups/Drafts</FormLabel>
               <div className="my-4" />
               <FormControl>
-                {/* <Dragger onChange={field.onChange} {...uploadProps}>
+                <Dragger onChange={field.onChange} {...uploadProps}>
                   <p className="ant-upload-drag-icon">
                     <InboxIcon size={36} className="mx-auto" />
                   </p>
@@ -72,8 +72,7 @@ export default function RequestEditingForm() {
                     You can upload multiple files of writeups and articles here.
                     Note that the files can only be .md, .txt or .doc formats.
                   </p>
-                </Dragger> */}
-                <Input type="file" {...field} />
+                </Dragger>
               </FormControl>
               <FormMessage />
             </FormItem>
