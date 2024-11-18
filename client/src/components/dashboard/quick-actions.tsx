@@ -7,32 +7,36 @@ import { Button } from "../ui/button";
 type QuickActionProps = {
   title: string;
   description: string;
-  imageSrc: string;
+  startingPrice: number;
+  icon: React.FC<React.SVGProps<SVGSVGElement>>;
   onClick: () => void;
 };
 
 const QuickAction = ({
   title,
   description,
-  imageSrc,
+  startingPrice,
+  icon,
   onClick,
 }: QuickActionProps) => {
+  const Icon = icon;
   return (
-    <div className="min-h-[180px] min-w-[225px] max-w-[225px] cursor-pointer rounded-xl border p-4 text-gray-600 hover:border-accent-foreground hover:text-gray-800 max-sm:max-w-full xl:min-w-[270px]">
-      <div className="flex items-center justify-between">
-        <Image
-          src={imageSrc}
-          alt="avatar"
-          width={40}
-          height={40}
-          className="mb-4 h-10 w-8"
-        />
-        <Button size={"sm"} variant={"secondary"} onClick={onClick}>
-          Request
-        </Button>
+    <div
+      onClick={onClick}
+      className="w-full max-w-[286px] cursor-pointer rounded-xl border p-4 shadow-sm hover:border-accent-foreground"
+    >
+      <div className="flex items-start gap-4">
+        <div className={`rounded-lg bg-secondary p-2.5`}>
+          <Icon className="h-5 w-5" />
+        </div>
+        <div>
+          <h3 className="font-medium">{title}</h3>
+          <p className="mt-1 text-sm">{description}</p>
+          <p className="mt-2 text-sm font-medium underline">
+            Starting from ${startingPrice}
+          </p>
+        </div>
       </div>
-      <h3 className="font-bold">{title}</h3>
-      <p className="mt-2">{description}</p>
     </div>
   );
 };
@@ -40,9 +44,9 @@ const QuickAction = ({
 export default function QuickActions() {
   const router = useRouter();
   return (
-    <Card>
+    <Card className="w-full max-w-[652px]">
       <CardTitle className="mt-8 px-4 text-sm font-medium">
-        Quick Actions
+        Our Services
       </CardTitle>
       <div className="p-4">
         <div className="mt-4 flex flex-wrap items-stretch justify-stretch gap-4 max-sm:justify-center">
@@ -51,9 +55,10 @@ export default function QuickActions() {
               <div className="p-1">
                 <QuickAction
                   key={index}
+                  startingPrice={action.startingPrice}
                   title={action.title}
+                  icon={action.icon}
                   description={action.description}
-                  imageSrc={action.imageSrc}
                   onClick={() => router.push(action.link)}
                 />
               </div>

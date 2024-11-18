@@ -12,7 +12,7 @@ export default function ArticleMetrics() {
   const [activeTab, setActiveTab] = useState(0);
 
   return (
-    <Card className="mt-6 w-full">
+    <Card className="mt-8 w-full">
       <div className="p-4">
         <CardTitle className="pt-4 text-sm font-medium">Projects</CardTitle>
         <div className="mt-4 rounded-xl border p-4">
@@ -40,7 +40,7 @@ export default function ArticleMetrics() {
               project(s)
             </p>
 
-            <p className="mb-2 mt-4 text-center text-3xl font-bold text-neutral-900">
+            <p className="mt-4 text-center text-3xl font-bold text-neutral-900">
               0
             </p>
           </div>

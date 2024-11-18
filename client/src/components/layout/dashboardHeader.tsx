@@ -23,7 +23,7 @@ export default function DashboardHeader() {
             </Badge>
           </Button>
         </div>
-        <Button className="block rounded-full" asChild>
+        <Button className="block rounded-xl" asChild>
           <Link href={"/dashboard/projects/create"}>Start Project</Link>
         </Button>
       </div>
