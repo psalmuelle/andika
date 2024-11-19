@@ -35,7 +35,7 @@ const items = [
   },
   {
     title: "Support",
-    url: "/dashboard/message",
+    url: "/dashboard/support",
     icon: MessageSquareText,
   },
   {

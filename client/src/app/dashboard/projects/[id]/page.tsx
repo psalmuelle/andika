@@ -14,7 +14,7 @@ export default function ProjectPage({ params }: Props) {
   const { id } = params;
   console.log(typeof id);
   return (
-    <div className="px-[3%]">
+    <div className="mt-6 px-[3%] pb-6">
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-b pb-2">
         <div>
           <Typography as="p" className="text-sm font-semibold">
