@@ -38,13 +38,6 @@ client/next-env.d.ts
 
 # For Backend Application
 
-server/.env
-server/node_modules
-server/dist
-
-
-# For Backend Application
-
 # compiled output
 backend/dist
 backend/node_modules
