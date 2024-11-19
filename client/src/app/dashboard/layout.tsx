@@ -22,7 +22,11 @@ export default function RootLayout({
       await init().catch(() => {
         window.location.href = "/auth/login";
       });
-      getProfile();
+      await getProfile().catch((error) => {
+        if (error.status === 404) {
+          window.location.href = "/profile";
+        }
+      });
     };
     authenticateUser();
   }, []);

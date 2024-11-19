@@ -57,12 +57,12 @@ export default function Login() {
           localStorage.setItem("email", values.email);
           router.push("/auth/verify-email");
         }
+        setIsLoading(false);
       } else {
+        setIsLoading(false);
         router.push(res.data.redirectUrl);
       }
     });
-
-    setIsLoading(false);
   }
 
   return (

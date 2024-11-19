@@ -51,7 +51,7 @@ const items = [
 ];
 
 export default function AppSidebar() {
-  const profile: any = useProfileStore((state) => state.profile);
+  const profile = useProfileStore((state) => state.profile);
   const logout = useUserStore((state) => state.logout);
   return (
     <Sidebar collapsible={"icon"}>

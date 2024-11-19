@@ -65,7 +65,7 @@ export default function ProfilePage() {
       refferedBy: values.refferalCode ? values.refferalCode : null,
     };
     const response = await createProfile(newProfile);
-    if (response.status === 201) {
+    if (response && response.status === 201) {
       toast({
         title: "Profile created successfully",
         description: "You can now access all features",

@@ -51,7 +51,7 @@ export default function VerifyEmail() {
         verificationCode: data.pin,
       });
 
-      if (response.status === 200) {
+      if (response && response.status === 200) {
         localStorage.removeItem("email");
         router.push("/auth/login");
         setBtnLoading(false);

@@ -1,12 +1,19 @@
-declare module 'types' {
-    // export interface User {
-    //     id: string;
-    //     name: string;
-    //     email: string;
-    // };
-    // export type Post = {
-    //     id: string;
-    //     title: string;
-    //     content: string;
-    // }
+declare module "types" {
+  export interface ProfileType {
+    id: number;
+    name: string;
+    email: string;
+    avatar: string;
+    userId: number;
+    company: string;
+    position: string;
+    refferalCode: string;
+    refferalCount: number;
+    rewards: {
+      value: number;
+      currency: string;
+    };
+    refferedBy: string | null;
+    createdAt: string;
+  }
 }

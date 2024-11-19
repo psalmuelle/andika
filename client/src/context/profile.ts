@@ -1,8 +1,9 @@
 import axiosInstance from "@/config/axios";
+import { ProfileType } from "types";
 import { create } from "zustand";
 
 interface ProfileState {
-  profile: {} | null;
+  profile: ProfileType | null;
   getProfile: () => Promise<any>;
   createProfile: (profile: any) => Promise<any>;
 }
