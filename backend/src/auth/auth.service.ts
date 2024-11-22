@@ -5,6 +5,7 @@ import { RegisterUserDto } from './dto/register.dto';
 import * as crypto from 'crypto';
 import { MailgunService } from '../mailgun/mailgun.service';
 import { VerifyEmailTemplate } from './email/verify-email.template';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class AuthService {
@@ -12,6 +13,7 @@ export class AuthService {
     private userService: UserService,
     private mailgunService: MailgunService,
     private emailTemplate: VerifyEmailTemplate,
+    private prismaService: PrismaService,
   ) {}
 
   async createUser(user: RegisterUserDto) {
@@ -49,15 +51,49 @@ export class AuthService {
     }
   }
 
+  async verifyEmail(email: string, code: string) {
+    try {
+      const user = await this.prismaService.user.findUnique({
+        where: { email },
+      });
+      if (!user)
+        throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      if (user.verified === true)
+        throw new HttpException(
+          'User already verified',
+          HttpStatus.BAD_REQUEST,
+        );
+      if (user.verificationCode !== code)
+        throw new HttpException(
+          'Invalid verification code',
+          HttpStatus.BAD_REQUEST,
+        );
+
+      await this.prismaService.user.update({
+        where: { email },
+        data: {
+          verified: true,
+          verificationCode: null,
+        },
+      });
+      return {
+        message: 'Email verified',
+      };
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async validateUser(email: string, password: string) {
     const user = await this.userService.findOne(email);
-    if (!user) return null;
+    if (!user)
+      throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (isPasswordValid) {
       const { password: userPassword, ...result } = user;
       return result;
     }
-    return null;
+    throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
   }
 }
