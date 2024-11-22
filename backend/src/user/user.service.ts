@@ -12,12 +12,12 @@ import * as bcrypt from 'bcrypt';
 export class UserService {
   constructor(private prisma: PrismaService) {}
 
-  async createUser(user: {
+  async create(user: {
     email: string;
     password: string;
     isAdmin?: boolean;
     adminPasskey?: string;
-    verificationCode: string
+    verificationCode: string;
   }) {
     try {
       const hashedPassword = await bcrypt.hash(user.password, 10);
@@ -50,6 +50,19 @@ export class UserService {
       });
       if (!user)
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);
+      return user;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async delete(email: string) {
+    try {
+      const user = await this.prisma.user.delete({
+        where: {
+          email: email,
+        },
+      });
       return user;
     } catch (err) {
       throw err;
