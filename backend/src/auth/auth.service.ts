@@ -53,9 +53,8 @@ export class AuthService {
 
   async verifyEmail(email: string, code: string) {
     try {
-      const user = await this.prismaService.user.findUnique({
-        where: { email },
-      });
+      const user = await this.userService.findOne(email);
+
       if (!user)
         throw new HttpException('User not found', HttpStatus.NOT_FOUND);
       if (user.verified === true)
@@ -83,6 +82,8 @@ export class AuthService {
       throw err;
     }
   }
+
+  async getUser(email: string) {}
 
   async validateUser(email: string, password: string) {
     const user = await this.userService.findOne(email);

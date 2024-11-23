@@ -6,9 +6,12 @@ import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
-  constructor(private authService: AuthService, private configService: ConfigService) {
+  constructor(
+    private authService: AuthService,
+    private configService: ConfigService,
+  ) {
     super({
-        clientID: configService.get('GOOGLE_CLIENT_ID'),
+      clientID: configService.get('GOOGLE_CLIENT_ID'),
       clientSecret: configService.get('GOOGLE_CLIENT_SECRET'),
       callbackURL: 'http://localhost:8000/api/auth/google/callback',
       scope: ['email', 'profile'],
@@ -19,7 +22,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
   tokenURL?: string | undefined;
   userProfileURL?: string | undefined;
-  
+
   async validate(
     accessToken: string,
     refreshToken: string,
@@ -37,22 +40,17 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
     // Save or fetch the user via AuthService
     // const validatedUser = await this.authService.validateGoogleUser(user);
-    const validatedUser = await this.authService.validateUser(user.email, user.googleId);
-
+    const validatedUser = await this.authService.validateUser(
+      user.email,
+      user.googleId,
+    );
 
     if (!validatedUser) {
       return done(null, false);
     }
     return done(null, validatedUser);
   }
-
 }
-
-
-
-
-
-
 
 // import passport from "passport";
 // import { Strategy as LocalStrategy } from "passport-local";

@@ -8,9 +8,15 @@ import { ConfigService } from '@nestjs/config';
 import { MailgunModule } from 'src/mailgun/mailgun.module';
 import { MailgunService } from 'src/mailgun/mailgun.service';
 import { VerifyEmailTemplate } from './email/verify-email.template';
+import { SessionSerializer } from './session.serializer';
+import { PassportModule } from '@nestjs/passport';
 
 @Module({
-  imports: [UserModule, MailgunModule],
+  imports: [
+    UserModule,
+    MailgunModule,
+    PassportModule.register({ session: true }),
+  ],
   providers: [
     AuthService,
     ConfigService,
@@ -18,6 +24,7 @@ import { VerifyEmailTemplate } from './email/verify-email.template';
     GoogleStrategy,
     MailgunService,
     VerifyEmailTemplate,
+    SessionSerializer,
   ],
   controllers: [AuthController],
 })
