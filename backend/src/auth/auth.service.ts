@@ -45,6 +45,7 @@ export class AuthService {
           message: 'OK',
           status: 200,
         },
+        redirectUrl: 'auth/verify-email',
       };
     } catch (error) {
       throw error;
@@ -77,13 +78,12 @@ export class AuthService {
       });
       return {
         message: 'Email verified',
+        redirectUrl: 'auth/login',
       };
     } catch (err) {
       throw err;
     }
   }
-
-  async getUser(email: string) {}
 
   async validateUser(email: string, password: string) {
     const user = await this.userService.findOne(email);
@@ -96,5 +96,27 @@ export class AuthService {
       return result;
     }
     throw new HttpException('Invalid credentials', HttpStatus.UNAUTHORIZED);
+  }
+
+  async validateGoogleUser(email: string) {
+    const user = await this.userService.findOne(email);
+    if (!user) {
+      const newUser = await this.prismaService.user.create({
+        data: {
+          email,
+          verified: true,
+          verificationCode: null,
+        },
+      });
+
+      if (!newUser) {
+        throw new HttpException(
+          'User not created',
+          HttpStatus.INTERNAL_SERVER_ERROR,
+        );
+      }
+      return newUser;
+    }
+    return user;
   }
 }

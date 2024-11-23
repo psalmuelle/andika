@@ -10,6 +10,7 @@ import { GoogleAuthGuard } from './guard';
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
+
   @Post('email/register')
   async register(
     @Body()
@@ -23,26 +24,35 @@ export class AuthController {
     return this.authService.verifyEmail(body.email, body.code);
   }
 
-  @UseGuards(AuthorizedGaurd)
   @Get('status')
+  @UseGuards(AuthorizedGaurd)
   async status(@Req() req: Request) {
-    console.log(req.user);
     return req.user;
   }
 
-  @UseGuards(LocalAuthGuard)
   @Post('email/login')
+  @UseGuards(LocalAuthGuard)
   async login(@Req() req: Request) {
-    return req.user;
+    return {
+      user: req.user,
+      redirectUrl: '/dashboard',
+    };
   }
 
+  @Get('google')
   @UseGuards(GoogleAuthGuard)
-  @Post('google')
-  async googleSignin() {}
+  async googleSignin() {
+    return 'Redirecting to Google...';
+  }
 
+  @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
-  @Post('google/callback')
-  async googleCallback() {}
+  async googleCallback(@Req() req: Request) {
+    return {
+      user: req.user,
+      redirectUrl: '/dashboard',
+    };
+  }
 
   @Post('logout')
   async logout(@Req() req: Request) {
