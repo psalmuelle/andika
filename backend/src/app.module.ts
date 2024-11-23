@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { MailgunService } from './mailgun/mailgun.service';
 import { MailgunModule } from './mailgun/mailgun.module';
+import { ProfileModule } from './profile/profile.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { MailgunModule } from './mailgun/mailgun.module';
     AuthModule,
     UserModule,
     MailgunModule,
+    ProfileModule,
   ],
   controllers: [AppController],
   providers: [AppService, MailgunService],

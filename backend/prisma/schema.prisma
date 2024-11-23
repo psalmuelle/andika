@@ -14,11 +14,24 @@ datasource db {
 }
 
 model User {
-  id               Int     @id @default(autoincrement())
-  email            String  @unique
-  password         String  @default("")
-  verified         Boolean @default(false)
+  id               Int      @id @default(autoincrement())
+  email            String   @unique
+  password         String   @default("")
+  verified         Boolean  @default(false)
   verificationCode String?
-  isAdmin          Boolean @default(false)
+  isAdmin          Boolean  @default(false)
   adminPasskey     String?
+  createdAt        DateTime @default(now())
+  profile          Profile?
+}
+
+model Profile {
+  id         Int      @id @default(autoincrement())
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int      @unique
+  name       String
+  company    String
+  position   String
+  avatar     String?
+  createdAt  DateTime @default(now())
 }

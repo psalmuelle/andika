@@ -1,0 +1,82 @@
+import { HttpException, Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateProfileDto } from './dto/create-profile.dto';
+import { MailgunService } from 'src/mailgun/mailgun.service';
+import { OnboardingMessage } from './onboarding-template.email';
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+
+@Injectable()
+export class ProfileService {
+  constructor(
+    private prismaService: PrismaService,
+    private mailgunService: MailgunService,
+    private onboardingMsg: OnboardingMessage,
+  ) {}
+
+  async createProfile(profile: CreateProfileDto, userId: number) {
+    try {
+      const newProfile = await this.prismaService.profile.create({
+        data: {
+          name: profile.name,
+          company: profile.company,
+          position: profile.position,
+          avatar: profile.avatar,
+          user: {
+            connect: {
+              id: userId,
+            },
+          },
+        },
+        include: {
+          user: {
+            select: {
+              email: true,
+            },
+          },
+        },
+      });
+
+      if (!newProfile) {
+        throw new HttpException('Profile not created', 400);
+      }
+      await this.mailgunService.sendEmail({
+        to: newProfile.user.email,
+        subject: 'Welcome To Andika',
+        html: this.onboardingMsg.message(),
+        text: "Welcome to Andika! We're excited to have you on board. Let's get started by creating your first project. Head over to dashboard to create your first project.",
+      });
+      return newProfile;
+    } catch (err) {
+      if (err instanceof PrismaClientKnownRequestError) {
+        if (err.code === 'P2014' || err.code === 'P2002') {
+          throw new HttpException('Profile already exists', 400);
+        }
+      }
+      throw err;
+    }
+  }
+
+  async getProfile(userId: number) {
+    try {
+      const userProfile = await this.prismaService.profile.findUnique({
+        where: {
+          userId: userId,
+        },
+        include: {
+          user: {
+            select: {
+              email: true,
+            },
+          },
+        },
+      });
+
+      if (!userProfile) {
+        throw new HttpException('Profile not found', 404);
+      }
+      return userProfile;
+    } catch (err) {
+      throw err;
+    }
+  }
+}
