@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   CreateApiDocRequestDto,
@@ -19,12 +19,6 @@ export class ProjectRequestService {
           userId: data.userId,
           requestType: data.requestType,
           status: data.status,
-        },
-        include: {
-          ApiDocRequest: data.requestType === 'API_DOC',
-          EditingRequest: data.requestType === 'EDITING',
-          WhitepaperRequest: data.requestType === 'WHITEPAPER',
-          ArticleRequest: data.requestType === 'TECHNICAL_ARTICLE',
         },
       });
       return projectRequest;
@@ -146,17 +140,37 @@ export class ProjectRequestService {
           where: {
             userId,
           },
+          include: {
+            ApiDocRequest: true,
+            EditingRequest: true,
+            WhitepaperRequest: true,
+            ArticleRequest: true,
+          },
         });
       }
 
-      return this.prismaService.projectRequest.findMany();
+      return this.prismaService.projectRequest.findMany({
+        include: {
+          ApiDocRequest: true,
+          EditingRequest: true,
+          WhitepaperRequest: true,
+          ArticleRequest: true,
+        },
+      });
     } catch (err) {
       throw err;
     }
   }
 
-  async updateRequest(id: number) {
+  async updateRequest(id: number, userId: number) {
     try {
+      const userIsAdmin = await this.prismaService.user.findUnique({
+        where: {
+          id: userId,
+          isAdmin: true,
+        },
+      });
+      if (!userIsAdmin) throw new UnauthorizedException();
       return this.prismaService.projectRequest.update({
         where: {
           id,

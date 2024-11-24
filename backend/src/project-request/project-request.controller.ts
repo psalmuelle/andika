@@ -84,10 +84,11 @@ export class ProjectRequestController {
       throw err;
     }
   }
-  @Put('update:id')
-  async updateRequest(@Param('id', ParseIntPipe) id: number) {
+  @Put('update/:id')
+  async updateRequest(@Param('id', ParseIntPipe) id: number, @Req() req: any) {
     try {
-      return this.requestService.updateRequest(id);
+      const adminId = req.user.id;
+      return this.requestService.updateRequest(id, adminId);
     } catch (err) {
       throw err;
     }
