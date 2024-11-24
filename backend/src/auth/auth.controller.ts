@@ -1,4 +1,14 @@
-import { Controller, Req, Post, UseGuards, Body, Get } from '@nestjs/common';
+import {
+  Controller,
+  Req,
+  Post,
+  UseGuards,
+  Body,
+  Get,
+  Redirect,
+  HttpStatus,
+  Res,
+} from '@nestjs/common';
 import { Request } from 'express';
 import { AuthService } from './auth.service';
 import { RegisterUserDto } from './dto/register.dto';
@@ -6,10 +16,14 @@ import { VerifyUserDto } from './dto/verify-email.dto';
 import { AuthorizedGaurd } from './guard';
 import { LocalAuthGuard } from './guard';
 import { GoogleAuthGuard } from './guard';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private prismaService: PrismaService,
+  ) {}
 
   @Post('email/register')
   async register(
@@ -32,11 +46,19 @@ export class AuthController {
 
   @Post('email/login')
   @UseGuards(LocalAuthGuard)
-  async login(@Req() req: Request) {
-    return {
-      user: req.user,
-      redirectUrl: '/dashboard',
-    };
+  async login(@Req() req: any) {
+    if (req.user) {
+      const userHasProfile = await this.prismaService.profile.findFirst({
+        where: {
+          userId: req.user.id,
+        },
+      });
+
+      return {
+        user: req.user,
+        redirectUrl: userHasProfile ? '/dashboard' : '/profile',
+      };
+    }
   }
 
   @Get('google')
@@ -47,11 +69,19 @@ export class AuthController {
 
   @Get('google/callback')
   @UseGuards(GoogleAuthGuard)
-  async googleCallback(@Req() req: Request) {
-    return {
-      user: req.user,
-      redirectUrl: '/dashboard',
-    };
+  async googleCallback(@Req() req: any, @Res() res: any) {
+    if (req.user) {
+      const userHasProfile = await this.prismaService.profile.findFirst({
+        where: {
+          userId: req.user.id,
+        },
+      });
+      res.redirect(
+        `http://localhost:3000/${userHasProfile ? 'dashboard' : 'profile'}`,
+      );
+    } else {
+      res.redirect('http://localhost:3000/login?error=Invalid%20Credentials');
+    }
   }
 
   @Post('logout')

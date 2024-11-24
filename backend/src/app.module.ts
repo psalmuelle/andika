@@ -8,6 +8,8 @@ import { UserModule } from './user/user.module';
 import { MailgunService } from './mailgun/mailgun.service';
 import { MailgunModule } from './mailgun/mailgun.module';
 import { ProfileModule } from './profile/profile.module';
+import { ProjectModule } from './project/project.module';
+import { ProjectRequestModule } from './project-request/project-request.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { ProfileModule } from './profile/profile.module';
     UserModule,
     MailgunModule,
     ProfileModule,
+    ProjectRequestModule,
+    ProjectModule,
   ],
   controllers: [AppController],
   providers: [AppService, MailgunService],

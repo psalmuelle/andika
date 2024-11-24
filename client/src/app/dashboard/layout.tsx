@@ -20,7 +20,7 @@ export default function RootLayout({
   useEffect(() => {
     const authenticateUser = async () => {
       await init().catch(() => {
-        window.location.href = "/auth/login";
+        // window.location.href = "/auth/login";
       });
       await getProfile().catch((error) => {
         if (error.status === 404) {
