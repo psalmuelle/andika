@@ -14,15 +14,16 @@ datasource db {
 }
 
 model User {
-  id               Int      @id @default(autoincrement())
-  email            String   @unique
-  password         String   @default("")
-  verified         Boolean  @default(false)
+  id               Int           @id @default(autoincrement())
+  email            String        @unique
+  password         String        @default("")
+  verified         Boolean       @default(false)
   verificationCode String?
-  isAdmin          Boolean  @default(false)
+  isAdmin          Boolean       @default(false)
   adminPasskey     String?
-  createdAt        DateTime @default(now())
+  createdAt        DateTime      @default(now())
   profile          Profile?
+  adminProfile     AdminProfile?
 }
 
 model Profile {
@@ -34,7 +35,19 @@ model Profile {
   position        String
   avatar          String?
   projectRequests ProjectRequest[]
+  projects        Project[]
   createdAt       DateTime         @default(now())
+}
+
+model AdminProfile {
+  id        Int       @id @default(autoincrement())
+  user      User      @relation(fields: [userId], references: [id])
+  userId    Int       @unique
+  name      String
+  position  String
+  avatar    String?
+  createdAt DateTime  @default(now())
+  projects  Project[]
 }
 
 model ProjectRequest {
@@ -94,6 +107,56 @@ model EditingRequest {
   createdAt        DateTime       @default(now())
 }
 
+model Project {
+  id              Int               @id @default(autoincrement())
+  title           String
+  description     String
+  projectType     String
+  startDate       DateTime
+  dueDate         DateTime
+  owner           Profile           @relation(fields: [ownerId], references: [id])
+  ownerId         Int
+  assignedPM      AdminProfile      @relation(fields: [assignedPMId], references: [userId])
+  assignedPMId    Int
+  status          String
+  overallProgress Int             @default(0)
+  tasks           ProjectTask[]
+  activities      ProjectActivity[]
+  fee             String
+  payments        PaymentTimeline[]
+  files           String[]
+  feedback        String[]
+  createdAt       DateTime          @default(now())
+}
+
+model ProjectTask {
+  id          Int        @id @default(autoincrement())
+  title       String
+  description String
+  status      TaskStatus @default(NEW)
+  project     Project    @relation(fields: [projectId], references: [id])
+  projectId   Int
+  dueDate     DateTime
+}
+
+model ProjectActivity {
+  id        Int      @id @default(autoincrement())
+  activity  String
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId Int
+  createdAt DateTime @default(now())
+}
+
+model PaymentTimeline {
+  id        Int       @id @default(autoincrement())
+  amount    String
+  dueDate   DateTime
+  status    String
+  datePaid  DateTime?
+  Project   Project   @relation(fields: [projectId], references: [id])
+  projectId Int
+}
+
 enum RequestStatus {
   NEW
   STARTED
@@ -104,4 +167,10 @@ enum RequestType {
   WHITEPAPER
   API_DOC
   EDITING
+}
+
+enum TaskStatus {
+  NEW
+  IN_PROGRESS
+  COMPLETED
 }
