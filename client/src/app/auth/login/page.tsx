@@ -19,6 +19,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
 import useUserStore from "@/context/auth";
+import { AxiosError } from "axios";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -43,26 +44,26 @@ export default function Login() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    setIsLoading(true);
-    await login(values).then((res) => {
-      if (!res.status) {
-        toast({
-          variant: "destructive",
-          title: `Uh oh! ${res}`,
-          description: "There was a problem with your request.",
-          action: <ToastAction altText="Try again">Try again</ToastAction>,
-        });
-
-        if (res === "User not verified") {
-          localStorage.setItem("email", values.email);
-          router.push("/auth/verify-email");
-        }
-        setIsLoading(false);
-      } else {
-        setIsLoading(false);
+    try {
+      setIsLoading(true);
+      await login(values).then((res) => {
         router.push(res.data.redirectUrl);
+        setIsLoading(false);
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: `Uh oh! ${(error instanceof AxiosError && error.response?.data.message) || "Something went wrong"}`,
+        description: "There was a problem with your request.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+
+      if (error instanceof AxiosError && error.response?.data.redirectUri) {
+        localStorage.setItem("email", values.email);
+        router.push(error.response.data.redirectUri);
       }
-    });
+      setIsLoading(false);
+    }
   }
 
   return (

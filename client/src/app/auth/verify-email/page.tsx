@@ -24,6 +24,7 @@ import axiosInstance from "@/config/axios";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
+import { AxiosError } from "axios";
 
 const FormSchema = z.object({
   pin: z.string().min(6, {
@@ -48,21 +49,18 @@ export default function VerifyEmail() {
       if (!email) throw new Error("Email not found");
       const response = await axiosInstance.post("/auth/email/verify", {
         email,
-        verificationCode: data.pin,
+        code: data.pin,
       });
-
-      if (response && response.status === 200) {
-        localStorage.removeItem("email");
-        router.push("/auth/login");
-        setBtnLoading(false);
-      } else {
-        throw new Error("Verification failed");
-      }
-    } catch (error: any) {
+      localStorage.removeItem("email");
+      setBtnLoading(false);
+      router.push(response.data.redirectUrl);
+    } catch (error) {
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
-        description: 'Verification failed!',
+        description:
+          (error instanceof AxiosError && error.response?.data.message) ||
+          "Please try again.",
         action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
       setBtnLoading(false);
@@ -112,7 +110,12 @@ export default function VerifyEmail() {
             )}
           />
 
-          <Button size={'lg'} loading={btnLoading} className="w-full" type="submit">
+          <Button
+            size={"lg"}
+            loading={btnLoading}
+            className="w-full"
+            type="submit"
+          >
             Submit
           </Button>
         </form>

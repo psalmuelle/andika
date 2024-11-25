@@ -19,6 +19,7 @@ import useUserStore from "@/context/auth";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -49,18 +50,21 @@ export default function Register() {
         if (res) {
           setIsLoading(false);
           localStorage.setItem("email", values.email);
-          router.push("/auth/verify-email");
-        } else {
-          toast({
-            variant: "destructive",
-            title: "Uh oh! Something went wrong.",
-            description: "There was a problem with your request.",
-            action: <ToastAction altText="Try again">Try again</ToastAction>,
-          });
-          setIsLoading(false);
+          router.push(res.redirectUrl);
         }
       });
-    } catch (error) {}
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description:
+          error instanceof AxiosError
+            ? error.response?.data.message
+            : "There was a problem with your request.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+      setIsLoading(false);
+    }
   }
 
   return (

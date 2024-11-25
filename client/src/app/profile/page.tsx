@@ -23,10 +23,10 @@ import {
 } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
-import useUserStore from "@/context/auth";
 import useProfileStore from "@/context/profile";
 import Typography from "@/components/ui/typography";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -36,12 +36,10 @@ const formSchema = z.object({
     message: "Company name is required",
   }),
   position: z.string(),
-  refferalCode: z.string(),
 });
 
 export default function ProfilePage() {
   const [isLoading, setIsLoading] = useState(false);
-  const user: any = useUserStore((state) => state.user);
   const createProfile = useProfileStore((state) => state.createProfile);
   const { toast } = useToast();
   const router = useRouter();
@@ -51,36 +49,28 @@ export default function ProfilePage() {
       name: "",
       company: "",
       position: "",
-      refferalCode: "",
     },
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     setIsLoading(true);
-    const newProfile = {
-      userId: user?.id,
-      name: values.name,
-      company: values.company,
-      position: values.position,
-      refferedBy: values.refferalCode ? values.refferalCode : null,
-    };
-    const response = await createProfile(newProfile);
-    if (response && response.status === 201) {
+
+    try {
+      await createProfile(values);
       toast({
         title: "Profile created successfully",
         description: "You can now access all features",
       });
-      router.push(response.data.redirectUrl);
-      
       setIsLoading(false);
-    } else {
-      setIsLoading(false);
+      router.push("/dashboard");
+    } catch (error) {
       toast({
         variant: "destructive",
-        title: `Uh oh! ${response.data.message}`,
+        title: `Uh oh! ${error instanceof AxiosError ? error.response?.data.message : "Something went wrong"}`,
         description: "There was a problem with your request.",
         action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
+      setIsLoading(false);
     }
   }
 
@@ -149,25 +139,6 @@ export default function ProfilePage() {
                         <SelectItem value="Other">Other</SelectItem>
                       </SelectContent>
                     </Select>
-                  </FormItem>
-                )}
-              />
-
-              <FormField
-                control={form.control}
-                name="refferalCode"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Refferal Code</FormLabel>
-                    <FormControl>
-                      <Input
-                        className="uppercase"
-                        maxLength={6}
-                        placeholder="optional"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
                   </FormItem>
                 )}
               />

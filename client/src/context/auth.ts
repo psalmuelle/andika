@@ -1,7 +1,8 @@
 import axiosInstance from "@/config/axios";
+import { UserType } from "types";
 import { create } from "zustand";
 interface UserState {
-  user: {} | null;
+  user: UserType | null;
   init: () => Promise<any>;
   register: ({
     email,
@@ -9,7 +10,7 @@ interface UserState {
   }: {
     email: string;
     password: string;
-  }) => Promise<boolean>;
+  }) => Promise<any>;
   login: ({
     email,
     password,
@@ -25,14 +26,15 @@ const useUserStore = create<UserState>((set) => ({
 
   // initialize the store with the current user session
   init: async () => {
-    const response = await axiosInstance.get("/auth/status", {
-      withCredentials: true,
-    });
-
-    if (response.status === 200) {
-      set({ user: response.data.user });
+    try {
+      const response = await axiosInstance.get("/auth/status", {
+        withCredentials: true,
+      });
+      set({ user: response.data });
+      return true;
+    } catch (err) {
+      throw err;
     }
-    return response;
   },
 
   //signup function
@@ -42,11 +44,9 @@ const useUserStore = create<UserState>((set) => ({
         email,
         password,
       });
-      if (register.status === 201) return true;
-      throw new Error(register.statusText);
+      if (register.status === 201) return register.data;
     } catch (error: any) {
-      console.log("Registration failed", error.message);
-      return false;
+      throw error;
     }
   },
 
@@ -54,7 +54,7 @@ const useUserStore = create<UserState>((set) => ({
   login: async ({ email, password }) => {
     try {
       const login = await axiosInstance.post(
-        "/auth/email",
+        "/auth/email/login",
         {
           email,
           password,
@@ -63,35 +63,20 @@ const useUserStore = create<UserState>((set) => ({
           withCredentials: true,
         },
       );
-      if (login.status === 200) {
-        return login;
-      }
-      throw new Error("Login failed");
-    } catch (error: any) {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(error.response.data, "text/html");
-      const preElement = doc.querySelector("pre");
-      const message = preElement ? preElement.textContent : "Unknown error";
-      return message;
+      return login;
+    } catch (error) {
+      throw error;
     }
   },
 
   // logout function
   logout: async () => {
     try {
-      const logout = await axiosInstance.post(
-        "/auth/logout",
-        {},
-        { withCredentials: true },
-      );
-      if (logout.status === 200) {
-        set({ user: null });
-        window.location.href = "/";
-      } else {
-        throw new Error("logout failed");
-      }
+      await axiosInstance.post("/auth/logout", {}, { withCredentials: true });
+      set({ user: null });
+      window.location.href = "/";
     } catch (error) {
-      console.error("Logout failed", error);
+      throw error;
     }
   },
 }));

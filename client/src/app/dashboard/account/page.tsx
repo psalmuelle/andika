@@ -1,10 +1,6 @@
 "use client";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Typography } from "antd";
-import { Button } from "@/components/ui/button";
 import useProfileStore from "@/context/profile";
-
-const { Paragraph } = Typography;
 
 export default function AccountPage() {
   const profile = useProfileStore((state) => state.profile);
@@ -19,7 +15,11 @@ export default function AccountPage() {
           <CardHeader className="border-b">
             <div className="flex items-center gap-2">
               <img
-                src={profile?.avatar}
+                src={
+                  profile?.avatar
+                    ? profile.avatar
+                    : "https://img.icons8.com/material/96/person-male.png"
+                }
                 alt={profile?.name}
                 className="h-14 w-14 rounded-full"
               />
@@ -41,7 +41,7 @@ export default function AccountPage() {
               </div>
               <div className="space-y-2">
                 <label className="text-muted-foreground">Email Address</label>
-                <p>{profile?.email}</p>
+                <p>{profile?.user.email}</p>
               </div>
 
               <div className="space-y-2">
@@ -54,26 +54,6 @@ export default function AccountPage() {
                 <p>{profile?.position}</p>
               </div>
             </div>
-
-            <h2 className="mt-8 font-medium">Refferal</h2>
-
-            <div className="mt-5 grid grid-cols-2 gap-4 max-sm:grid-cols-1">
-              <div className="space-y-2">
-                <label className="text-muted-foreground">Refferal Code</label>
-                <Paragraph copyable>{profile?.refferalCode}</Paragraph>
-              </div>
-              <div className="space-y-2">
-                <label className="text-muted-foreground">Total Referrals</label>
-                <p>{profile?.refferalCount}</p>
-              </div>
-              <div className="space-y-2">
-                <label className="text-muted-foreground">Total Reward</label>
-                <p>${profile?.rewards?.value}</p>
-              </div>
-            </div>
-            <Button variant={"outline"} className="mt-6">
-              Claim Reward
-            </Button>
           </CardContent>
         </Card>
       </div>

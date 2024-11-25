@@ -37,15 +37,12 @@ export class AuthService {
           throw new HttpException(err, HttpStatus.UNAUTHORIZED);
         });
 
-      const { password, ...userWithoutPassword } = newUser;
-
       return {
-        user: { ...userWithoutPassword },
         emailSent: {
           message: 'OK',
           status: 200,
         },
-        redirectUrl: 'auth/verify-email',
+        redirectUrl: '/auth/verify-email',
       };
     } catch (error) {
       throw error;
@@ -78,7 +75,7 @@ export class AuthService {
       });
       return {
         message: 'Email verified',
-        redirectUrl: 'auth/login',
+        redirectUrl: '/auth/login',
       };
     } catch (err) {
       throw err;

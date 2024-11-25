@@ -45,7 +45,7 @@ const items = [
   },
   {
     title: "Logout",
-    url: "/dashboard/?logout",
+    url: "#logout",
     icon: LogOut,
   },
 ];
@@ -81,7 +81,7 @@ export default function AppSidebar() {
                     <a
                       href={item.url}
                       onClick={() => {
-                        item.url == "/dashboard/?logout" && logout();
+                        item.url == "#logout" && logout();
                       }}
                     >
                       <item.icon />

@@ -14,7 +14,7 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     if (user.verified === false) {
       throw new UnauthorizedException({
         message: 'User not verified',
-        redirectUri: '/verify-email',
+        redirectUri: '/auth/verify-email',
       });
     }
     return user;

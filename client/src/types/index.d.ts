@@ -1,19 +1,23 @@
 declare module "types" {
   export interface ProfileType {
+    avatar: string;
+    company: string;
+    createdAt: string;
     id: number;
     name: string;
-    email: string;
-    avatar: string;
-    userId: number;
-    company: string;
     position: string;
-    refferalCode: string;
-    refferalCount: number;
-    rewards: {
-      value: number;
-      currency: string;
+    userId: number;
+    user: {
+      email: string;
     };
-    refferedBy: string | null;
+  }
+
+  export interface UserType {
+    adminPasskey: string | null;
     createdAt: string;
+    email: string;
+    id: number;
+    isAdmin: boolean;
+    verified: boolean;
   }
 }
