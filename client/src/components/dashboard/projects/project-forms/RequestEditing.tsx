@@ -1,4 +1,8 @@
 "use client";
+import { useToast } from "@/hooks/use-toast";
+import useProjectStore from "@/context/project";
+import RequestSuccessDialogue from "../RequestSuccessDialogue";
+import { AxiosError } from "axios";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import {
@@ -18,21 +22,24 @@ import { InboxIcon } from "lucide-react";
 
 const { Dragger } = Upload;
 
-
 const formSchema = z.object({
   usefulLinks: z.string(),
-  otherInfo: z.string(),
-  docFiles: z.string(),
+  info: z.string(),
+  drafts: z.array(z.string()),
 });
 
 export default function RequestEditingForm() {
-  const [fileList, setFileList] = useState<File[]>([]);
+  const [fileList, setFileList] = useState<string[]>();
+  const [btnLoading, setBtnLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const { createEditingRequest } = useProjectStore();
+  const { toast } = useToast();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       usefulLinks: "",
-      otherInfo: "",
-      docFiles: undefined,
+      info: "",
+      drafts: ["a", "b"],
     },
   });
 
@@ -42,81 +49,102 @@ export default function RequestEditingForm() {
     multiple: true,
     action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
     onChange(info) {
-      const main = info.fileList.map((file) => file.originFileObj);
-      console.log(info);
+      return setFileList(["a", "b"]);
     },
   };
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    try {
+      setBtnLoading(true);
+
+      await createEditingRequest(values);
+      setSuccess(true);
+      setBtnLoading(false);
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description:
+          error instanceof AxiosError
+            ? error.response?.data.message
+            : "There was a problem with your request.",
+      });
+      setBtnLoading(false);
+    }
   }
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-        <FormField
-          control={form.control}
-          name="docFiles"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Upload Writeups/Drafts</FormLabel>
-              <div className="my-4" />
-              <FormControl>
-                <Dragger onChange={field.onChange} {...uploadProps}>
-                  <p className="ant-upload-drag-icon">
-                    <InboxIcon size={36} className="mx-auto" />
-                  </p>
-                  <p className="ant-upload-text">
-                    Click or drag file to this area to upload
-                  </p>
-                  <p className="ant-upload-hint">
-                    You can upload multiple files of writeups and articles here.
-                    Note that the files can only be .md, .txt or .doc formats.
-                  </p>
-                </Dragger>
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <>
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+          <FormField
+            control={form.control}
+            name="drafts"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Upload Writeups/Drafts</FormLabel>
+                <div className="my-4" />
+                <FormControl>
+                  <Dragger onChange={field.onChange} {...uploadProps}>
+                    <p className="ant-upload-drag-icon">
+                      <InboxIcon size={36} className="mx-auto" />
+                    </p>
+                    <p className="ant-upload-text">
+                      Click or drag file to this area to upload
+                    </p>
+                    <p className="ant-upload-hint">
+                      You can upload multiple files of writeups and articles
+                      here. Note that the files can only be .md, .txt or .doc
+                      formats.
+                    </p>
+                  </Dragger>
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name={"usefulLinks"}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Useful Links & Materials- if any</FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="E.g link to landing page of product"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name={"usefulLinks"}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Useful Links & Materials- if any</FormLabel>
+                <FormControl>
+                  <Textarea
+                    placeholder="E.g link to landing page of product"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name={"otherInfo"}
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Any useful </FormLabel>
-              <FormControl>
-                <Textarea
-                  placeholder="E.g link to landing page of product"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name={"info"}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Other Information </FormLabel>
+                <FormControl>
+                  <Textarea placeholder="E.g style guide..." {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
 
-        <Button size={"lg"} className="w-full" type="submit">
-          Submit
-        </Button>
-      </form>
-    </Form>
+          <Button
+            loading={btnLoading}
+            size={"lg"}
+            className="w-full"
+            type="submit"
+          >
+            Submit
+          </Button>
+        </form>
+      </Form>
+      <RequestSuccessDialogue open={success} onChange={() => {}} />
+    </>
   );
 }
