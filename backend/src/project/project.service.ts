@@ -1,7 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
-import { CreateProjectDto } from './dto/create-project.dto';
-import { CreateTaskDto } from './dto/create-task.dto';
+import {
+  CreateProjectDto,
+  CreateActivityDto,
+  CreateTaskDto,
+  CreateTimelineDto,
+  UpdateProjectDto,
+  UpdateTaskDto,
+  UpdateTimelineDto,
+} from './dto';
 
 @Injectable()
 export class ProjectService {
@@ -25,7 +32,7 @@ export class ProjectService {
     return project;
   }
 
-  async update(data: CreateProjectDto, id: number) {
+  async update(data: UpdateProjectDto, id: number) {
     return this.prismaService.project.update({
       where: {
         id,
@@ -109,7 +116,8 @@ export class ProjectService {
     });
   }
 
-  async updateTask(data: CreateTaskDto, id: number) {
+  async updateTask(data: UpdateTaskDto, id: number) {
+    //update task
     const task = await this.prismaService.projectTask.update({
       where: {
         id,
@@ -122,6 +130,102 @@ export class ProjectService {
       },
     });
 
+    if (task.status == 'COMPLETED') {
+      //update progress
+
+      const allProjectTasks = await this.prismaService.projectTask.findMany({
+        where: {
+          projectId: task.projectId,
+        },
+      });
+
+      const totalTasks = allProjectTasks.length;
+
+      const finishedTasks = allProjectTasks.filter(
+        (task) => task.status === 'COMPLETED',
+      ).length;
+
+      if (totalTasks && finishedTasks) {
+        const progress = (finishedTasks / totalTasks) * 100;
+
+        await this.prismaService.project.update({
+          where: {
+            id: task.projectId,
+          },
+          data: {
+            overallProgress: progress,
+          },
+        });
+      }
+    }
+
     return task;
+  }
+
+  async createActivity(data: CreateActivityDto) {
+    const activity = await this.prismaService.projectActivity.create({
+      data: {
+        activity: data.activity,
+        projectId: data.projectId,
+      },
+    });
+    return activity;
+  }
+
+  async getActivities(projectId: number) {
+    const activities = await this.prismaService.projectActivity.findMany({
+      where: {
+        projectId,
+      },
+    });
+    return activities;
+  }
+
+  async updateActivity(activity: string, id: number) {
+    const updatedActivity = await this.prismaService.projectActivity.update({
+      where: {
+        id: id,
+      },
+      data: {
+        activity: activity,
+      },
+    });
+  }
+
+  async createPaymentTimeline(data: CreateTimelineDto) {
+    const timeline = await this.prismaService.paymentTimeline.create({
+      data: {
+        amount: data.amount,
+        dueDate: data.dueDate,
+        status: data.status,
+        projectId: data.projectId,
+        datePaid: data.datePaid,
+      },
+    });
+
+    return timeline;
+  }
+
+  async getPaymentTimelines(projectId: number) {
+    const projectTimelines = await this.prismaService.paymentTimeline.findMany({
+      where: {
+        projectId,
+      },
+    });
+    return projectTimelines;
+  }
+
+  async updatePaymentTimeline(data: UpdateTimelineDto, id: number) {
+    const updatedTimeline = await this.prismaService.paymentTimeline.update({
+      where: {
+        id,
+      },
+      data: {
+        status: data.status,
+        datePaid: data.datePaid,
+        dueDate: data.dueDate,
+      },
+    });
+    return updatedTimeline;
   }
 }

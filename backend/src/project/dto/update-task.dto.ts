@@ -1,19 +1,19 @@
 import { TaskStatus } from '@prisma/client';
-import { IsDateString, IsEnum, IsNumber, IsString } from 'class-validator';
+import { IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
 
-export class CreateTaskDto {
+export class UpdateTaskDto {
   @IsString()
+  @IsOptional()
   title: string;
 
   @IsString()
+  @IsOptional()
   description: string;
 
   @IsEnum(TaskStatus)
   status: TaskStatus;
 
-  @IsNumber()
-  projectId: number;
-
   @IsDateString()
+  @IsOptional()
   dueDate: string;
 }
