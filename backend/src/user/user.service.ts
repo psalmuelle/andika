@@ -15,8 +15,6 @@ export class UserService {
   async create(user: {
     email: string;
     password: string;
-    isAdmin?: boolean;
-    adminPasskey?: string;
     verificationCode: string;
   }) {
     try {
@@ -26,8 +24,6 @@ export class UserService {
           email: user.email,
           password: hashedPassword,
           verificationCode: user.verificationCode,
-          isAdmin: user.isAdmin,
-          adminPasskey: user.adminPasskey,
         },
       });
       return newUser;

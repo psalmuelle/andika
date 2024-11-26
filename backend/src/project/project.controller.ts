@@ -19,26 +19,17 @@ import {
   UpdateTaskDto,
   UpdateTimelineDto,
 } from './dto';
-import { PrismaService } from 'src/prisma/prisma.service';
 import { AuthorizedGaurd } from 'src/auth/guard';
 
 @UseGuards(AuthorizedGaurd)
 @Controller('project')
 export class ProjectController {
-  constructor(
-    private projectService: ProjectService,
-    private prismaService: PrismaService,
-  ) {}
+  constructor(private projectService: ProjectService) {}
 
   @Post('create')
   async create(@Body() data: CreateProjectDto, @Req() req: any) {
     try {
-      const userIsAdmin = await this.prismaService.user.findUnique({
-        where: {
-          id: req.user.id,
-          isAdmin: true,
-        },
-      });
+      const userIsAdmin = req.user.isAdmin === true;
       if (!userIsAdmin) throw new UnauthorizedException();
 
       const project = await this.projectService.create(data, req.user.id);
@@ -73,12 +64,7 @@ export class ProjectController {
     @Req() req: any,
   ) {
     try {
-      const userIsAdmin = await this.prismaService.user.findUnique({
-        where: {
-          id: req.user.id,
-          isAdmin: true,
-        },
-      });
+      const userIsAdmin = req.user.isAdmin === true;
       if (!userIsAdmin) throw new UnauthorizedException();
       return this.projectService.update(data, id);
     } catch (err) {
@@ -89,12 +75,7 @@ export class ProjectController {
   @Post('task/create')
   async createTask(@Body() data: CreateTaskDto, @Req() req: any) {
     try {
-      const userIsAdmin = await this.prismaService.user.findUnique({
-        where: {
-          id: req.user.id,
-          isAdmin: true,
-        },
-      });
+      const userIsAdmin = req.user.isAdmin === true;
       if (!userIsAdmin) throw new UnauthorizedException();
       return this.projectService.createTask(data);
     } catch (err) {
@@ -118,12 +99,7 @@ export class ProjectController {
     @Req() req: any,
   ) {
     try {
-      const userIsAdmin = await this.prismaService.user.findUnique({
-        where: {
-          id: req.user.id,
-          isAdmin: true,
-        },
-      });
+      const userIsAdmin = req.user.isAdmin === true;
       if (!userIsAdmin) throw new UnauthorizedException();
       return this.projectService.updateTask(data, id);
     } catch (err) {
@@ -134,12 +110,7 @@ export class ProjectController {
   @Post('activity/create')
   async createActivity(@Body() createDto: CreateActivityDto, @Req() req: any) {
     try {
-      const userIsAdmin = await this.prismaService.user.findUnique({
-        where: {
-          id: req.user.id,
-          isAdmin: true,
-        },
-      });
+      const userIsAdmin = req.user.isAdmin === true;
       if (!userIsAdmin) throw new UnauthorizedException();
       return this.projectService.createActivity(createDto);
     } catch (err) {
@@ -163,12 +134,7 @@ export class ProjectController {
     @Req() req: any,
   ) {
     try {
-      const userIsAdmin = await this.prismaService.user.findUnique({
-        where: {
-          id: req.user.id,
-          isAdmin: true,
-        },
-      });
+      const userIsAdmin = req.user.isAdmin === true;
       if (!userIsAdmin) throw new UnauthorizedException();
       return this.projectService.updateActivity(data.activity, id);
     } catch (err) {
@@ -179,12 +145,7 @@ export class ProjectController {
   @Post('payment-timeline/create')
   async createTimeline(@Req() req: any, @Body() createDto: CreateTimelineDto) {
     try {
-      const userIsAdmin = await this.prismaService.user.findUnique({
-        where: {
-          id: req.user.id,
-          isAdmin: true,
-        },
-      });
+      const userIsAdmin = req.user.isAdmin === true;
       if (!userIsAdmin) throw new UnauthorizedException();
       return this.projectService.createPaymentTimeline(createDto);
     } catch (err) {
@@ -210,12 +171,7 @@ export class ProjectController {
     @Req() req: any,
   ) {
     try {
-      const userIsAdmin = await this.prismaService.user.findUnique({
-        where: {
-          id: req.user.id,
-          isAdmin: true,
-        },
-      });
+      const userIsAdmin = req.user.isAdmin === true;
       if (!userIsAdmin) throw new UnauthorizedException();
       return this.projectService.updatePaymentTimeline(updateDto, id);
     } catch (err) {

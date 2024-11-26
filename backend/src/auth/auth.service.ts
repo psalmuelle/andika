@@ -6,6 +6,7 @@ import * as crypto from 'crypto';
 import { MailgunService } from '../mailgun/mailgun.service';
 import { VerifyEmailTemplate } from './email/verify-email.template';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ConfigService } from '@nestjs/config';
 
 @Injectable()
 export class AuthService {
@@ -14,13 +15,45 @@ export class AuthService {
     private mailgunService: MailgunService,
     private emailTemplate: VerifyEmailTemplate,
     private prismaService: PrismaService,
+    private configService: ConfigService,
   ) {}
 
   async createUser(user: RegisterUserDto) {
     try {
+      const adminPasskey = await this.configService.get('ADMIN_KEY');
+      if (user.isAdmin && user.adminPasskey !== adminPasskey) {
+        throw new HttpException(
+          'Invalid admin passkey',
+          HttpStatus.UNAUTHORIZED,
+        );
+      }
+
+      if (user.isAdmin && user.adminPasskey === adminPasskey) {
+        const admin = await this.userService.findOne(user.email);
+        if (admin) {
+          throw new HttpException(
+            'Admin already exists',
+            HttpStatus.BAD_REQUEST,
+          );
+        }
+
+        const hashedPassword = await bcrypt.hash(user.password, 10);
+        const newAdmin = await this.prismaService.user.create({
+          data: {
+            email: user.email,
+            password: hashedPassword,
+            verified: true,
+            verificationCode: null,
+            isAdmin: true,
+            adminPasskey: 'pass',
+          },
+        });
+        const { password, adminPasskey, ...result } = newAdmin;
+        return result;
+      }
       const verificationCode = crypto.randomInt(100000, 1000000).toString();
 
-      const newUser = await this.userService.create({
+      await this.userService.create({
         ...user,
         verificationCode,
       });

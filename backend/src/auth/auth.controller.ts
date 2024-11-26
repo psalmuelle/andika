@@ -53,7 +53,7 @@ export class AuthController {
           userId: req.user.id,
         },
       });
-
+      
       return {
         user: req.user,
         redirectUrl: userHasProfile ? '/dashboard' : '/profile',
