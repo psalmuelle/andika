@@ -55,6 +55,9 @@ export class ProjectService {
       where: {
         id: userId,
       },
+      include: {
+        profile: true,
+      },
     });
     if (user?.isAdmin) {
       return this.prismaService.project.findMany({
@@ -69,7 +72,7 @@ export class ProjectService {
     } else {
       return this.prismaService.project.findMany({
         where: {
-          ownerId: userId,
+          ownerId: user?.profile?.id,
         },
         include: {
           activities: true,

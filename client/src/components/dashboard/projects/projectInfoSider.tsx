@@ -8,6 +8,8 @@ import {
 } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { ProjectType } from "types";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 const projectData = {
   id: "PRJ-2024-001",
@@ -39,8 +41,15 @@ const projectData = {
   ],
 };
 
-export default function ProjectInfoSidebar() {
-  const project = projectData;
+export default function ProjectInfoSidebar({
+  project,
+}: {
+  project: ProjectType;
+}) {
+  const formatDate = (date: string): string => {
+    return new Date(date).toLocaleString();
+  };
+
   return (
     <div className="flex w-max grid-cols-2 flex-col gap-6 max-lg:grid max-sm:grid-cols-1">
       {/* Assigned Writer */}
@@ -51,14 +60,18 @@ export default function ProjectInfoSidebar() {
         <CardContent>
           <div className="flex items-center space-x-3">
             <img
-              src={project.assignedWriter.avatar}
-              alt={project.assignedWriter.name}
+              src={
+                project?.assignedPM.avatar
+                  ? project.assignedPM.avatar
+                  : "/icon-profile.png"
+              }
+              alt={project?.assignedPM.name}
               className="h-9 w-9 rounded-full"
             />
             <div>
-              <h3 className="font-medium">{project.assignedWriter.name}</h3>
+              <h3 className="font-medium">{project?.assignedPM.name}</h3>
               <p className="text-muted-foreground">
-                {project.assignedWriter.role}
+                {project?.assignedPM.position}
               </p>
             </div>
           </div>
@@ -70,19 +83,23 @@ export default function ProjectInfoSidebar() {
         <CardHeader>
           <CardTitle>Recent Activity</CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {project.recentActivities.map((activity, index) => (
-              <div key={index} className="flex items-start space-x-3">
-                <BarChart3 className="mt-1 h-5 w-5 text-muted-foreground" />
-                <div>
-                  <p className="text-gray-600">{activity.action}</p>
-                  <p className="text-xs text-gray-500">{activity.time}</p>
+        <ScrollArea className="h-[286px]">
+          <CardContent>
+            <div className="space-y-4">
+              {project?.activities.map((activity, index) => (
+                <div key={index} className="flex items-start space-x-3">
+                  <BarChart3 className="mt-1 h-5 w-5 text-muted-foreground" />
+                  <div>
+                    <p className="text-gray-600">{activity?.activity}</p>
+                    <p className="text-xs text-gray-500">
+                      {formatDate(activity?.createdAt)}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
+              ))}
+            </div>
+          </CardContent>
+        </ScrollArea>
       </Card>
 
       {/* Quick Actions */}

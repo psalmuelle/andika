@@ -1,9 +1,7 @@
 import axiosInstance from "@/config/axios";
-import { UserType } from "types";
 import { create } from "zustand";
 interface UserState {
-  user: UserType | null;
-  init: () => Promise<any>;
+  getUser: () => Promise<any>;
   register: ({
     email,
     password,
@@ -22,16 +20,12 @@ interface UserState {
 }
 
 const useUserStore = create<UserState>((set) => ({
-  user: null,
-
-  // initialize the store with the current user session
-  init: async () => {
+  getUser: async () => {
     try {
       const response = await axiosInstance.get("/auth/status", {
         withCredentials: true,
       });
-      set({ user: response.data });
-      return true;
+      return response;
     } catch (err) {
       throw err;
     }
@@ -73,7 +67,6 @@ const useUserStore = create<UserState>((set) => ({
   logout: async () => {
     try {
       await axiosInstance.post("/auth/logout", {}, { withCredentials: true });
-      set({ user: null });
       window.location.href = "/";
     } catch (error) {
       throw error;

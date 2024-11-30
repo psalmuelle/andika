@@ -20,6 +20,8 @@ import {
 } from "@/components/ui/sidebar";
 import useUserStore from "@/context/auth";
 import useProfileStore from "@/context/profile";
+import { useQuery } from "@tanstack/react-query";
+import { Skeleton } from "../ui/skeleton";
 
 // Menu items.
 const items = [
@@ -51,8 +53,14 @@ const items = [
 ];
 
 export default function AppSidebar() {
-  const profile = useProfileStore((state) => state.profile);
-  const logout = useUserStore((state) => state.logout);
+  const { logout } = useUserStore();
+  const { getProfile } = useProfileStore();
+
+  const { data: profile, isLoading: isProfileLoading } = useQuery({
+    queryKey: ["profile"],
+    queryFn: getProfile,
+  });
+
   return (
     <Sidebar collapsible={"icon"}>
       <SidebarHeader>
@@ -98,7 +106,12 @@ export default function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton className="text-accent-foreground">
-              <BadgeCheck color={"blue"} /> {profile?.name}
+              <BadgeCheck color={"blue"} />{" "}
+              {isProfileLoading ? (
+                <Skeleton className="h-4 w-36" />
+              ) : (
+                profile?.name
+              )}
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

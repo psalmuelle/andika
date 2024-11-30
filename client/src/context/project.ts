@@ -1,9 +1,10 @@
 import axiosInstance from "@/config/axios";
+import { ProjectType } from "types";
 import { create } from "zustand";
 
 interface ProjectState {
-  projects: [] | null;
-  getProjects: () => Promise<any>;
+  getProjects: () => Promise<ProjectType[]>;
+  getProjectById: (id: number) => Promise<ProjectType>;
   createArticleRequest: (request: any) => Promise<any>;
   createWhitepaperRequest: (request: any) => Promise<any>;
   createApiDocRequest: (request: any) => Promise<any>;
@@ -11,9 +12,27 @@ interface ProjectState {
 }
 
 const useProjectStore = create<ProjectState>((set) => ({
-  projects: null,
+  getProjects: async () => {
+    try {
+      const response = await axiosInstance.get("/project/get/all", {
+        withCredentials: true,
+      });
+      return response.data as ProjectType[];
+    } catch (err) {
+      throw err;
+    }
+  },
 
-  getProjects: async () => {},
+  getProjectById: async (id: number) => {
+    try {
+      const response = await axiosInstance.get(`/project/get/${id}`, {
+        withCredentials: true,
+      });
+      return response.data as ProjectType;
+    } catch (err) {
+      throw err;
+    }
+  },
 
   createArticleRequest: async (request) => {
     try {

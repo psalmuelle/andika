@@ -1,49 +1,41 @@
 "use client";
-import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import Footer from "@/components/layout/footer";
 import "./../globals.css";
 import AppSidebar from "@/components/layout/userSider";
 import DashboardHeader from "@/components/layout/dashboardHeader";
-import useUserStore from "@/context/auth";
-import useProfileStore from "@/context/profile";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { UserProvider } from "@/context/UserProvider";
+import { Suspense } from "react";
+import Loading from "./loading";
+
+const queryClient = new QueryClient();
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { init } = useUserStore();
-  const getProfile = useProfileStore((state) => state.getProfile);
-
-  useEffect(() => {
-    const authenticateUser = async () => {
-      await init().catch(() => {
-        window.location.href = "/auth/login";
-      });
-      await getProfile().catch((error) => {
-        if (error.status === 404) {
-          window.location.href = "/profile";
-        }
-      });
-    };
-    authenticateUser();
-  }, []);
-
   return (
-    <html lang="en">
-      <body className="mx-auto max-w-[1440px] text-sm">
-        <SidebarProvider>
-          <AppSidebar />
-          <main className="w-full">
-            <DashboardHeader />
-            {children}
-          </main>
-        </SidebarProvider>
-        <Footer />
-        <Toaster />
-      </body>
-    </html>
+    <QueryClientProvider client={queryClient}>
+      <UserProvider>
+        <html lang="en">
+          <body className="mx-auto max-w-[1440px] text-sm">
+            <Suspense fallback={<Loading />}>
+              <SidebarProvider>
+                <AppSidebar />
+                <main className="w-full">
+                  <DashboardHeader />
+                  {children}
+                </main>
+              </SidebarProvider>
+              <Footer />
+              <Toaster />
+            </Suspense>
+          </body>
+        </html>
+      </UserProvider>
+    </QueryClientProvider>
   );
 }

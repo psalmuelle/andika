@@ -6,8 +6,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Calendar, FileText } from "lucide-react";
+import { ProjectType } from "types";
 
-export default function ProjectOverview() {
+export default function ProjectOverview({ project }: { project: ProjectType }) {
+  const dueDate = new Date(project?.dueDate).toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
   return (
     <Card className="w-full max-w-2xl">
       <CardHeader>
@@ -16,7 +22,7 @@ export default function ProjectOverview() {
             <FileText className="text-muted-foreground/70" />
             <div>
               <CardDescription className="mb-1">Project Type</CardDescription>
-              <CardTitle>API/SDK Documentation</CardTitle>
+              <CardTitle>{project?.projectType}</CardTitle>
             </div>
           </div>
 
@@ -24,16 +30,13 @@ export default function ProjectOverview() {
             <Calendar className="text-muted-foreground/70" />
             <div>
               <CardDescription className="mb-1">Due Date</CardDescription>
-              <CardTitle>2024-03-15</CardTitle>
+              <CardTitle>{dueDate}</CardTitle>
             </div>
           </div>
         </div>
       </CardHeader>
       <CardContent>
-        <p>
-          Comprehensive documentation for the payment gateway SDK, including
-          installation guides, API reference, and implementation examples.
-        </p>
+        <p>{project?.description}</p>
       </CardContent>
     </Card>
   );

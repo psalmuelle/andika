@@ -1,3 +1,4 @@
+"use client";
 import ProjectInfoSidebar from "@/components/dashboard/projects/projectInfoSider";
 import ProjectOverview from "@/components/dashboard/projects/projectOverviewCard";
 import ProjectPayments from "@/components/dashboard/projects/projectPayments";
@@ -5,6 +6,10 @@ import { ProjectProgress } from "@/components/dashboard/projects/projectProgress
 import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { MessageSquare, Phone } from "lucide-react";
+import useProjectStore from "@/context/project";
+import { redirect } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import Loading from "../../loading";
 
 type Props = {
   params: { id: string };
@@ -12,15 +17,29 @@ type Props = {
 
 export default function ProjectPage({ params }: Props) {
   const { id } = params;
-  console.log(typeof id);
+  const { getProjectById } = useProjectStore();
+
+  const {
+    data: project,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["project", id],
+    queryFn: () => getProjectById(parseInt(id)),
+  });
+
+  if (isLoading) return <Loading />;
+  if (isError) {
+    redirect("/dashboard/projects");
+  }
   return (
     <div className="mt-6 px-[3%] pb-6">
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-b pb-2">
         <div>
           <Typography as="p" className="text-sm font-semibold">
-            Project #FJU7B
+            Project #PRJB{project?.id}
           </Typography>
-          <p>API Documentation for Payment Gateway SDK</p>
+          <p>{project?.title}</p>
         </div>
         <div className="flex gap-4">
           <Button>
@@ -35,11 +54,11 @@ export default function ProjectPage({ params }: Props) {
       </div>
       <div className="mt-6 flex gap-4 max-lg:flex-wrap">
         <div className="w-full max-w-2xl space-y-6">
-          <ProjectOverview />
-          <ProjectProgress />
-          <ProjectPayments />
+          <ProjectOverview project={project!} />
+          <ProjectProgress project={project!} />
+          <ProjectPayments project={project!} />
         </div>
-        <ProjectInfoSidebar />
+        <ProjectInfoSidebar project={project!} />
       </div>
     </div>
   );

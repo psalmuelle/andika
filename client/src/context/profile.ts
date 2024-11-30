@@ -3,8 +3,7 @@ import { ProfileType } from "types";
 import { create } from "zustand";
 
 interface ProfileState {
-  profile: ProfileType | null;
-  getProfile: () => Promise<any>;
+  getProfile: () => Promise<ProfileType>;
   createProfile: (profile: any) => Promise<any>;
 }
 
@@ -16,8 +15,7 @@ const useProfileStore = create<ProfileState>((set) => ({
       const response = await axiosInstance.get("/profile", {
         withCredentials: true,
       });
-      set({ profile: response.data });
-      return true;
+      return response.data as ProfileType;
     } catch (error) {
       throw error;
     }

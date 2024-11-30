@@ -1,15 +1,24 @@
 import { Card, CardTitle } from "../ui/card";
-import { useState } from "react";
-import Typography from "../ui/typography";
+import { useEffect, useState } from "react";
 
 const categories = [
-  { name: "Active", emoji: "🎯" },
   { name: "Pending", emoji: "🚧" },
+  { name: "Active", emoji: "🎯" },
   { name: "Completed", emoji: "🚀" },
 ];
 
-export default function ArticleMetrics() {
-  const [activeTab, setActiveTab] = useState(0);
+export default function ArticleMetrics({
+  quantity,
+  setActiveBar,
+}: {
+  quantity: number;
+  setActiveBar: (tab: number) => void;
+}) {
+  const [activeTab, setActiveTab] = useState(1);
+
+  useEffect(() => {
+    setActiveBar(activeTab);
+  }, [activeTab]);
 
   return (
     <Card className="mt-8 w-full">
@@ -41,7 +50,7 @@ export default function ArticleMetrics() {
             </p>
 
             <p className="mt-4 text-center text-3xl font-bold text-neutral-900">
-              0
+              {quantity}
             </p>
           </div>
         </div>
