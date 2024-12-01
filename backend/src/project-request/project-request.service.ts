@@ -126,15 +126,8 @@ export class ProjectRequestService {
     }
   }
 
-  async getAllRequests(userId: number) {
+  async getAllRequests(userId: number, userIsAdmin: boolean) {
     try {
-      const userIsAdmin = await this.prismaService.user.findUnique({
-        where: {
-          id: userId,
-          isAdmin: true,
-        },
-      });
-
       if (!userIsAdmin) {
         return this.prismaService.projectRequest.findMany({
           where: {

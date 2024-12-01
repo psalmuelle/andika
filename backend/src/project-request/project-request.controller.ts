@@ -79,7 +79,8 @@ export class ProjectRequestController {
   async getAllRequests(@Req() req: any) {
     try {
       const userId = req.user.id;
-      return this.requestService.getAllRequests(userId);
+      const isAdmin = req.user.isAdmin;
+      return this.requestService.getAllRequests(userId, isAdmin);
     } catch (err) {
       throw err;
     }

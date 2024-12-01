@@ -42,7 +42,8 @@ export class ProjectController {
   @Get('get/all')
   async getAll(@Req() req: any) {
     try {
-      return this.projectService.getAll(req.user.id);
+      const userId = req.user.id;
+      return this.projectService.getAll(userId);
     } catch (err) {
       throw err;
     }

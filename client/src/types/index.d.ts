@@ -21,6 +21,51 @@ declare module "types" {
     verified: boolean;
   }
 
+  export interface TechnicalArticleRequest {
+    id: number;
+    numberOfArticles: number;
+    audience: string;
+    primaryGoal: string;
+    contentStructure: string[];
+    idealLength: string;
+    usefulLinks: string;
+    proposedTopics: string;
+  }
+
+  export interface WhitepaperRequest {
+    id: number;
+    productName: string;
+    niche: string;
+  }
+
+  export interface ApiDocRequest {
+    id: number;
+    startupName: string;
+    industry: string;
+    docType: string;
+    usefulLinks: string;
+  }
+
+  export interface EditingRequest {
+    id: number;
+    drafts: string[];
+    usefulLinks: string;
+    info: string;
+  }
+
+  export interface ProjectRequestType {
+    id: number;
+    user: UserType;
+    userId: number;
+    requestType: "TECHNICAL_ARTICLE" | "WHITEPAPER" | "API_DOC" | "EDITING";
+    status: "NEW" | "STARTED";
+    createdAt: string;
+    ArticleRequest?: TechnicalArticleRequest;
+    WhitepaperRequest?: WhitepaperRequest
+    ApiDocRequest?: ApiDocRequest;
+    EditingRequest?: EditingRequest;
+  }
+
   export interface ProjectType {
     id: number;
     title: string;

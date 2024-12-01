@@ -22,7 +22,7 @@ export default function ProjectPage({ params }: Props) {
   const { data: project, isPending } = useQuery({
     queryKey: ["project", id],
     queryFn: async () => await getProjectById(parseInt(id)),
-    refetchInterval: 10000,
+    refetchInterval: 25000,
   });
 
   useEffect(() => {
