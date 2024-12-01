@@ -4,6 +4,7 @@ import { CreateProfileDto } from './dto/create-profile.dto';
 import { MailgunService } from 'src/mailgun/mailgun.service';
 import { OnboardingMessage } from './onboarding-template.email';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
+import { CreateAdminProfileDto } from './dto/create-admin-profile.dto';
 
 @Injectable()
 export class ProfileService {
@@ -56,6 +57,41 @@ export class ProfileService {
     }
   }
 
+  async createAdminProfile({
+    userId,
+    userIsAdmin,
+    profile,
+  }: {
+    userId: number;
+    userIsAdmin: boolean;
+    profile: CreateAdminProfileDto;
+  }) {
+    try {
+      if (!userIsAdmin) {
+        throw new HttpException('Unauthorized', 401);
+      }
+
+      const newAdminProfile = await this.prismaService.adminProfile.create({
+        data: {
+          name: profile.name,
+          avatar: profile.avatar,
+          userId,
+          position: profile.position,
+        },
+      });
+      if (!newAdminProfile) {
+        throw new HttpException('Profile not created', 400);
+      }
+    } catch (err) {
+      if (err instanceof PrismaClientKnownRequestError) {
+        if (err.code === 'P2014' || err.code === 'P2002') {
+          throw new HttpException('Profile already exists', 400);
+        }
+      }
+      throw err;
+    }
+  }
+
   async getProfile(userId: number) {
     try {
       const userProfile = await this.prismaService.profile.findUnique({
@@ -75,6 +111,30 @@ export class ProfileService {
         throw new HttpException('Profile not found', 404);
       }
       return userProfile;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getAdminProfile(userId: number) {
+    try {
+      const adminProfile = await this.prismaService.adminProfile.findUnique({
+        where: {
+          userId: userId,
+        },
+        include: {
+          user: {
+            select: {
+              email: true,
+            },
+          },
+        },
+      });
+
+      if (!adminProfile) {
+        throw new HttpException('Profile not found', 404);
+      }
+      return adminProfile;
     } catch (err) {
       throw err;
     }
