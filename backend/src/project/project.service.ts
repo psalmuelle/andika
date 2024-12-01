@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   CreateProjectDto,
@@ -84,10 +84,13 @@ export class ProjectService {
     }
   }
 
-  async getOne(id: number) {
-    return this.prismaService.project.findUnique({
+  async getOne(id: number, ownerId: number) {
+    const project = await this.prismaService.project.findUnique({
       where: {
         id,
+        owner: {
+          userId: ownerId,
+        },
       },
       include: {
         activities: true,
@@ -97,6 +100,10 @@ export class ProjectService {
         owner: true,
       },
     });
+    if (!project) {
+      throw new HttpException('Project not found', 404);
+    }
+    return project;
   }
 
   async createTask(data: CreateTaskDto) {

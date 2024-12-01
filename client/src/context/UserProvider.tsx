@@ -7,7 +7,7 @@ import { AxiosError } from "axios";
 
 interface UserContextType {
   user: UserType;
-  isLoading: boolean;
+  isPending: boolean;
   isError: boolean;
   error: any;
 }
@@ -19,7 +19,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
 
   const {
     data: user,
-    isLoading,
+    isPending,
     isError,
     error,
   } = useQuery({
@@ -33,7 +33,7 @@ export function UserProvider({ children }: { children: ReactNode }) {
   }, [error, isError]);
 
   return (
-    <UserContext.Provider value={{ user, isLoading, isError, error }}>
+    <UserContext.Provider value={{ user, isPending, isError, error }}>
       {children}
     </UserContext.Provider>
   );

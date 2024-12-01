@@ -27,31 +27,33 @@ export function ProjectProgress({ project }: { project: ProjectType }) {
         <Progress className="h-2" value={project?.overallProgress} />
 
         <div className="mt-6 space-y-4">
-          {project?.tasks.map((milestone, index) => (
-            <div key={index} className="flex items-center justify-between">
-              <div className="flex items-center space-x-3">
-                {milestone.status === "COMPLETED" ? (
-                  <CheckCircle2 className="h-5 w-5 text-green-500" />
-                ) : milestone.status === "IN_PROGRESS" ? (
-                  <Clock className="h-5 w-5 text-blue-500" />
-                ) : (
-                  <AlertCircle className="h-5 w-5 text-gray-300" />
-                )}
-                <span
-                  className={
-                    milestone.status === "COMPLETED"
-                      ? "text-gray-600 line-through"
-                      : "text-gray-600"
-                  }
-                >
-                  {milestone.title}
+          {project?.tasks
+            .sort((a, b) => a.id - b.id)
+            .map((milestone, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <div className="flex items-center space-x-3">
+                  {milestone.status === "COMPLETED" ? (
+                    <CheckCircle2 className="h-5 w-5 text-green-500" />
+                  ) : milestone.status === "IN_PROGRESS" ? (
+                    <Clock className="h-5 w-5 text-blue-500" />
+                  ) : (
+                    <AlertCircle className="h-5 w-5 text-gray-300" />
+                  )}
+                  <span
+                    className={
+                      milestone.status === "COMPLETED"
+                        ? "text-gray-600 line-through"
+                        : "text-gray-600"
+                    }
+                  >
+                    {milestone.title}
+                  </span>
+                </div>
+                <span className="text-sm text-gray-500">
+                  {changeDateFormat(milestone.dueDate)}
                 </span>
               </div>
-              <span className="text-sm text-gray-500">
-                {changeDateFormat(milestone.dueDate)}
-              </span>
-            </div>
-          ))}
+            ))}
         </div>
       </CardContent>
     </Card>

@@ -86,17 +86,19 @@ export default function ProjectInfoSidebar({
         <ScrollArea className="h-[286px]">
           <CardContent>
             <div className="space-y-4">
-              {project?.activities.map((activity, index) => (
-                <div key={index} className="flex items-start space-x-3">
-                  <BarChart3 className="mt-1 h-5 w-5 text-muted-foreground" />
-                  <div>
-                    <p className="text-gray-600">{activity?.activity}</p>
-                    <p className="text-xs text-gray-500">
-                      {formatDate(activity?.createdAt)}
-                    </p>
+              {project?.activities
+                .sort((a, b) => b.id - a.id)
+                .map((activity, index) => (
+                  <div key={index} className="flex items-start space-x-3">
+                    <BarChart3 className="mt-1 h-5 w-5 text-muted-foreground" />
+                    <div>
+                      <p className="text-gray-600">{activity?.activity}</p>
+                      <p className="text-xs text-gray-500">
+                        {formatDate(activity?.createdAt)}
+                      </p>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))}
             </div>
           </CardContent>
         </ScrollArea>

@@ -7,9 +7,9 @@ import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { MessageSquare, Phone } from "lucide-react";
 import useProjectStore from "@/context/project";
-import { redirect } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import Loading from "../../loading";
+import { useEffect } from "react";
 
 type Props = {
   params: { id: string };
@@ -19,19 +19,19 @@ export default function ProjectPage({ params }: Props) {
   const { id } = params;
   const { getProjectById } = useProjectStore();
 
-  const {
-    data: project,
-    isLoading,
-    isError,
-  } = useQuery({
+  const { data: project, isPending } = useQuery({
     queryKey: ["project", id],
-    queryFn: () => getProjectById(parseInt(id)),
+    queryFn: async () => await getProjectById(parseInt(id)),
+    refetchInterval: 10000,
   });
 
-  if (isLoading) return <Loading />;
-  if (isError) {
-    redirect("/dashboard/projects");
-  }
+  useEffect(() => {
+    if (!isPending && project === undefined) {
+      window.location.replace("/dashboard/projects");
+    }
+  }, [project, isPending]);
+
+  if (isPending) return <Loading />;
   return (
     <div className="mt-6 px-[3%] pb-6">
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-b pb-2">
@@ -54,11 +54,15 @@ export default function ProjectPage({ params }: Props) {
       </div>
       <div className="mt-6 flex gap-4 max-lg:flex-wrap">
         <div className="w-full max-w-2xl space-y-6">
-          <ProjectOverview project={project!} />
-          <ProjectProgress project={project!} />
-          <ProjectPayments project={project!} />
+          {project !== undefined && (
+            <>
+              <ProjectOverview project={project} />
+              <ProjectProgress project={project} />
+              <ProjectPayments project={project} />
+            </>
+          )}
         </div>
-        <ProjectInfoSidebar project={project!} />
+        {project !== undefined && <ProjectInfoSidebar project={project} />}
       </div>
     </div>
   );

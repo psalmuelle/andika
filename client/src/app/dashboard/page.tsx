@@ -17,7 +17,7 @@ export default function Dashboard() {
   const [numOfProjects, setNumOfProjects] = useState(0);
   const { getProjects } = useProjectStore();
 
-  const { data: projects, isLoading: projectLoading } = useQuery({
+  const { data: projects, isPending: projectLoading } = useQuery({
     queryKey: ["projects"],
     queryFn: getProjects,
   });

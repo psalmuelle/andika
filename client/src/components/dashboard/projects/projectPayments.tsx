@@ -16,24 +16,31 @@ export default function ProjectPayments({ project }: { project: ProjectType }) {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {project?.payments.map((payment) => (
-            <div key={payment.id} className="flex items-center justify-between">
-              <span className="text-muted-foreground">
-                {payment.id}
-                {payment.id == 1
-                  ? "st Payment"
-                  : payment.id == 2
-                    ? "nd Payment"
-                    : payment.id == 3
-                      ? "rd Payment"
-                      : "th Payment"}{" "}
-                <Tag color={payment.status === "Paid" ? "success" : "warning"}>
-                  {payment.status}
-                </Tag>
-              </span>
-              <span className="font-medium">${payment?.amount}</span>
-            </div>
-          ))}
+          {project?.payments
+            .sort((a, b) => a.id - b.id)
+            .map((payment) => (
+              <div
+                key={payment.id}
+                className="flex items-center justify-between"
+              >
+                <span className="text-muted-foreground">
+                  {payment.id}
+                  {payment.id == 1
+                    ? "st Payment"
+                    : payment.id == 2
+                      ? "nd Payment"
+                      : payment.id == 3
+                        ? "rd Payment"
+                        : "th Payment"}{" "}
+                  <Tag
+                    color={payment.status === "Paid" ? "success" : "warning"}
+                  >
+                    {payment.status}
+                  </Tag>
+                </span>
+                <span className="font-medium">${payment?.amount}</span>
+              </div>
+            ))}
         </div>
         <hr className="mt-4" />
       </CardContent>

@@ -7,7 +7,7 @@ import { Spin } from "antd";
 export default function AccountPage() {
   const { getProfile } = useProfileStore();
 
-  const { data: profile, isLoading } = useQuery({
+  const { data: profile, isPending } = useQuery({
     queryKey: ["profile"],
     queryFn: getProfile,
   });
@@ -19,7 +19,7 @@ export default function AccountPage() {
       </div>
       <div className="mt-8">
         <Card>
-          <Spin spinning={isLoading}>
+          <Spin spinning={isPending}>
             <CardHeader className="border-b">
               <div className="flex items-center gap-2">
                 <img

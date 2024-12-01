@@ -49,9 +49,11 @@ export class ProjectController {
   }
 
   @Get('get/:id')
-  async getOne(@Param('id', ParseIntPipe) id: number) {
+  async getOne(@Param('id', ParseIntPipe) id: number, @Req() req: any) {
     try {
-      return this.projectService.getOne(id);
+      const user = req.user;
+      const project = await this.projectService.getOne(id, user.id);
+      return project;
     } catch (err) {
       throw err;
     }

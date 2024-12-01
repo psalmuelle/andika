@@ -56,7 +56,7 @@ export default function AppSidebar() {
   const { logout } = useUserStore();
   const { getProfile } = useProfileStore();
 
-  const { data: profile, isLoading: isProfileLoading } = useQuery({
+  const { data: profile, isPending: isProfileLoading } = useQuery({
     queryKey: ["profile"],
     queryFn: getProfile,
   });

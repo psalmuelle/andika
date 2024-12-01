@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function ProjectPage() {
   const { getProjects } = useProjectStore();
-  const { data: projects, isLoading } = useQuery({
+  const { data: projects, isPending } = useQuery({
     queryKey: ["projects"],
     queryFn: getProjects,
   });
@@ -16,7 +16,7 @@ export default function ProjectPage() {
     <div className="mt-6 px-[3%] pb-6">
       <h1 className="mt-8 font-semibold">All projects</h1>
 
-      {isLoading ? (
+      {isPending ? (
         <div className="flex h-40 items-center justify-center">
           <Spin spinning />
         </div>
