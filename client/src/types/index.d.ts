@@ -61,7 +61,7 @@ declare module "types" {
     status: "NEW" | "STARTED";
     createdAt: string;
     ArticleRequest?: TechnicalArticleRequest;
-    WhitepaperRequest?: WhitepaperRequest
+    WhitepaperRequest?: WhitepaperRequest;
     ApiDocRequest?: ApiDocRequest;
     EditingRequest?: EditingRequest;
   }
@@ -79,6 +79,7 @@ declare module "types" {
     projectType: string;
     startDate: string;
     dueDate: string;
+    owner?: ProfileType;
     ownerId: number;
     status: string;
     overallProgress: number;

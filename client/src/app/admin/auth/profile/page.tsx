@@ -134,9 +134,6 @@ export default function Profile() {
                           <SelectItem value="Technical Writer">
                             Technical Writer
                           </SelectItem>
-                          <SelectItem value="Snr. Technical Writer">
-                            Snr. Technical Writer
-                          </SelectItem>
                         </SelectContent>
                       </Select>
                     </FormItem>

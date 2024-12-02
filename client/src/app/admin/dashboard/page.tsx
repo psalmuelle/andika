@@ -11,6 +11,13 @@ import { AxiosError } from "axios";
 import { ToastAction } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
 import { ProjectRequestType, ProjectType } from "types";
+import RecentProjects from "@/components/dashboard/projects/RecentProjects";
+import WriterOverview from "@/components/dashboard/writerOverview";
+import AdminMessages from "@/components/dashboard/allMessages";
+import UsersList from "@/components/dashboard/usersList";
+import AdminRecentActivities from "@/components/dashboard/AdminActivities";
+import RevenueOverview from "@/components/dashboard/RevenueOverview";
+import CallSchedules from "@/components/dashboard/CallSchedules";
 
 export default function Dashboard() {
   const { data, isPending } = useQuery({
@@ -30,7 +37,6 @@ export default function Dashboard() {
       const response = await axiosInstance.get("/project-request/all", {
         withCredentials: true,
       });
-      console.log(response);
       return response.data;
     },
     refetchInterval: 25000,
@@ -107,7 +113,15 @@ export default function Dashboard() {
         />
 
         {/* Recent Activities */}
-        <div className=""></div>
+        <div className="mt-12 space-y-6">
+          <RecentProjects projects={data as ProjectType[]} />
+          <WriterOverview />
+          <AdminMessages />
+          <UsersList />
+          <AdminRecentActivities />
+          <RevenueOverview />
+          <CallSchedules />
+        </div>
       </div>
     </>
   );
