@@ -1,3 +1,4 @@
+"use client";
 import {
   Accordion,
   AccordionItem,
@@ -14,8 +15,20 @@ import {
 } from "@/components/ui/card";
 import { Clock } from "lucide-react";
 import { supportChannels, faqs } from "@/constant/dashboard";
+import { getCalApi } from "@calcom/embed-react";
+import { useEffect } from "react";
 
 export default function Support() {
+  useEffect(() => {
+    (async function () {
+      const cal = await getCalApi({ namespace: "30min" });
+      cal("ui", {
+        styles: { branding: { brandColor: "#000000" } },
+        hideEventTypeDetails: false,
+        layout: "month_view",
+      });
+    })();
+  }, []);
   return (
     <div className="mt-6 px-[3%] pb-6">
       <div className="mt-8">
@@ -43,7 +56,18 @@ export default function Support() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button className="w-full">{channel.action}</Button>
+              {channel.title === "Call Support" ? (
+                <Button
+                  className="w-full"
+                  data-cal-namespace="30min"
+                  data-cal-link="erinle-samuel-1zabaa/30min"
+                  data-cal-config='{"layout":"month_view", "theme": "light"}'
+                >
+                  {channel.action}
+                </Button>
+              ) : (
+                <Button className="w-full">{channel.action}</Button>
+              )}
             </CardFooter>
           </Card>
         ))}

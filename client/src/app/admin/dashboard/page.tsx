@@ -101,7 +101,7 @@ export default function Dashboard() {
           <Typography as={"h4"}>Admin Dashboard</Typography>
           <div className="flex space-x-4">
             <Button>New Project</Button>
-            <Button variant={"outline"}>Generate Report</Button>
+            <Button variant={'outline'}>Message Client</Button>
           </div>
         </div>
 
@@ -114,13 +114,21 @@ export default function Dashboard() {
 
         {/* Recent Activities */}
         <div className="mt-12 space-y-6">
-          <RecentProjects projects={data as ProjectType[]} />
-          <WriterOverview />
-          <AdminMessages />
-          <UsersList />
-          <AdminRecentActivities />
-          <RevenueOverview />
-          <CallSchedules />
+          <div className="flex gap-6">
+            <RecentProjects projects={data as ProjectType[]} />
+            <RevenueOverview />
+          </div>
+
+          <div className="flex justify-between gap-6">
+            <CallSchedules />
+            <AdminMessages />
+            <AdminRecentActivities />
+          </div>
+
+          <div className="flex justify-between gap-6">
+            <UsersList />
+            <WriterOverview />
+          </div>
         </div>
       </div>
     </>

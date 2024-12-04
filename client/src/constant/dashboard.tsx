@@ -42,7 +42,7 @@ const quickActions = [
 const supportChannels = [
   {
     icon: <Phone className="h-6 w-6" />,
-    title: "Phone Support",
+    title: "Call Support",
     description: "Schedule a call with our support team",
     availability: "24/7 Support",
     action: "Schedule Call",

@@ -45,7 +45,7 @@ export default function AdminMessages() {
       <CardHeader className="border-b">
         <CardTitle>Messages</CardTitle>
       </CardHeader>
-      <ScrollArea className="h-80">
+      <ScrollArea className="h-[480px]">
         <CardContent className="divide-y">
           {messages.map((message, index) => (
             <div key={index} className="cursor-pointer p-4 hover:bg-gray-50">
