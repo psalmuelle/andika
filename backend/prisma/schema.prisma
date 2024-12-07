@@ -123,7 +123,7 @@ model Project {
   tasks           ProjectTask[]
   activities      ProjectActivity[]
   fee             String
-  payments        PaymentTimeline[]
+  payments        Payment[]
   files           String[]
   feedback        String[]
   createdAt       DateTime          @default(now())
@@ -147,14 +147,17 @@ model ProjectActivity {
   createdAt DateTime @default(now())
 }
 
-model PaymentTimeline {
-  id        Int       @id @default(autoincrement())
+model Payment {
+  id        Int           @id @default(autoincrement())
+  title     String
   amount    String
   dueDate   DateTime
-  status    String
+  status    PaymentStatus
   datePaid  DateTime?
-  Project   Project   @relation(fields: [projectId], references: [id])
+  Project   Project       @relation(fields: [projectId], references: [id])
   projectId Int
+  invoiceId String
+  invoice   String?
 }
 
 enum RequestStatus {
@@ -179,4 +182,9 @@ enum ProjectStatus {
   PENDING
   IN_PROGRESS
   COMPLETED
+}
+
+enum PaymentStatus {
+  PAID
+  PENDING
 }

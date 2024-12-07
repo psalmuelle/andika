@@ -1,4 +1,4 @@
-import { HttpException, Injectable } from '@nestjs/common';
+import { HttpException, Injectable, UploadedFile } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   CreateProjectDto,
@@ -9,10 +9,14 @@ import {
   UpdateTaskDto,
   UpdateTimelineDto,
 } from './dto';
+import { UploadService } from 'src/upload/upload.service';
 
 @Injectable()
 export class ProjectService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private uploadService: UploadService,
+  ) {}
 
   async create(data: CreateProjectDto, adminId: number) {
     const project = await this.prismaService.project.create({
@@ -51,36 +55,40 @@ export class ProjectService {
   }
 
   async getAll(userId: number) {
-    const user = await this.prismaService.user.findUnique({
-      where: {
-        id: userId,
-      },
-      include: {
-        profile: true,
-      },
-    });
-    if (user?.isAdmin) {
-      return this.prismaService.project.findMany({
-        include: {
-          activities: true,
-          tasks: true,
-          payments: true,
-          assignedPM: true,
-          owner: true,
-        },
-      });
-    } else {
-      return this.prismaService.project.findMany({
+    try {
+      const user = await this.prismaService.user.findUnique({
         where: {
-          ownerId: user?.profile?.id,
+          id: userId,
         },
         include: {
-          activities: true,
-          tasks: true,
-          payments: true,
-          assignedPM: true,
+          profile: true,
         },
       });
+      if (user?.isAdmin) {
+        return this.prismaService.project.findMany({
+          include: {
+            activities: true,
+            tasks: true,
+            payments: true,
+            assignedPM: true,
+            owner: true,
+          },
+        });
+      } else {
+        return this.prismaService.project.findMany({
+          where: {
+            ownerId: user?.profile?.id,
+          },
+          include: {
+            activities: true,
+            tasks: true,
+            payments: true,
+            assignedPM: true,
+          },
+        });
+      }
+    } catch (err) {
+      throw err;
     }
   }
 
@@ -103,6 +111,11 @@ export class ProjectService {
     if (!project) {
       throw new HttpException('Project not found', 404);
     }
+    project.payments.forEach(async (payment) => {
+      const invoice = await this.uploadService.getFileUrl(payment.invoiceId);
+      payment.invoice = invoice.fileUrl;
+    });
+
     return project;
   }
 
@@ -202,31 +215,48 @@ export class ProjectService {
     });
   }
 
-  async createPaymentTimeline(data: CreateTimelineDto) {
-    const timeline = await this.prismaService.paymentTimeline.create({
-      data: {
-        amount: data.amount,
-        dueDate: data.dueDate,
-        status: data.status,
-        projectId: data.projectId,
-        datePaid: data.datePaid,
-      },
-    });
+  async createPayment(data: CreateTimelineDto, file: Express.Multer.File) {
+    try {
+      if (!file) {
+        throw new HttpException('Invoice is required', 400);
+      }
+      const uploadInvoice = await this.uploadService.upload(file);
+      const payment = await this.prismaService.payment.create({
+        data: {
+          amount: data.amount,
+          dueDate: data.dueDate,
+          status: data.status,
+          projectId: data.projectId,
+          datePaid: data.datePaid,
+          invoiceId: uploadInvoice.fileName,
+        },
+      });
 
-    return timeline;
+      return payment;
+    } catch (err) {
+      throw err;
+    }
   }
 
-  async getPaymentTimelines(projectId: number) {
-    const projectTimelines = await this.prismaService.paymentTimeline.findMany({
-      where: {
-        projectId,
-      },
-    });
-    return projectTimelines;
+  async getPayments(projectId: number) {
+    try {
+      const payments = await this.prismaService.payment.findMany({
+        where: {
+          projectId,
+        },
+      });
+      payments.forEach(async (payment) => {
+        const invoice = await this.uploadService.getFileUrl(payment.invoiceId);
+        payment.invoice = invoice.fileUrl;
+      });
+      return payments;
+    } catch (err) {
+      throw err;
+    }
   }
 
   async updatePaymentTimeline(data: UpdateTimelineDto, id: number) {
-    const updatedTimeline = await this.prismaService.paymentTimeline.update({
+    const updatedTimeline = await this.prismaService.payment.update({
       where: {
         id,
       },

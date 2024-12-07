@@ -8,7 +8,9 @@ import {
   Put,
   Req,
   UnauthorizedException,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProjectService } from './project.service';
 import {
@@ -20,6 +22,7 @@ import {
   UpdateTimelineDto,
 } from './dto';
 import { AuthorizedGaurd } from 'src/auth/guard';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @UseGuards(AuthorizedGaurd)
 @Controller('project')
@@ -145,29 +148,34 @@ export class ProjectController {
     }
   }
 
-  @Post('payment-timeline/create')
-  async createTimeline(@Req() req: any, @Body() createDto: CreateTimelineDto) {
+  @Post('payment/create')
+  @UseInterceptors(FileInterceptor('invoice'))
+  async createTimeline(
+    @Req() req: any,
+    @Body() createDto: CreateTimelineDto,
+    @UploadedFile() file: Express.Multer.File,
+  ) {
     try {
       const userIsAdmin = req.user.isAdmin === true;
       if (!userIsAdmin) throw new UnauthorizedException();
-      return this.projectService.createPaymentTimeline(createDto);
+      return this.projectService.createPayment(createDto, file);
     } catch (err) {
       throw err;
     }
   }
 
-  @Get('payment-timeline/:projectId')
+  @Get('payment/:projectId')
   async getPaymentTimelines(
     @Param('projectId', ParseIntPipe) projectId: number,
   ) {
     try {
-      return this.projectService.getPaymentTimelines(projectId);
+      return this.projectService.getPayments(projectId);
     } catch (err) {
       throw err;
     }
   }
 
-  @Put('payment-timeline/update/:id')
+  @Put('payment/update/:id')
   async updatePaymentTimeline(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateDto: UpdateTimelineDto,

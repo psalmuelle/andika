@@ -1,4 +1,5 @@
-import { IsDateString, IsOptional, IsString } from 'class-validator';
+import { PaymentStatus } from '@prisma/client';
+import { IsDateString, IsEnum, IsOptional, IsString } from 'class-validator';
 
 export class UpdateTimelineDto {
   @IsString()
@@ -9,8 +10,8 @@ export class UpdateTimelineDto {
   @IsOptional()
   dueDate: string;
 
-  @IsString()
-  status: string;
+  @IsEnum(PaymentStatus)
+  status: PaymentStatus;
 
   @IsDateString()
   @IsOptional()
