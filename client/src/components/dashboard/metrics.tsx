@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { Button } from "../ui/button";
 import { Card, CardTitle } from "../ui/card";
 import { useEffect, useState } from "react";
 
@@ -23,7 +25,12 @@ export default function ArticleMetrics({
   return (
     <Card className="mt-8 w-full">
       <div className="p-4">
-        <CardTitle className="pt-4 text-sm font-medium">Projects</CardTitle>
+        <CardTitle className="flex items-center justify-between pt-2 text-sm font-medium">
+          <p>Projects</p>{" "}
+          <Button size={"sm"} asChild variant={"link"}>
+            <Link href={"/dashboard/projects"}>View All</Link>
+          </Button>
+        </CardTitle>
         <div className="mt-4 rounded-xl border p-4">
           <div className="mx-auto flex w-fit justify-center gap-2 rounded-md bg-accent p-2">
             {categories.map((category, index) => {

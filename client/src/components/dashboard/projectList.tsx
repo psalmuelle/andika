@@ -21,7 +21,7 @@ export default function ProjectList({
           </div>
         ) : projects.length === 0 ? (
           <Empty
-            description={"No project yet!"}
+            description={"No project here!"}
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             className="mx-auto"
           >

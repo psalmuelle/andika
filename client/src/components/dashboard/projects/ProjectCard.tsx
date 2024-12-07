@@ -29,7 +29,9 @@ function ProjectCard({ project }: { project: ProjectType }) {
       <CardHeader>
         <CardTitle className="leading-tight">{project.title}</CardTitle>
         <CardDescription>{project.projectType}</CardDescription>
-        <Tag className="w-fit rounded-xl">{project.status}</Tag>
+        <Tag className="w-fit rounded-xl capitalize">
+          {project.status.toLowerCase()}
+        </Tag>
       </CardHeader>
       <CardContent className="space-y-3">
         <div className="flex justify-between">

@@ -17,7 +17,7 @@ export function ProjectProgress({ project }: { project: ProjectType }) {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Project Progress</CardTitle>
-        <Tag className="w-fit">{project?.status}</Tag>
+        <Tag className="w-fit capitalize">{project?.status.toLowerCase()}</Tag>
       </CardHeader>
       <CardContent>
         <div className="mb-2 flex justify-between font-medium">

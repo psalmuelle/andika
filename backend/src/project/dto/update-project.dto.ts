@@ -1,4 +1,11 @@
-import { IsDateString, IsNumber, IsOptional, IsString } from 'class-validator';
+import {
+  IsDateString,
+  IsEnum,
+  IsNumber,
+  IsOptional,
+  IsString,
+} from 'class-validator';
+import { ProjectStatus } from '@prisma/client';
 
 export class UpdateProjectDto {
   @IsString()
@@ -25,9 +32,9 @@ export class UpdateProjectDto {
   @IsOptional()
   ownerId: number;
 
-  @IsString()
+  @IsEnum(ProjectStatus)
   @IsOptional()
-  status: string;
+  status: ProjectStatus;
 
   @IsString()
   @IsOptional()

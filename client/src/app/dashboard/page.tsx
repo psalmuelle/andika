@@ -22,7 +22,7 @@ export default function Dashboard() {
     queryFn: getProjects,
   });
 
-  const categories = ["Pending", "In Progress", "Completed"];
+  const categories = ["PENDING", "IN_PROGRESS", "COMPLETED"];
 
   useEffect(() => {
     if (projects && projects?.length > 0) {

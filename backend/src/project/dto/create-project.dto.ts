@@ -1,4 +1,5 @@
-import { IsDateString, IsNumber, IsString } from 'class-validator';
+import { IsDateString, IsEnum, IsNumber, IsString } from 'class-validator';
+import { ProjectStatus } from '@prisma/client';
 
 export class CreateProjectDto {
   @IsString()
@@ -19,8 +20,8 @@ export class CreateProjectDto {
   @IsNumber()
   ownerId: number;
 
-  @IsString()
-  status: string;
+  @IsEnum(ProjectStatus)
+  status: ProjectStatus;
 
   @IsString()
   fee: string;

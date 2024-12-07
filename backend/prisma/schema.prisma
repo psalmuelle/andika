@@ -118,8 +118,8 @@ model Project {
   ownerId         Int
   assignedPM      AdminProfile      @relation(fields: [assignedPMId], references: [userId])
   assignedPMId    Int
-  status          String
-  overallProgress Int             @default(0)
+  status          ProjectStatus     @default(PENDING)
+  overallProgress Int               @default(0)
   tasks           ProjectTask[]
   activities      ProjectActivity[]
   fee             String
@@ -171,6 +171,12 @@ enum RequestType {
 
 enum TaskStatus {
   NEW
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum ProjectStatus {
+  PENDING
   IN_PROGRESS
   COMPLETED
 }
