@@ -10,6 +10,7 @@ import { MailgunModule } from './mailgun/mailgun.module';
 import { ProfileModule } from './profile/profile.module';
 import { ProjectModule } from './project/project.module';
 import { ProjectRequestModule } from './project-request/project-request.module';
+import { UploadModule } from './upload/upload.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ProjectRequestModule } from './project-request/project-request.module';
     ProfileModule,
     ProjectRequestModule,
     ProjectModule,
+    UploadModule,
   ],
   controllers: [AppController],
   providers: [AppService, MailgunService],
