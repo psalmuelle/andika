@@ -14,28 +14,28 @@ const quickActions = [
     description: "In-depth articles explaining complex technical concepts",
     icon: FileText,
     startingPrice: 299,
-    link: "",
+    link: "/dashboard/projects/create?service=Technical Articles",
   },
   {
     title: "API/SDK Documentation",
     description: "Clear and detailed API reference documentation",
     icon: Code,
     startingPrice: 499,
-    link: "",
+    link: "/dashboard/projects/create?service=API/SDK Documentation",
   },
   {
     title: "Whitepapers",
     description: "Comprehensive research papers and industry analysis",
     icon: Book,
     startingPrice: 799,
-    link: "",
+    link: "/dashboard/projects/create?service=Whitepapers",
   },
   {
     title: "Editing/Proofreading",
     description: "Professional editing and proofreading",
     icon: CheckSquare,
     startingPrice: 149,
-    link: "",
+    link: "/dashboard/projects/create?service=Editing and Proofreading",
   },
 ];
 

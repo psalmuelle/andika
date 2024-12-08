@@ -2,12 +2,13 @@ import Image from "next/image";
 import { Card, CardTitle } from "../ui/card";
 import { useRouter } from "next/navigation";
 import { quickActions } from "@/constant/dashboard";
-import { Button } from "../ui/button";
+import Link from "next/link";
 
 type QuickActionProps = {
   title: string;
   description: string;
   startingPrice: number;
+  link: string;
   icon: React.FC<React.SVGProps<SVGSVGElement>>;
   onClick: () => void;
 };
@@ -17,6 +18,7 @@ const QuickAction = ({
   description,
   startingPrice,
   icon,
+  link,
   onClick,
 }: QuickActionProps) => {
   const Icon = icon;
@@ -25,16 +27,16 @@ const QuickAction = ({
       onClick={onClick}
       className="w-full max-w-[286px] cursor-pointer rounded-xl border p-4 shadow-sm hover:border-accent-foreground"
     >
-      <div className="flex items-start gap-4">
+      <div className="flex items-start gap-4 max-lg:bg-green-400">
         <div className={`rounded-lg bg-secondary p-2.5`}>
           <Icon className="h-5 w-5" />
         </div>
         <div>
           <h3 className="font-medium">{title}</h3>
           <p className="mt-1 text-sm">{description}</p>
-          <p className="mt-2 text-sm font-medium underline">
+          <Link href={link} className="mt-2 text-sm font-medium">
             Starting from ${startingPrice}
-          </p>
+          </Link>
         </div>
       </div>
     </div>
@@ -58,6 +60,7 @@ export default function QuickActions() {
                   startingPrice={action.startingPrice}
                   title={action.title}
                   icon={action.icon}
+                  link={action.link}
                   description={action.description}
                   onClick={() => router.push(action.link)}
                 />

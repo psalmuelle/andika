@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -12,6 +12,7 @@ import RequestArticleForm from "@/components/dashboard/projects/project-forms/Re
 import RequestApiDocForm from "@/components/dashboard/projects/project-forms/RequestApiDoc";
 import RequestEditingForm from "@/components/dashboard/projects/project-forms/RequestEditing";
 import RequestWhitepaperForm from "@/components/dashboard/projects/project-forms/RequestWhitepaper";
+import { useSearchParams } from "next/navigation";
 
 const projectTypes = [
   {
@@ -33,8 +34,17 @@ const projectTypes = [
 ];
 
 export default function CreateProjectPage() {
+  const searchParams = useSearchParams();
   const [selectedService, setSelectedService] = useState<String>("");
   const [step, setStep] = useState<number>(0);
+
+  useEffect(() => {
+    const service = searchParams.get("service");
+    if (service) {
+      setSelectedService(service);
+      setStep(1);
+    }
+  }, []);
 
   return (
     <div className="mt-6 px-[3%] pb-6">
