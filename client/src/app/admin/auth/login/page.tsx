@@ -93,7 +93,7 @@ export default function Login() {
       <div className="flex min-h-[90vh] flex-col items-center justify-center px-[5%]">
         <div className="mt-8 text-center">
           <Typography as="h4">Admin Authentication</Typography>
-          <p>Sign up</p>
+          <p className="font-medium">Welcome back!</p>
         </div>
         <section className="mx-auto my-8 w-full max-w-sm">
           <Form {...form}>

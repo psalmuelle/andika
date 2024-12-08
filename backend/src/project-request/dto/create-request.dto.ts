@@ -60,9 +60,6 @@ export class CreateApiDocRequestDto {
 }
 
 export class CreateEditingRequestDto {
-  @IsArray()
-  drafts: string[];
-
   @IsString()
   usefulLinks: string;
 

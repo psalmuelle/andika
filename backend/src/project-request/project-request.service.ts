@@ -7,10 +7,14 @@ import {
   CreateRequestDto,
   CreateWhitepaperRequestDto,
 } from './dto/create-request.dto';
+import { UploadService } from 'src/upload/upload.service';
 
 @Injectable()
 export class ProjectRequestService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    private uploadService: UploadService,
+  ) {}
 
   async createProjectRequest(data: CreateRequestDto) {
     try {
@@ -103,7 +107,11 @@ export class ProjectRequestService {
     }
   }
 
-  async createEditingRequest(data: CreateEditingRequestDto, userId: number) {
+  async createEditingRequest(
+    data: CreateEditingRequestDto,
+    userId: number,
+    files: Array<Express.Multer.File>,
+  ) {
     try {
       const projectReq = await this.createProjectRequest({
         userId,
@@ -111,10 +119,17 @@ export class ProjectRequestService {
         status: 'NEW',
       });
 
+      const fileNames = await Promise.all(
+        files.map(async (file) => {
+          const { fileName } = await this.uploadService.upload(file);
+          return fileName;
+        }),
+      );
+
       await this.prismaService.editingRequest.create({
         data: {
           projectRequestId: projectReq.id,
-          drafts: data.drafts,
+          drafts: fileNames,
           info: data.info,
           usefulLinks: data.usefulLinks,
         },
@@ -142,7 +157,7 @@ export class ProjectRequestService {
         });
       }
 
-      return this.prismaService.projectRequest.findMany({
+      const requests = await this.prismaService.projectRequest.findMany({
         include: {
           ApiDocRequest: true,
           EditingRequest: true,
@@ -150,6 +165,7 @@ export class ProjectRequestService {
           ArticleRequest: true,
         },
       });
+      return requests;
     } catch (err) {
       throw err;
     }

@@ -19,17 +19,17 @@ import { z } from "zod";
 import { Upload, type UploadProps } from "antd";
 import { Textarea } from "@/components/ui/textarea";
 import { InboxIcon } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 const { Dragger } = Upload;
 
 const formSchema = z.object({
   usefulLinks: z.string(),
   info: z.string(),
-  drafts: z.array(z.string()),
 });
 
 export default function RequestEditingForm() {
-  const [fileList, setFileList] = useState<string[]>();
+  const [fileList, setFileList] = useState<any[]>();
   const [btnLoading, setBtnLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const { createEditingRequest } = useProjectStore();
@@ -39,7 +39,6 @@ export default function RequestEditingForm() {
     defaultValues: {
       usefulLinks: "",
       info: "",
-      drafts: ["a", "b"],
     },
   });
 
@@ -47,9 +46,9 @@ export default function RequestEditingForm() {
     name: "file",
     accept: ".doc,.docx,.xml,.pdf,.txt,.md",
     multiple: true,
-    action: "https://www.mocky.io/v2/5cc8019d300000980a055e76",
     onChange(info) {
-      return setFileList(["a", "b"]);
+      const files = info.fileList.map((file) => file.originFileObj);
+      setFileList(files);
     },
   };
 
@@ -57,7 +56,16 @@ export default function RequestEditingForm() {
     try {
       setBtnLoading(true);
 
-      await createEditingRequest(values);
+      const formData = new FormData();
+      formData.append("usefulLinks", values.usefulLinks);
+      formData.append("info", values.info);
+
+      if (fileList && fileList.length > 0) {
+        fileList.forEach((file: File) => {
+          formData.append("drafts", file);
+        });
+      }
+      await createEditingRequest(formData);
       setSuccess(true);
       setBtnLoading(false);
     } catch (error) {
@@ -76,32 +84,25 @@ export default function RequestEditingForm() {
     <>
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="drafts"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Upload Writeups/Drafts</FormLabel>
-                <div className="my-4" />
-                <FormControl>
-                  <Dragger onChange={field.onChange} {...uploadProps}>
-                    <p className="ant-upload-drag-icon">
-                      <InboxIcon size={36} className="mx-auto" />
-                    </p>
-                    <p className="ant-upload-text">
-                      Click or drag file to this area to upload
-                    </p>
-                    <p className="ant-upload-hint">
-                      You can upload multiple files of writeups and articles
-                      here. Note that the files can only be .md, .txt or .doc
-                      formats.
-                    </p>
-                  </Dragger>
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <FormItem>
+            <FormLabel>Upload Writeups/Drafts</FormLabel>
+            <div className="my-4" />
+            <FormControl>
+              <Dragger {...uploadProps}>
+                <p className="ant-upload-drag-icon">
+                  <InboxIcon size={36} className="mx-auto" />
+                </p>
+                <p className="ant-upload-text">
+                  Click or drag file to this area to upload
+                </p>
+                <p className="ant-upload-hint">
+                  You can upload multiple files of writeups and articles here.
+                  Note that the files can only be .md, .txt or .doc formats.
+                </p>
+              </Dragger>
+            </FormControl>
+            <FormMessage />
+          </FormItem>
 
           <FormField
             control={form.control}

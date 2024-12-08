@@ -78,7 +78,10 @@ const useProjectStore = create<ProjectState>((set) => ({
       const response = await axiosInstance.post(
         "/project-request/editing",
         request,
-        { withCredentials: true },
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "multipart/form-data" },
+        },
       );
       return response;
     } catch (err) {

@@ -7,7 +7,10 @@ import {
   Post,
   Put,
   Req,
+  UploadedFile,
+  UploadedFiles,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { ProjectRequestService } from './project-request.service';
 import {
@@ -17,6 +20,7 @@ import {
   CreateWhitepaperRequestDto,
 } from './dto/create-request.dto';
 import { AuthorizedGaurd } from 'src/auth/guard';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 
 @UseGuards(AuthorizedGaurd)
 @Controller('project-request')
@@ -63,13 +67,15 @@ export class ProjectRequestController {
   }
 
   @Post('editing')
+  @UseInterceptors(FilesInterceptor('drafts', 20))
   async createEditingRequest(
     @Body() data: CreateEditingRequestDto,
     @Req() req: any,
+    @UploadedFiles() drafts: Array<Express.Multer.File>,
   ) {
     try {
       const userId = req.user.id;
-      return this.requestService.createEditingRequest(data, userId);
+      return this.requestService.createEditingRequest(data, userId, drafts);
     } catch (err) {
       throw err;
     }
