@@ -91,6 +91,17 @@ export class ProjectRequestController {
       throw err;
     }
   }
+
+  @Get(':id')
+  async getRequestById(@Param('id', ParseIntPipe) id: number, @Req() req: any) {
+    try {
+      const userIsAdmin = req.user.isAdmin;
+      return this.requestService.getRequestById({ id, userIsAdmin });
+    } catch (err) {
+      throw err;
+    }
+  }
+
   @Put('update/:id')
   async updateRequest(@Param('id', ParseIntPipe) id: number, @Req() req: any) {
     try {

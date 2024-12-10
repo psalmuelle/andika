@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   CreateApiDocRequestDto,
@@ -163,9 +168,38 @@ export class ProjectRequestService {
           EditingRequest: true,
           WhitepaperRequest: true,
           ArticleRequest: true,
+          user: true,
         },
       });
       return requests;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getRequestById({
+    id,
+    userIsAdmin,
+  }: {
+    id: number;
+    userIsAdmin: boolean;
+  }) {
+    try {
+      if (!userIsAdmin)
+        throw new HttpException('Unauthorized', HttpStatus.FORBIDDEN);
+
+      return this.prismaService.projectRequest.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          ApiDocRequest: true,
+          EditingRequest: true,
+          WhitepaperRequest: true,
+          ArticleRequest: true,
+          user: true,
+        },
+      });
     } catch (err) {
       throw err;
     }

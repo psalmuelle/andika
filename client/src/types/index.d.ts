@@ -55,7 +55,7 @@ declare module "types" {
 
   export interface ProjectRequestType {
     id: number;
-    user: UserType;
+    user: ProfileType;
     userId: number;
     requestType: "TECHNICAL_ARTICLE" | "WHITEPAPER" | "API_DOC" | "EDITING";
     status: "NEW" | "STARTED";

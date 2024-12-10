@@ -58,4 +58,14 @@ export class ProfileController {
       throw error;
     }
   }
+
+  @Get('admin/get/all')
+  async getAllAdminProfiles(@Req() req: any) {
+    try {
+      const userIsAdmin = req.user?.isAdmin as boolean;
+      return this.profileService.getAllAdminProfiles({ userIsAdmin });
+    } catch (err) {
+      throw err;
+    }
+  }
 }

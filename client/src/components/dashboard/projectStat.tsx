@@ -31,26 +31,26 @@ export default function ProjectStat({
     {
       label: "Active Projects",
       value: numActiveProj,
-      change: Math.round((numActiveProj / data?.length) * 100) + "%",
+      change: Math.round(numActiveProj / data?.length || 0) * 100 + "%",
       icon: <FileText className="h-5 w-5 text-blue-600" />,
     },
     {
       label: "In Review",
       value: numReviewProj,
-      change: Math.round((numReviewProj / data?.length) * 100) + "%",
+      change: Math.round(numReviewProj / data?.length || 0) * 100 + "%",
       icon: <Clock className="h-5 w-5 text-yellow-600" />,
     },
     {
       label: "Completed",
       value: numCompletedProj,
-      change: Math.round((numCompletedProj / data?.length) * 100) + "%",
+      change: Math.round((numCompletedProj / data?.length || 0) * 100) + "%",
       icon: <CheckCircle className="h-5 w-5 text-green-600" />,
     },
     {
       label: "Delayed",
       value: numDelayedProj,
       change:
-        Math.round((numDelayedProj / projectRequests?.length) * 100) + "%",
+        Math.round(numDelayedProj / projectRequests?.length || 0) * 100 + "%",
       icon: <AlertTriangle className="h-5 w-5 text-red-600" />,
     },
   ];

@@ -10,6 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ProjectType } from "types";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { formatDistanceToNow } from "date-fns";
 
 const projectData = {
   id: "PRJ-2024-001",
@@ -41,14 +42,15 @@ const projectData = {
   ],
 };
 
+const timeAgo = (date: string) => {
+  return formatDistanceToNow(new Date(date), { addSuffix: true });
+};
+
 export default function ProjectInfoSidebar({
   project,
 }: {
   project: ProjectType;
 }) {
-  const formatDate = (date: string): string => {
-    return new Date(date).toLocaleString();
-  };
 
   return (
     <div className="flex w-max grid-cols-2 flex-col gap-6 max-lg:grid max-sm:grid-cols-1">
@@ -94,7 +96,7 @@ export default function ProjectInfoSidebar({
                     <div>
                       <p className="text-gray-600">{activity?.activity}</p>
                       <p className="text-xs text-gray-500">
-                        {formatDate(activity?.createdAt)}
+                        {timeAgo(activity?.createdAt)}
                       </p>
                     </div>
                   </div>

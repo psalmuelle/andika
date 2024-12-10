@@ -5,11 +5,6 @@ import Typography from "@/components/ui/typography";
 import { LayoutDashboard } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/config/axios";
-import { useEffect } from "react";
-import { useToast } from "@/hooks/use-toast";
-import { AxiosError } from "axios";
-import { ToastAction } from "@/components/ui/toast";
-import { useRouter } from "next/navigation";
 import { ProjectRequestType, ProjectType } from "types";
 import RecentProjects from "@/components/dashboard/projects/RecentProjects";
 import WriterOverview from "@/components/dashboard/writerOverview";
@@ -18,9 +13,10 @@ import UsersList from "@/components/dashboard/usersList";
 import AdminRecentActivities from "@/components/dashboard/AdminActivities";
 import RevenueOverview from "@/components/dashboard/RevenueOverview";
 import CallSchedules from "@/components/dashboard/CallSchedules";
+import ProjectRequestDrawer from "@/components/dashboard/projects/ProjectRequesDrawer";
 
 export default function Dashboard() {
-  const { data, isPending } = useQuery({
+  const { data: projects, isPending } = useQuery({
     queryKey: ["projects"],
     queryFn: async () => {
       const response = await axiosInstance.get("/project/get/all", {
@@ -31,7 +27,7 @@ export default function Dashboard() {
     refetchInterval: 25000,
   });
 
-  const { data: projectRequests } = useQuery({
+  const { data: projectRequests, isPending: projectRequestLoading } = useQuery({
     queryKey: ["projectRequests"],
     queryFn: async () => {
       const response = await axiosInstance.get("/project-request/all", {
@@ -41,31 +37,6 @@ export default function Dashboard() {
     },
     refetchInterval: 25000,
   });
-  const { toast } = useToast();
-  const router = useRouter();
-
-  useEffect(() => {
-    async function isAuthorized() {
-      try {
-        const res = await axiosInstance.get("auth/status", {
-          withCredentials: true,
-        });
-        return res;
-      } catch (error) {
-        toast({
-          variant: "destructive",
-          title: "Uh oh! Something went wrong.",
-          description:
-            error instanceof AxiosError
-              ? error.response?.data.message
-              : "There was a problem with your request.",
-          action: <ToastAction altText="Try again">Try again</ToastAction>,
-        });
-        router.replace("/admin/auth/login");
-      }
-    }
-    isAuthorized();
-  }, []);
 
   return (
     <>
@@ -100,14 +71,14 @@ export default function Dashboard() {
         <div className="mt-8 flex items-center justify-between">
           <Typography as={"h4"}>Admin Dashboard</Typography>
           <div className="flex space-x-4">
-            <Button>New Project</Button>
-            <Button variant={'outline'}>Message Client</Button>
+            <ProjectRequestDrawer isLoading={projectRequestLoading} data={projectRequests} />
+            <Button variant={"outline"}>Message Client</Button>
           </div>
         </div>
 
         {/* Project Stats */}
         <ProjectStat
-          data={data as ProjectType[]}
+          data={projects as ProjectType[]}
           isPending={isPending}
           projectRequests={projectRequests as ProjectRequestType[]}
         />
@@ -115,7 +86,7 @@ export default function Dashboard() {
         {/* Recent Activities */}
         <div className="mt-12 space-y-6">
           <div className="flex gap-6">
-            <RecentProjects projects={data as ProjectType[]} />
+            <RecentProjects projects={projects as ProjectType[]} />
             <RevenueOverview />
           </div>
 

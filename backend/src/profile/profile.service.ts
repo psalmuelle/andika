@@ -139,4 +139,26 @@ export class ProfileService {
       throw err;
     }
   }
+
+  async getAllAdminProfiles({ userIsAdmin }: { userIsAdmin: boolean }) {
+    try {
+      if (!userIsAdmin) {
+        throw new HttpException('Unauthorized', 401);
+      }
+
+      const adminProfiles = await this.prismaService.adminProfile.findMany({
+        include: {
+          user: {
+            select: {
+              email: true,
+            },
+          },
+        },
+      });
+
+      return adminProfiles;
+    } catch (err) {
+      throw err;
+    }
+  }
 }
