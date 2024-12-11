@@ -30,9 +30,11 @@ export default function ProjectList({
             </Button>
           </Empty>
         ) : (
-          projects.map((project) => (
-            <ProductCard key={project.id} project={project} />
-          ))
+          <div className="flex flex-wrap gap-4 max-md:justify-center">
+            {projects.map((project) => (
+              <ProductCard key={project.id} project={project} />
+            ))}
+          </div>
         )}
       </div>
     </Card>

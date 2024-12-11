@@ -21,7 +21,7 @@ function ProjectCard({ project }: { project: ProjectType }) {
   const router = useRouter();
   return (
     <Card
-      className="w-full max-w-[290px] cursor-pointer"
+      className="w-full max-w-[280px] cursor-pointer"
       onClick={() => {
         router.push(`/dashboard/projects/${project.id}`);
       }}

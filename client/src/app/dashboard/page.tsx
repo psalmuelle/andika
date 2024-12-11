@@ -53,7 +53,7 @@ export default function Dashboard() {
           <ChatWidget />
         </div>
       </div>
-      <ArticleMetrics quantity={numOfProjects} setActiveBar={setActiveBar} />
+      <ArticleMetrics quantity={numOfProjects} projects={ projects} setActiveBar={setActiveBar} />
       <div className="mt-6">
         <ProjectList isLoading={projectLoading} projects={visibleProjects} />
       </div>

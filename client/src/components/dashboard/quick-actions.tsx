@@ -27,7 +27,7 @@ const QuickAction = ({
       onClick={onClick}
       className="w-full max-w-[286px] cursor-pointer rounded-xl border p-4 shadow-sm hover:border-accent-foreground"
     >
-      <div className="flex items-start gap-4 max-lg:bg-green-400">
+      <div className="flex items-start gap-4">
         <div className={`rounded-lg bg-secondary p-2.5`}>
           <Icon className="h-5 w-5" />
         </div>
