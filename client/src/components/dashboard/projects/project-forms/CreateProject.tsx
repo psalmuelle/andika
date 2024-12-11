@@ -59,7 +59,7 @@ export default function CreateProjectForm({
   projectOwnerId: number;
   requestId: number;
   admins: ProfileType[];
-  requestStatus: "NEW" | "STARTED"
+  requestStatus: "NEW" | "STARTED";
 }) {
   const router = useRouter();
   const { toast } = useToast();

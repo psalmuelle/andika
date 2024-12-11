@@ -11,11 +11,22 @@ import { JsonView, allExpanded, darkStyles } from "react-json-view-lite";
 import "react-json-view-lite/dist/index.css";
 import CreateProjectForm from "@/components/dashboard/projects/project-forms/CreateProject";
 import { ProfileType } from "types";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { useRouter } from "next/navigation";
 
 export default function CreateProject() {
   const searchParams = useSearchParams();
   const [requestId, setRequestId] = useState<string>();
-  const { data: projectRequest } = useQuery({
+  const router = useRouter();
+  const { data: projectRequest, isPending: projectReqPending } = useQuery({
     queryKey: ["projectRequest", requestId],
     queryFn: async ({ queryKey }) => {
       if (!queryKey[1]) return;
@@ -50,7 +61,10 @@ export default function CreateProject() {
 
   useEffect(() => {
     const requestId = searchParams.get("requestId");
-    if (!requestId) return;
+    if (!requestId) {
+      router.push("/admin/dashboard/projects");
+      return;
+    }
     setRequestId(requestId);
   }, []);
 
@@ -156,6 +170,30 @@ export default function CreateProject() {
           </div>
         </section>
       </main>
+
+      <AlertDialog
+        open={!projectReqPending && projectRequest?.status === "STARTED"}
+      >
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>
+              A Project Has Been Created For This Request
+            </AlertDialogTitle>
+            <AlertDialogDescription>
+              Request is now active and project has been created for it. Go back
+              to projects page to view the project.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogAction
+              className="mt-4 w-full"
+              onClick={() => router.push("/admin/dashboard/projects")}
+            >
+              Back to Projects
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -11,7 +11,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ProjectRequestType } from "types";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { formatDistanceToNow } from "date-fns";
+import { formatDistance } from "date-fns";
 
 export default function ProjectRequestDrawer({
   data,
@@ -21,7 +21,7 @@ export default function ProjectRequestDrawer({
   isLoading: boolean;
 }) {
   const timeAgo = (date: string) => {
-    return formatDistanceToNow(new Date(date), { addSuffix: true });
+    return formatDistance(new Date(date), new Date(), { addSuffix: true });
   };
   return (
     <Drawer>
@@ -74,7 +74,7 @@ export default function ProjectRequestDrawer({
               data &&
               data.filter((projectRequest) => projectRequest?.status === "NEW")
                 .length == 0 && (
-                <p className="w-full mb-4 text-center font-semibold">
+                <p className="mb-4 w-full text-center font-semibold">
                   No project Request
                 </p>
               )}

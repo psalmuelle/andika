@@ -13,15 +13,13 @@ export default function ProjectStat({
   isPending: boolean;
 }) {
   const numActiveProj = data?.filter(
-    (val) => val.status === "In Progress",
+    (val) => val.status === "IN_PROGRESS",
   ).length;
 
-  const numReviewProj = data?.filter(
-    (val) => val.status === "In Review",
-  ).length;
+  const numReviewProj = data?.filter((val) => val.status === "PENDING").length;
 
   const numCompletedProj = data?.filter(
-    (val) => val.status === "Completed",
+    (val) => val.status === "COMPLETED",
   ).length;
 
   const numDelayedProj = projectRequests?.filter(
