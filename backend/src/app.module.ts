@@ -11,6 +11,7 @@ import { ProfileModule } from './profile/profile.module';
 import { ProjectModule } from './project/project.module';
 import { ProjectRequestModule } from './project-request/project-request.module';
 import { UploadModule } from './upload/upload.module';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { UploadModule } from './upload/upload.module';
     ProjectRequestModule,
     ProjectModule,
     UploadModule,
+    ChatModule,
   ],
   controllers: [AppController],
   providers: [AppService, MailgunService],

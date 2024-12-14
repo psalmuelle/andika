@@ -229,6 +229,7 @@ export class ProjectService {
           projectId: data.projectId,
           datePaid: data.datePaid,
           invoiceId: uploadInvoice.fileName,
+          title: data.title,
         },
       });
 
