@@ -59,6 +59,15 @@ export class ProfileController {
     }
   }
 
+  @Get('admin/support')
+  async getSupportProfile() {
+    try {
+      return this.profileService.getSupportProfile();
+    } catch (err) {
+      throw err;
+    }
+  }
+
   @Get('admin/get/all')
   async getAllAdminProfiles(@Req() req: any) {
     try {

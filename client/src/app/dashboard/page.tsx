@@ -49,11 +49,15 @@ export default function Dashboard() {
 
       <div className="mt-8 flex gap-4">
         <QuickActions />
-        <div className="min-w-[275px] max-md:hidden">
+        <div className="min-w-[304px] max-md:hidden">
           <ChatWidget />
         </div>
       </div>
-      <ArticleMetrics quantity={numOfProjects} projects={ projects} setActiveBar={setActiveBar} />
+      <ArticleMetrics
+        quantity={numOfProjects}
+        projects={projects}
+        setActiveBar={setActiveBar}
+      />
       <div className="mt-6">
         <ProjectList isLoading={projectLoading} projects={visibleProjects} />
       </div>
@@ -66,7 +70,7 @@ export default function Dashboard() {
       />
 
       {openChatWidget && (
-        <div className="fixed bottom-24 right-[3%]">
+        <div className="fixed bottom-24 right-[7%]">
           <ChatWidget />
         </div>
       )}

@@ -21,11 +21,11 @@ export default function RootLayout({
     <QueryClientProvider client={queryClient}>
       <UserProvider>
         <html lang="en">
-          <body className="mx-auto max-w-[1440px] text-sm">
+          <body>
             <Suspense fallback={<Loading />}>
               <SidebarProvider>
                 <AppSidebar />
-                <main className="w-full">
+                <main className="mx-auto w-full max-w-[1440px] text-sm">
                   <DashboardHeader />
                   {children}
                 </main>

@@ -34,11 +34,13 @@ export class UploadController {
 
   @Post('get-url')
   async getFileUrl(@Body('fileName') fileName: string[]) {
-    const fileUrls: string[] = [];
-    fileName.map(async (name) => {
-      const { fileUrl } = await this.uploadService.getFileUrl(name);
-      fileUrls.push(fileUrl);
-    });
+    const fileUrls = await Promise.all(
+      fileName.map(async (name) => {
+        const { fileUrl } = await this.uploadService.getFileUrl(name);
+        return fileUrl;
+      }),
+    );
+
     return fileUrls;
   }
 }

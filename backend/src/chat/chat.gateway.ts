@@ -1,40 +1,51 @@
 import {
+  ConnectedSocket,
+  MessageBody,
+  SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  SubscribeMessage,
-  MessageBody,
-  ConnectedSocket,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
-import { ChatService } from './chat.service';
 import { CreateChatDto } from './dto/create-chat.dto';
+import { ChatService } from './chat.service';
 
-@WebSocketGateway()
+@WebSocketGateway({
+  cors: {
+    origin: 'http://localhost:3000', // Frontend origin
+    credentials: true, // Allow credentials
+  },
+})
 export class ChatGateway {
+  constructor(private chatService: ChatService) {}
+
   @WebSocketServer()
   server: Server;
 
-  constructor(private readonly chatService: ChatService) {}
-
-  @SubscribeMessage('privateMessage')
-  async handlePrivateMessage(
-    @MessageBody() data: CreateChatDto,
-  ): Promise<void> {
+  @SubscribeMessage('chat')
+  async handleMessage(@MessageBody() data: CreateChatDto) {
     const room = this.getRoomName(
       data.senderId.toString(),
       data.receiverId.toString(),
     );
-     console.log(this.server.sockets.adapter.rooms)
-    const message = await this.chatService.saveMessage(data);
-    this.server.to(room).emit('privateMessage', message);
+
+    const roomExists = this.server.sockets.adapter.rooms.has(room);
+    console.log(roomExists);
+    if (roomExists) {
+      const message = await this.chatService.saveMessage(data);
+      console.log(message);
+      return this.server.to(room).emit('chat', message);
+    } else {
+      console.log('Room does not exist');
+    }
   }
 
   @SubscribeMessage('joinRoom')
-  handleJoinRoom(
+  handleRoom(
     @MessageBody() data: { user: string; admin: string },
     @ConnectedSocket() client: Socket,
-  ): void {
+  ) {
     const room = this.getRoomName(data.user, data.admin);
+    console.log('Joining room', room);
     client.join(room);
     client.emit('joinedRoom', room);
   }
@@ -43,13 +54,23 @@ export class ChatGateway {
   handleLeaveRoom(
     @MessageBody() data: { user: string; admin: string },
     @ConnectedSocket() client: Socket,
-  ): void {
+  ) {
     const room = this.getRoomName(data.user, data.admin);
     client.leave(room);
     client.emit('leftRoom', room);
   }
 
-  private getRoomName(user1: string, user2: string): string {
-    return [user1, user2].sort().join('_');
+  @SubscribeMessage('isTyping')
+  handleIsTyping(
+    @MessageBody() data: { user: string; admin: string; isTyping: boolean },
+  ) {
+    const room = this.getRoomName(data.user, data.admin);
+    this.server
+      .to(room)
+      .emit('typing', { user: data.user, isTyping: data.isTyping });
+  }
+
+  private getRoomName(user: string, admin: string): string {
+    return [user, admin].sort().join('_');
   }
 }

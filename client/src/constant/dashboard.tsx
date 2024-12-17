@@ -25,7 +25,7 @@ const quickActions = [
   },
   {
     title: "Whitepapers",
-    description: "Comprehensive research papers and industry analysis",
+    description: "Indepth research papers and industry analysis",
     icon: Book,
     startingPrice: 799,
     link: "/dashboard/projects/create?service=Whitepapers",

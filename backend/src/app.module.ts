@@ -12,9 +12,12 @@ import { ProjectModule } from './project/project.module';
 import { ProjectRequestModule } from './project-request/project-request.module';
 import { UploadModule } from './upload/upload.module';
 import { ChatModule } from './chat/chat.module';
+import { ChatGateway } from './chat/chat.gateway';
+import { ChatService } from './chat/chat.service';
 
 @Module({
   imports: [
+    ChatModule,
     PrismaModule,
     ConfigModule.forRoot(),
     AuthModule,
@@ -24,10 +27,9 @@ import { ChatModule } from './chat/chat.module';
     ProjectRequestModule,
     ProjectModule,
     UploadModule,
-    ChatModule,
   ],
   controllers: [AppController],
-  providers: [AppService, MailgunService],
+  providers: [AppService, MailgunService, ChatGateway, ChatService],
   exports: [MailgunService],
 })
 export class AppModule {}

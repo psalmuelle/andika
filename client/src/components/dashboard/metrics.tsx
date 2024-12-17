@@ -40,6 +40,7 @@ export default function ArticleMetrics({
             {categories.map((category, index) => {
               return (
                 <Badge
+                key={index}
                   dot={
                     projects &&
                     projects?.filter(

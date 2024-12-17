@@ -140,6 +140,29 @@ export class ProfileService {
     }
   }
 
+  async getSupportProfile() {
+    try {
+      const supportProfile = await this.prismaService.adminProfile.findFirst({
+        where: {
+          position: 'Project Manager',
+          user: {
+            email: 'admin@andika.com',
+          },
+        },
+        include: {
+          user: {
+            select: {
+              email: true,
+            },
+          },
+        },
+      });
+      return supportProfile;
+    } catch (err) {
+      throw err;
+    }
+  }
+
   async getAllAdminProfiles({ userIsAdmin }: { userIsAdmin: boolean }) {
     try {
       if (!userIsAdmin) {

@@ -25,7 +25,7 @@ const useUserStore = create<UserState>((set) => ({
       const response = await axiosInstance.get("/auth/status", {
         withCredentials: true,
       });
-      return response;
+      return response.data;
     } catch (err) {
       throw err;
     }

@@ -1,6 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 import * as session from 'express-session';
 import * as passport from 'passport';
 
@@ -11,7 +12,6 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
-  app.setGlobalPrefix('api');
   app.use(
     session({
       secret: process.env.SESSION_SECRET,
@@ -22,10 +22,16 @@ async function bootstrap() {
       },
     }),
   );
+
+  const ioAdapter = new IoAdapter(app);
+  app.useWebSocketAdapter(ioAdapter);
+
   app.enableCors({
     origin: 'http://localhost:3000',
     credentials: true,
   });
+
+  app.setGlobalPrefix('api');
   app.use(passport.initialize());
   app.use(passport.session());
   await app.listen(process.env.PORT ?? 8000);

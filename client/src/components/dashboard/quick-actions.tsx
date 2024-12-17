@@ -25,7 +25,7 @@ const QuickAction = ({
   return (
     <div
       onClick={onClick}
-      className="w-full max-w-[286px] cursor-pointer rounded-xl border p-4 shadow-sm hover:border-accent-foreground"
+      className="w-full max-w-[275px] cursor-pointer rounded-xl border p-4 shadow-sm hover:border-accent-foreground"
     >
       <div className="flex items-start gap-4">
         <div className={`rounded-lg bg-secondary p-2.5`}>
@@ -46,12 +46,12 @@ const QuickAction = ({
 export default function QuickActions() {
   const router = useRouter();
   return (
-    <Card className="w-full max-w-[652px]">
+    <Card className="w-full max-w-[640px]">
       <CardTitle className="mt-8 px-4 text-sm font-medium">
         Our Services
       </CardTitle>
       <div className="p-4">
-        <div className="mt-4 flex flex-wrap items-stretch justify-stretch gap-4 max-sm:justify-center">
+        <div className="mt-4 flex flex-wrap items-stretch justify-stretch gap-2 max-sm:justify-center">
           {quickActions.map((action, index) => (
             <div key={index} className="">
               <div className="p-1">
