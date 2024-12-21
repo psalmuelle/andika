@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import ArticleMetrics from "@/components/dashboard/metrics";
 import QuickActions from "@/components/dashboard/quick-actions";
 import ProjectList from "@/components/dashboard/projectList";
@@ -9,6 +9,7 @@ import { Mail } from "lucide-react";
 import useProjectStore from "@/context/project";
 import { ProjectType } from "types";
 import { useQuery } from "@tanstack/react-query";
+import { NotificationContext } from "@/context/notificationProvider";
 
 export default function Dashboard() {
   const [openChatWidget, setOpenChatWidget] = useState(false);
@@ -16,6 +17,7 @@ export default function Dashboard() {
   const [visibleProjects, setVisibleProjects] = useState<ProjectType[]>([]);
   const [numOfProjects, setNumOfProjects] = useState(0);
   const { getProjects } = useProjectStore();
+  const { unreadMessages } = useContext(NotificationContext);
 
   const { data: projects, isPending: projectLoading } = useQuery({
     queryKey: ["projects"],
@@ -65,7 +67,7 @@ export default function Dashboard() {
       <FloatButton
         icon={<Mail className="h-5 w-5" />}
         className="md:hidden"
-        badge={{ count: 5, color: "red" }}
+        badge={{ count: unreadMessages.length, color: "red" }}
         onClick={toggleChatWidget}
       />
 

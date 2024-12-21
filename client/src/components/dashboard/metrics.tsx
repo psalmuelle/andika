@@ -41,6 +41,7 @@ export default function ArticleMetrics({
               return (
                 <Badge
                 key={index}
+                color={'blue'}
                   dot={
                     projects &&
                     projects?.filter(

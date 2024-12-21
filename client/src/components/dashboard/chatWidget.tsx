@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Send, Phone, VideoIcon, FilePlusIcon } from "lucide-react";
+import { Send, Phone, VideoIcon, Paperclip } from "lucide-react";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/config/axios";
-import { io, Socket } from "socket.io-client";
+import { Socket } from "socket.io-client";
+import socketInstance from "@/config/socket";
 import { useUserContext } from "@/context/UserProvider";
 import { Input } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
@@ -20,13 +21,17 @@ interface MessageType {
   receiverId: number;
   content: string | ReactElement;
   createdAt: string;
+  isRead: boolean;
 }
 
-function MessageBox({
-  senderId,
-  content,
-  userId,
-}: MessageType & { userId: number }) {
+type MessageBoxProps = Pick<
+  MessageType,
+  "senderId" | "content" | "id" | "createdAt" | "receiverId"
+> & {
+  userId: number;
+};
+
+function MessageBox({ senderId, content, userId }: MessageBoxProps) {
   return (
     <div
       className={`${senderId === userId && "flex max-w-[284px] justify-end"}`}
@@ -47,7 +52,6 @@ function ChatWidget() {
   const [newMessage, setNewMessage] = useState("");
   const [userIsTyping, setUserIsTyping] = useState(false);
   const [isUploadingFile, setIsUploadingFile] = useState(false);
-  const [uploadedFileName, setUploadedFileName] = useState<string>();
   const { data: admin, isPending: adminLoading } = useQuery({
     queryKey: ["admin"],
     queryFn: async () => {
@@ -62,7 +66,7 @@ function ChatWidget() {
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (bottomRef.current) {
+    if (messages && bottomRef.current) {
       bottomRef.current.scrollTop = bottomRef.current.scrollHeight;
     }
   }, [messages]);
@@ -78,21 +82,24 @@ function ChatWidget() {
     })();
   }, []);
 
+  //get chat messages
+  useEffect(() => {
+    async function getChat() {
+      const res = await axiosInstance.get(`/chat/${admin?.userId}`, {
+        withCredentials: true,
+      });
+      if (res.data.length > 0) {
+        setMessages(res.data);
+      }
+    }
+    if (!admin) return;
+    getChat();
+  }, [admin]);
+
   useEffect(() => {
     if (!user || !admin) return;
 
-    const res = axiosInstance.get(`/chat/${admin?.userId}`, {
-      withCredentials: true,
-    });
-    Promise.resolve(res).then((data) => {
-      if (data.data.length > 0) {
-        setMessages(data.data);
-      }
-    });
-
-    const socketio = io("http://localhost:8000", {
-      withCredentials: true,
-    });
+    const socketio = socketInstance();
     setSocket(socketio);
 
     const roomData = {
@@ -108,6 +115,7 @@ function ChatWidget() {
       setMessages((prev) => [...prev, newMessage]);
     });
 
+    // Listen for other user typing
     socketio.on("isTyping", (data) => {
       console.log("isTyping", data);
       if (data.senderId === admin?.userId) {
@@ -121,12 +129,40 @@ function ChatWidget() {
     };
   }, [user, admin]);
 
+  // Mark messages as Read
+  const markMessagesAsRead = async () => {
+    try {
+      if (messages.length > 0) {
+        const unReadMsgs = messages.filter(
+          (msg) => msg.isRead === false && msg.receiverId === user.id,
+        );
+
+        if (
+          unReadMsgs.length > 0 &&
+          inputRef.current &&
+          socket &&
+          user &&
+          admin
+        ) {
+          unReadMsgs.forEach((msg) => {
+            socket.emit("markAsRead", {
+              id: msg.id,
+              user: user.id,
+              admin: admin.userId,
+            });
+          });
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const onSendMessage = () => {
-    if (newMessage.length > 1 && socket) {
-      console.log("Sending Message");
+    if (newMessage.length > 1 && socket && user && admin) {
       socket.emit("chat", {
-        senderId: user?.id,
-        receiverId: admin?.userId,
+        senderId: user.id,
+        receiverId: admin.userId,
         content: newMessage,
       });
       if (inputRef.current) {
@@ -201,37 +237,51 @@ function ChatWidget() {
         ref={bottomRef}
         className="h-64 w-full max-w-[304px] flex-1 bg-accent p-2"
       >
-        {messages.map((msg) => (
-          <MessageBox
-            key={msg.id}
-            id={msg.id}
-            content={
-              typeof msg.content == "string" &&
-              msg.content.includes("https://andikauploader.s3") ? (
-                <a
-                  href={msg.content}
-                  target="_blank"
-                  rel="noreferrer"
-                  download={"download"}
-                  className="flex items-center hover:underline"
-                >
-                  <img
-                    src="https://img.icons8.com/?size=100&id=11321&format=png&color=000000"
-                    className="mr-2 h-4"
-                    alt="file"
-                  />{" "}
-                  File
-                </a>
-              ) : (
-                msg.content
-              )
-            }
-            createdAt={msg.createdAt}
-            receiverId={msg.receiverId}
-            senderId={msg.senderId}
-            userId={user?.id}
-          />
-        ))}
+        {messages.length > 0 &&
+          messages.map((msg) => (
+            <MessageBox
+              key={msg.id}
+              id={msg.id}
+              content={
+                typeof msg.content == "string" &&
+                msg.content.includes("https://andikauploader.s3") ? (
+                  <a
+                    href={msg.content}
+                    target="_blank"
+                    rel="noreferrer"
+                    download={"download"}
+                    className="flex items-center hover:text-gray-600"
+                  >
+                    <Paperclip className="h-4" />
+                    Shared File
+                  </a>
+                ) : (
+                  msg.content
+                )
+              }
+              createdAt={msg.createdAt}
+              receiverId={msg.receiverId}
+              senderId={msg.senderId}
+              userId={user?.id}
+            />
+          ))}
+
+        {(adminLoading || !socket) && (
+          <div className="min-h-60 w-full">
+            <Spin
+              spinning={true}
+              className="flex min-h-60 items-center justify-center"
+            />
+          </div>
+        )}
+
+        {!adminLoading && messages.length === 0 && (
+          <div className="min-h-60 w-full">
+            <p className="mt-8 flex min-h-60 items-center justify-center text-center text-white">
+              No messages yet!
+            </p>
+          </div>
+        )}
 
         {userIsTyping && (
           <p
@@ -246,7 +296,10 @@ function ChatWidget() {
         <div className="">
           <Input
             referance={inputRef}
-            onFocus={onTyping}
+            onFocus={() => {
+              onTyping();
+              markMessagesAsRead();
+            }}
             onBlur={onTypingEnd}
             multiline
             minHeight={40}
@@ -265,7 +318,6 @@ function ChatWidget() {
                   }
                   if (status === "done") {
                     setIsUploadingFile(false);
-                    setUploadedFileName(info.file.response.fileName);
                     if (socket) {
                       const res = axiosInstance.post(
                         "upload/get-url",
@@ -292,7 +344,7 @@ function ChatWidget() {
                   }
                 }}
               >
-                <FilePlusIcon className="h-4 cursor-pointer font-bold text-gray-500" />
+                <Paperclip className="h-4 cursor-pointer font-bold text-gray-500" />
               </Upload>
             }
             rightButtons={

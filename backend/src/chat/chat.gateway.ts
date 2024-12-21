@@ -32,7 +32,6 @@ export class ChatGateway {
     console.log(roomExists);
     if (roomExists) {
       const message = await this.chatService.saveMessage(data);
-      console.log(message);
       return this.server.to(room).emit('chat', message);
     } else {
       console.log('Room does not exist');
@@ -45,7 +44,6 @@ export class ChatGateway {
     @ConnectedSocket() client: Socket,
   ) {
     const room = this.getRoomName(data.user, data.admin);
-    console.log('Joining room', room);
     client.join(room);
     client.emit('joinedRoom', room);
   }
@@ -68,6 +66,25 @@ export class ChatGateway {
     this.server
       .to(room)
       .emit('typing', { user: data.user, isTyping: data.isTyping });
+  }
+
+  @SubscribeMessage('markAsRead')
+  async handleReadMessages(
+    @MessageBody() data: { id: number; user: string; admin: string },
+  ) {
+    const room = this.getRoomName(data.user, data.admin);
+    const messages = await this.chatService.markMessagesAsRead(data.id);
+    this.server.to(room).emit('messagesRead', messages);
+  }
+
+  @SubscribeMessage('unreadMessages')
+  async handleGetUnreadMessages(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() data: { user: string; admin: string },
+  ) {
+    const messages = await this.chatService.getUnreadMessages(+data.user);
+    console.log(messages);
+    client.emit('unreadMessages', messages);
   }
 
   private getRoomName(user: string, admin: string): string {

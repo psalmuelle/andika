@@ -45,4 +45,28 @@ export class ChatService {
 
     return messages;
   }
+
+  async getUnreadMessages(userId: number) {
+    const unreadMessages = await this.prismaService.message.findMany({
+      where: {
+        receiverId: userId,
+        isRead: false,
+      },
+    });
+
+    return unreadMessages;
+  }
+
+  async markMessagesAsRead(id: number) {
+    const markMessages = await this.prismaService.message.update({
+      where: {
+       id: id
+      },
+      data: {
+        isRead: true,
+      },
+    });
+
+    return markMessages;
+  }
 }

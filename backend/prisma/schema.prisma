@@ -165,6 +165,7 @@ model Message {
   senderId   Int
   receiverId Int
   content    String
+  isRead     Boolean  @default(false)
   createdAt  DateTime @default(now())
 }
 
