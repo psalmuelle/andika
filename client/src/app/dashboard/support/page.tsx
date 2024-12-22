@@ -17,6 +17,7 @@ import { Clock } from "lucide-react";
 import { supportChannels, faqs } from "@/constant/dashboard";
 import { getCalApi } from "@calcom/embed-react";
 import { useEffect } from "react";
+import Link from "next/link";
 
 export default function Support() {
   useEffect(() => {
@@ -66,7 +67,13 @@ export default function Support() {
                   {channel.action}
                 </Button>
               ) : (
-                <Button className="w-full">{channel.action}</Button>
+                <Button className="w-full" asChild>
+                  {channel.action === "Start Chat" ? (
+                    <Link href={"/dashboard"}>{channel.action}</Link>
+                  ) : (
+                    <Link href="mailto://">{channel.action}</Link>
+                  )}
+                </Button>
               )}
             </CardFooter>
           </Card>

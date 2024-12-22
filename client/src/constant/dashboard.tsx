@@ -13,7 +13,7 @@ const quickActions = [
     title: "Technical Articles",
     description: "In-depth articles explaining complex technical concepts",
     icon: FileText,
-    startingPrice: 299,
+    startingPrice: 249,
     link: "/dashboard/projects/create?service=Technical Articles",
   },
   {
@@ -32,7 +32,7 @@ const quickActions = [
   },
   {
     title: "Editing/Proofreading",
-    description: "Professional editing and proofreading",
+    description: "Improve the quality and accuracy of your content",
     icon: CheckSquare,
     startingPrice: 149,
     link: "/dashboard/projects/create?service=Editing and Proofreading",

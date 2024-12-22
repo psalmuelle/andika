@@ -21,18 +21,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <QueryClientProvider client={queryClient}>
-        <ConfigProvider
-          theme={{
-            token: {
-              colorPrimary: "#18181b",
-              borderRadius: 6,
-            },
-          }}
-        >
-          <NotificationProvider>
-            <UserProvider>
-              <body>
+      <body>
+        <QueryClientProvider client={queryClient}>
+          <ConfigProvider
+            theme={{
+              token: {
+                colorPrimary: "#18181b",
+                borderRadius: 6,
+              },
+            }}
+          >
+            <NotificationProvider>
+              <UserProvider>
                 <Suspense fallback={<Loading />}>
                   <SidebarProvider>
                     <AppSidebar />
@@ -44,11 +44,11 @@ export default function RootLayout({
                   <Footer />
                   <Toaster />
                 </Suspense>
-              </body>
-            </UserProvider>
-          </NotificationProvider>
-        </ConfigProvider>
-      </QueryClientProvider>
+              </UserProvider>
+            </NotificationProvider>
+          </ConfigProvider>
+        </QueryClientProvider>
+      </body>
     </html>
   );
 }

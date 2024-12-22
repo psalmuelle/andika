@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { Card, CardTitle } from "../ui/card";
 import { useRouter } from "next/navigation";
 import { quickActions } from "@/constant/dashboard";

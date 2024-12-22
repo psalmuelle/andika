@@ -45,7 +45,7 @@ export default function Dashboard() {
       <div className="mt-8">
         <h1 className="font-semibold">Hi, Welcome 👋</h1>
         <p className="mt-2">
-          Track your documentation projects and connect with our writers
+          Track your documentation projects and connect with our support team
         </p>
       </div>
 
