@@ -29,12 +29,11 @@ export class ChatGateway {
     );
 
     const roomExists = this.server.sockets.adapter.rooms.has(room);
-    console.log(roomExists);
     if (roomExists) {
       const message = await this.chatService.saveMessage(data);
       return this.server.to(room).emit('chat', message);
     } else {
-      console.log('Room does not exist');
+      return;
     }
   }
 
@@ -83,7 +82,6 @@ export class ChatGateway {
     @MessageBody() data: { user: string; admin: string },
   ) {
     const messages = await this.chatService.getUnreadMessages(+data.user);
-    console.log(messages);
     client.emit('unreadMessages', messages);
   }
 

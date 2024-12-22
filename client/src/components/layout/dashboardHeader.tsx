@@ -36,7 +36,7 @@ export default function DashboardHeader() {
               <section className="mt-3 text-sm text-gray-700">
                 {unreadMessages.length > 0 &&
                   unreadMessages.map((msg, index) => (
-                    <div className="border-b pb-2" key={index}>
+                    <div className="border-b py-2 truncate" key={index}>
                       📢{" "}
                       {typeof msg.content == "string" &&
                       msg.content.includes("https://andikauploader.s3") ? (
@@ -81,7 +81,7 @@ export default function DashboardHeader() {
               <section className="mt-3 text-sm text-gray-700">
                 {updates.length > 0 &&
                   updates.map((update, index) => (
-                    <div className="border-b pb-2" key={index}>
+                    <div className="border-b py-2 truncate" key={index}>
                       🔔 {update.content}
                     </div>
                   ))}
