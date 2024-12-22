@@ -34,10 +34,10 @@ type MessageBoxProps = Pick<
 function MessageBox({ senderId, content, userId }: MessageBoxProps) {
   return (
     <div
-      className={`${senderId === userId && "flex max-w-[284px] justify-end"}`}
+      className={`${senderId === userId && "flex w-full justify-end"}`}
     >
       <p
-        className={`mb-3 max-w-[75%] whitespace-pre-line rounded-2xl p-2 ${senderId === userId ? "rounded-tr-none bg-white" : "rounded-tl-none bg-accent-foreground text-white"}`}
+        className={`mb-3 w-fit max-w-[70%] whitespace-pre-line rounded-2xl p-2 ${senderId === userId ? "rounded-tr-none bg-white" : "rounded-tl-none bg-accent-foreground text-white"}`}
       >
         {content}
       </p>
@@ -191,7 +191,7 @@ function ChatWidget() {
   };
 
   return (
-    <Card className="flex h-[400px] flex-col">
+    <Card className="flex min-h-[400px] w-full h-full flex-col">
       <div className="flex items-center justify-between border-b p-4">
         <Spin spinning={adminLoading}>
           <div className="flex items-center gap-3">
@@ -221,21 +221,14 @@ function ChatWidget() {
           >
             <Phone className="h-4 w-4" />
           </Button>
-          <Button
-            data-cal-namespace="30min"
-            data-cal-link="erinle-samuel-1zabaa/30min"
-            data-cal-config='{"layout":"month_view", "theme": "light"}'
-            size={"icon"}
-            variant={"secondary"}
-            className="rounded-full"
-          >
-            <VideoIcon className="h-4 w-4" />
+          <Button size={"icon"} variant={null} className="rounded-full">
+            ❇️
           </Button>
         </div>
       </div>
       <ScrollArea
         ref={bottomRef}
-        className="h-64 w-full max-w-[304px] flex-1 bg-accent p-2"
+        className="h-64 flex-1 bg-accent p-2"
       >
         {messages.length > 0 &&
           messages.map((msg) => (

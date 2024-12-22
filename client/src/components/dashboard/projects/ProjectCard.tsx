@@ -33,19 +33,19 @@ function ProjectCard({ project }: { project: ProjectType }) {
           {project.status.toLowerCase()}
         </Tag>
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-2">
         <div className="flex justify-between">
-          <span className="text-gray-500">Assigned to</span>
-          <span className="font-medium text-gray-900">
+          <span className="text-gray-600">Project Manager</span>
+          <span className="font-medium text-primary">
             {project.assignedPM.name}
           </span>
         </div>
         <div className="flex justify-between">
-          <span className="text-gray-500">Due date</span>
-          <span className="font-medium text-gray-900">{dueDate}</span>
+          <span className="text-gray-600">Due date</span>
+          <span className="font-medium text-primary">{dueDate}</span>
         </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="my-1">
         <Progress value={project.overallProgress} />
       </CardFooter>
     </Card>

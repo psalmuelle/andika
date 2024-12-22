@@ -30,7 +30,7 @@ export default function ProjectPage() {
           <Button
             asChild
             variant={"outline"}
-            className="mt-4 block w-full max-w-[290px] rounded-xl max-sm:mx-auto"
+            className="mt-4 block w-full max-w-[280px] rounded-xl max-sm:mx-auto"
           >
             <Link
               className="w-full text-center"
@@ -47,7 +47,7 @@ export default function ProjectPage() {
         >
           <Button
             asChild
-            className="mx-auto mt-4 block w-full max-w-[290px] rounded-xl"
+            className="mx-auto mt-4 block w-full max-w-[280px] rounded-xl"
           >
             <Link href={"/dashboard/projects/create"}>Create New Project</Link>
           </Button>

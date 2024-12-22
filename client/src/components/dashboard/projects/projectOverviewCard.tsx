@@ -17,20 +17,22 @@ export default function ProjectOverview({ project }: { project: ProjectType }) {
   return (
     <Card className="w-full max-w-2xl">
       <CardHeader>
-        <div className="grid grid-cols-2 gap-4">
-          <div className="flex items-center gap-1.5">
-            <FileText className="text-muted-foreground/70" />
+        <div className="grid grid-cols-2 gap-4 max-sm:grid-cols-1">
+          <div className="flex items-center gap-0.5">
+            <FileText className="h-5 text-muted-foreground/80" />
             <div>
-              <CardDescription className="mb-1">Project Type</CardDescription>
-              <CardTitle>{project?.projectType}</CardTitle>
+              <CardDescription className="mb-0.5">Project Type</CardDescription>
+              <CardTitle className="font-medium">
+                {project?.projectType}
+              </CardTitle>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5">
-            <Calendar className="text-muted-foreground/70" />
+          <div className="flex items-center gap-0.5">
+            <Calendar className="h-5 text-muted-foreground/80" />
             <div>
-              <CardDescription className="mb-1">Due Date</CardDescription>
-              <CardTitle>{dueDate}</CardTitle>
+              <CardDescription className="mb-0.5">Due Date</CardDescription>
+              <CardTitle className="font-medium">{dueDate}</CardTitle>
             </div>
           </div>
         </div>

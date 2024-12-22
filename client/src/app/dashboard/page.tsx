@@ -51,7 +51,7 @@ export default function Dashboard() {
 
       <div className="mt-8 flex gap-4">
         <QuickActions />
-        <div className="min-w-[304px] max-md:hidden">
+        <div className="h-[400px] w-[50%] min-w-[304px] max-w-[360px] max-md:hidden">
           <ChatWidget />
         </div>
       </div>
@@ -72,7 +72,7 @@ export default function Dashboard() {
       />
 
       {openChatWidget && (
-        <div className="fixed bottom-24 right-[7%]">
+        <div className="fixed bottom-24 right-[6%] h-[70vh] w-[80%] md:hidden">
           <ChatWidget />
         </div>
       )}
