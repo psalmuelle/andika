@@ -6,17 +6,17 @@ import { testimonials } from "@/constant/landingPage";
 
 export default function Testimonials() {
   return (
-    <Carousel effect="fade" autoplay className="max-w-md max-sm:w-[90vw] p-4">
+    <Carousel effect="fade" autoplay className="max-w-md p-4 max-sm:w-[90vw]">
       {testimonials.map((testimonial) => {
         return (
           <div key={testimonial.id}>
             <div>
-              <div className="min-h-16">
-                <Typography as="h4" className="font-mono">
+              <div className="min-h-20">
+                <Typography as="p" className="italic">
                   "{testimonial.comment}"
                 </Typography>
               </div>
-              <div className="mt-2 flex items-center gap-2.5">
+              <div className="mt-4 flex items-center gap-2.5">
                 <Image
                   width="32"
                   height="32"
@@ -25,8 +25,10 @@ export default function Testimonials() {
                   className="block rounded-full border"
                 />
                 <div>
-                  <p className="font-bold leading-tight">{testimonial.name}</p>
-                  <p className="text-xs font-medium">{testimonial.title}</p>
+                  <p className="font-semibold leading-tight">
+                    {testimonial.name}
+                  </p>
+                  <p className="pt-0.5 text-xs">{testimonial.title}</p>
                 </div>
               </div>
             </div>

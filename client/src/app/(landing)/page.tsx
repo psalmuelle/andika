@@ -13,7 +13,7 @@ import {
 } from "@radix-ui/react-icons";
 import Marquee from "react-fast-marquee";
 import Typography from "@/components/ui/typography";
-import { clients, stats } from "@/constant/landingPage";
+import { clients, pricelist, stats } from "@/constant/landingPage";
 import Link from "next/link";
 import Features from "@/components/landing-page/features";
 import PriceCard from "@/components/landing-page/pricing";
@@ -37,13 +37,12 @@ export default function Home() {
           as="h1"
           className="mx-auto mt-4 max-w-2xl px-[5%] text-center font-sans"
         >
-          Technical Writing Don't Have To Be A Hassle
+          Technical Writing, Simplified.
         </Typography>
         <Typography as="p" className="mx-auto max-w-4xl px-[5%] text-center">
-          This is going to be the test that's going to be on the under of the
-          document that I am talking about. I will also help to check if there
-          is anything that I can do with these texts. I think this part can
-          accomodate a lot of texts.
+          Let us handle your technical writing so you can focus on innovation.
+          From API documentation to whitepapers, we craft clear, concise, and
+          impactful content that speaks to your audience.
         </Typography>
         <div className="mx-auto mt-6 flex w-fit items-center gap-4 px-[5%]">
           <Button size={"lg"} variant={"outline"} className="rounded-full">
@@ -51,7 +50,7 @@ export default function Home() {
               href={"/contact"}
               className="flex w-full items-center justify-center"
             >
-              Contact us <ChatBubbleIcon className="ml-2 font-bold" />
+              Contact Us <ChatBubbleIcon className="ml-2 font-bold" />
             </Link>
           </Button>
           <Button size={"lg"} className="rounded-full" asChild>
@@ -65,17 +64,29 @@ export default function Home() {
             src={"/Dashboard.png"}
             width={2332}
             height={982}
-            alt="andika dashboard for managing projects"
+            className="rounded-t-lg"
+            alt="Andika dashboard for managing projects"
           />
         </div>
         <div className="w-full border-b bg-white px-[5%] py-5">
-          <Marquee pauseOnHover gradient>
-            {clients.map((client) => (
-              <div key={client.id} className="px-4">
-                {client.name}
-              </div>
-            ))}
-          </Marquee>
+          <div className="mx-auto w-full max-w-[650px]">
+            <Marquee
+              autoFill
+              pauseOnHover
+              gradient
+              className="flex w-full items-center justify-between gap-5"
+            >
+              {clients.map((client) => (
+                <div
+                  key={client.id}
+                  className="flex flex-col items-center justify-center px-4"
+                >
+                  {client.name}
+                  <img src={client.image} alt={client.name} className="h-8" />
+                </div>
+              ))}
+            </Marquee>
+          </div>
         </div>
       </section>
 
@@ -87,11 +98,11 @@ export default function Home() {
           <p className="mr-2.5 font-medium">Offers</p>
         </div>
         <div className="mt-3">
-          <Typography as={"h3"}>Main Power of Andika.</Typography>
+          <Typography as={"h3"}>Andika: Your Writing Partner</Typography>
           <p className="mt-2 max-w-xl">
-            Our intuitive platforms empowers businesses to automate interactions
-            and provide writing services that meet their business needs.
-            Increase customer and developers satisfaction.
+            Our expert writing services help tech companies streamline
+            communication with precise documentation, user-friendly guides, and
+            impactful content.
           </p>
         </div>
         <div className="mt-12">
@@ -109,10 +120,11 @@ export default function Home() {
 
         <div className="text-center">
           <Typography as="h3" className="mt-6">
-            Unleash the full power of data
+            Insights That Drive Success
           </Typography>
           <p className="mt-2 text-white/80">
-            Everything you need to convert, engage and retain more users
+            Trusted by industry leaders, we deliver results that elevate your
+            brand and engage your audience.
           </p>
         </div>
 
@@ -164,17 +176,16 @@ export default function Home() {
         </div>
 
         <div className="mt-6 text-center">
-          <Typography as="h3">Andika To Make Your Work Easy</Typography>
+          <Typography as="h3">Affordable Plans for Every Business</Typography>
           <p className="mt-2">
-            Choose an affordable plan that's packed with the best features for
-            engaging your audience, creating customer loyalty, and driving
-            sales.
+            Choose a plan tailored to your goals, with premium features that
+            make creating exceptional content effortless.
           </p>
         </div>
         <div className="mx-auto mb-6 mt-12 flex flex-wrap justify-center gap-4">
-          <PriceCard />
-          <PriceCard />
-          <PriceCard />
+          {pricelist.map((tag) => (
+            <PriceCard key={tag.id} tag={tag} />
+          ))}
         </div>
       </section>
 
@@ -187,7 +198,7 @@ export default function Home() {
         </div>
         <div className="mb-8">
           <Typography as="h3" className="text-center">
-            Frequently asked questions
+            Frequently Asked Questions
           </Typography>
           <Faq />
         </div>
@@ -195,14 +206,13 @@ export default function Home() {
 
       <section className="mx-[5%] mb-6 mt-8 flex flex-wrap items-center justify-between gap-4 rounded-lg bg-neutral-100 p-4 sm:p-6">
         <div>
-          <p className="font-semibold">Still have questions?</p>
+          <p className="font-semibold">Still Have Questions?</p>
           <p className="text-accent-foreground/90">
-            Can't find the answer you are looking for? Please chat to our
-            friendly team.
+            Our team is ready to help. Reach out to us and let's get started!
           </p>
         </div>
         <Button className="rounded-full" asChild>
-          <Link href={"/contact"}>Get in touch</Link>
+          <Link href={"/contact"}>Get in Touch</Link>
         </Button>
       </section>
     </div>

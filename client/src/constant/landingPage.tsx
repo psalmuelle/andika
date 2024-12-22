@@ -1,79 +1,68 @@
 const clients = [
   {
     id: 1,
-    name: "Client 1",
-    image: "/client1.png",
+    name: "Aboo",
+    image: "/company-1.jpg",
   },
   {
     id: 2,
-    name: "Client 2",
-    image: "/client2.png",
+    name: "Virtua Systems",
+    image: "/company-2.png",
   },
   {
     id: 3,
-    name: "Client 3",
-    image: "/client3.png",
+    name: "Bocotea Tech",
+    image: "/company-3.jpg",
   },
   {
     id: 4,
-    name: "Client 4",
-    image: "/client4.png",
+    name: "Mon AI",
+    image: "/company-4.jpg",
   },
   {
     id: 5,
-    name: "Client 5",
-    image: "/client5.png",
-  },
-  {
-    id: 6,
-    name: "Client 6",
-    image: "/client6.png",
-  },
-  {
-    id: 7,
-    name: "Client 7",
-    image: "/client7.png",
+    name: "Laid Inc.",
+    image: "/company-5.jpg",
   },
 ];
-
 const offers = [
   {
     id: 1,
-    title: "Simple Setup, Powerful Results",
+    title: "Effortless Documentation, Exceptional Quality",
     description:
-      "Chatify does this blah blah and blah that I will change later. I hope this is long enough",
-    href: "/services/articles",
+      "Our team crafts clear, concise, and engaging technical content to help your users navigate complex systems with ease.",
+    href: "/auth/login",
   },
   {
     id: 2,
-    title: "Intelligent Messages, Every Time",
+    title: "API & SDK Guides That Work",
     description:
-      "Chatify does this blah blah and blah that I will change later. I hope this is long enough",
-    href: "/services/articles",
+      "We create user-friendly API and SDK guides to ensure developers integrate your tools seamlessly and efficiently.",
+    href: "/auth/login",
   },
   {
     id: 3,
-    title: "Seamless Integration with Big",
+    title: "Whitepapers That Stand Out",
     description:
-      "Chatify does this blah blah and blah that I will change later. I hope this is long enough",
-    href: "/services/articles",
+      "Deliver high-impact whitepapers that highlight your expertise and help you win over your target audience.",
+    href: "/auth/login",
   },
 ];
 
 const offeringImages = [
   {
     id: 1,
-    src: "/offer.png",
+    src: "/andika-step-1.jpg",
     alt: "andika dashboard for managing projects",
   },
   {
     id: 2,
-    src: "/offer.png",
+    src: "/andika-step-2.jpg",
     alt: "andika dashboard for managing projects",
   },
   {
     id: 3,
-    src: "/offer.png",
+    src: "/andika-step-3.jpg",
     alt: "andika dashboard for managing projects",
   },
 ];
@@ -91,7 +80,7 @@ const stats = [
   },
   {
     id: 3,
-    figure: "10+",
+    figure: "5+",
     label: "Years of Experience",
   },
 ];
@@ -99,25 +88,69 @@ const stats = [
 const testimonials = [
   {
     id: 1,
-    name: "John Doe",
-    title: "CEO, Company",
-    image: "",
-    comment: "Long and easy to read comment from customer!",
+    name: "Alex Johnson",
+    title: "CEO, TechWave Inc.",
+    image: "/images/testimonial-alex.png",
+    comment:
+      "Working with this team transformed our documentation process. Their technical writers delivered API guides that are clear, professional, and easy for developers to follow.",
   },
   {
     id: 2,
-    name: "Jane Doe",
-    title: "Marketter, Company",
-    image: "",
-    comment: "Long easy to read comment from customer!",
+    name: "Sophia Lee",
+    title: "Product Manager, Innovatech",
+    image: "/images/testimonial-sophia.png",
+    comment:
+      "Their whitepapers have been a game-changer for us. The content is engaging, concise, and perfectly captures the essence of our technical solutions.",
   },
   {
     id: 3,
-    name: "Jendor Name",
-    title: "Founder, Company",
-    image: "",
-    comment: "Easy to read comment from customer!",
+    name: "Michael Rivera",
+    title: "Founder, CloudEdge",
+    image: "/images/testimonial-michael.png",
+    comment:
+      "The team's ability to distill complex technical information into user-friendly documentation is unmatched. Highly recommend them for any technical writing needs!",
   },
 ];
 
-export { clients, offers, offeringImages, stats, testimonials };
+const pricelist = [
+  {
+    id: 1,
+    title: "Technical Articles",
+    description: "In-depth articles explaining complex technical concepts.",
+    price: "$249",
+    unit: "/article",
+    features: [
+      "SEO-optimized content",
+      "Comprehensive technical research",
+      "Custom illustrations and diagrams",
+    ],
+    link: "/auth/login",
+  },
+  {
+    id: 2,
+    title: "Whitepapers & API/SDK Docs",
+    description: "Clear and detailed API reference documentation.",
+    price: "$499",
+    unit: "/project",
+    features: [
+      "Developer-focused clarity",
+      "Full API lifecycle coverage",
+      "Customizable for your platform",
+    ],
+    link: "/auth/login",
+  },
+  {
+    id: 3,
+    title: "Editing & Proofreading",
+    description: "Improve the quality and accuracy of your technical content.",
+    price: "$149",
+    unit: "/document",
+    features: [
+      "Grammar and syntax checks",
+      "Technical accuracy review",
+      "Enhanced readability and flow",
+    ],
+    link: "/auth/login",
+  },
+];
+export { clients, offers, offeringImages, stats, testimonials, pricelist };

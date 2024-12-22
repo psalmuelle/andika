@@ -75,14 +75,14 @@ const faqs = [
       "We offer unlimited revisions within 14 days of delivery to ensure your complete satisfaction with the final content.",
   },
   {
-    question: "Can I change my assigned writer?",
-    answer:
-      "Yes, you can request a different writer at any time during the project if you're not satisfied with the current assignment.",
-  },
-  {
     question: "Do you sign NDAs?",
     answer:
       "Yes, we're happy to sign NDAs to protect your confidential information. Contact our support team to arrange this.",
+  },
+  {
+    question: "What industries do you specialize in?",
+    answer:
+      "We have expertise in writing for a wide range of industries, including software, fintech, healthcare, and more.",
   },
 ];
 

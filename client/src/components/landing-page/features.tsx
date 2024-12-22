@@ -38,7 +38,7 @@ const FeatureText = ({
       </div>
       <Button asChild variant={"link"}>
         <Link href={href}>
-          Learn more <ArrowRightIcon className="ml-2" />
+          Get Started <ArrowRightIcon className="ml-2" />
         </Link>
       </Button>
     </div>
@@ -75,10 +75,10 @@ export default function Features() {
           );
         })}
       </div>
-      <div className="w-full rounded-lg bg-neutral-100">
+      <div className="w-full h-full rounded-lg bg-neutral-100">
         <Carousel
           opts={{
-            align: "center",
+            align: 'center',
             loop: true,
           }}
           plugins={[
@@ -88,8 +88,9 @@ export default function Features() {
           ]}
           setApi={setApi}
           orientation="vertical"
+          className="my-auto"
         >
-          <CarouselContent className="mx-auto h-full max-h-[440px]">
+          <CarouselContent className="mx-auto h-full max-h-[400px]">
             {offeringImages.map((img) => {
               return (
                 <CarouselItem key={img.id} className="mx-auto basis-full">
@@ -97,7 +98,7 @@ export default function Features() {
                     className="mx-auto my-4 block"
                     src={img.src}
                     width={400}
-                    height={400}
+                    height={500}
                     alt={img.alt}
                   />
                 </CarouselItem>

@@ -23,7 +23,7 @@ export default function AccountPage() {
             <CardHeader className="border-b">
               <div className="flex items-center gap-2">
                 <img
-                  src={profile?.avatar ? profile.avatar : "/icon-profile.png"}
+                  src={profile?.avatar ? profile.avatar : "https://img.icons8.com/fluency-systems-filled/50/user.png"}
                   alt={profile?.name}
                   className="h-14 w-14 rounded-full"
                 />
