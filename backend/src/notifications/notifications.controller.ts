@@ -1,4 +1,4 @@
-import { Controller, Get, Delete, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Put, Req, UseGuards } from '@nestjs/common';
 import { NotificationsService } from './notifications.service';
 import { AuthorizedGaurd } from 'src/auth/guard';
 
@@ -18,8 +18,8 @@ export class NotificationsController {
     }
   }
 
-  @Delete()
-  async deleteAllNotifications(@Req() req: any) {
+  @Put()
+  async readAllNotifications(@Req() req: any) {
     try {
       const userId = req.user?.id as number;
       const response = await this.notificationService.markAllAsRead(userId);

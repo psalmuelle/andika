@@ -1,6 +1,7 @@
-import { createContext, ReactElement, useEffect, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import socketInstance from "@/config/socket";
 import axiosInstance from "@/config/axios";
+import { useQuery } from "@tanstack/react-query";
 
 interface MessageTypes {
   id: number;
@@ -14,6 +15,7 @@ interface MessageTypes {
 interface UpdateTypes {
   id: number;
   content: string;
+  createdAt: string;
 }
 
 export const NotificationContext = createContext({
@@ -26,6 +28,17 @@ export const NotificationContext = createContext({
 function NotificationProvider({ children }: { children: React.ReactNode }) {
   const [unreadMessages, setUnreadMessages] = useState<MessageTypes[]>([]);
   const [updates, setUpdates] = useState<UpdateTypes[]>([]);
+
+  const { data: updateData } = useQuery({
+    queryKey: ["notifications"],
+    queryFn: async () => {
+      const res = await axiosInstance.get("/notifications", {
+        withCredentials: true,
+      });
+      return res.data;
+    },
+    refetchInterval: 30000,
+  });
 
   useEffect(() => {
     const fetchData = async () => {
@@ -43,10 +56,6 @@ function NotificationProvider({ children }: { children: React.ReactNode }) {
         setUnreadMessages(messages);
       });
 
-      // socketio.on("updates", () => {
-      //   console.log("updates");
-      // });
-
       // Cleanup on component unmount
       return () => {
         socketio.disconnect();
@@ -55,6 +64,12 @@ function NotificationProvider({ children }: { children: React.ReactNode }) {
 
     fetchData();
   }, []);
+
+  useEffect(() => {
+    if (updateData) {
+      setUpdates(updateData);
+    }
+  }, [updateData]);
 
   const getUnreadMessages = (messages: MessageTypes[]) => {
     setUnreadMessages(messages);

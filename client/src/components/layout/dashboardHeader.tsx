@@ -7,9 +7,35 @@ import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { NotificationContext } from "@/context/notificationProvider";
 import { useContext } from "react";
 import { Paperclip } from "lucide-react";
+import axiosInstance from "@/config/axios";
+import { useToast } from "@/hooks/use-toast";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 export default function DashboardHeader() {
   const { unreadMessages, updates } = useContext(NotificationContext);
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const mutateUpdates = useMutation({
+    mutationFn: async () => {
+      const res = await axiosInstance.put(
+        "/notifications",
+        {},
+        {
+          withCredentials: true,
+        },
+      );
+      return res;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+      toast({
+        title: "Notifications marked as read",
+        description: "You have marked all notifications as read",
+      });
+    },
+  });
+
   return (
     <header className="mt-4 flex items-center justify-between px-[3%]">
       <div className="flex items-center justify-center">
@@ -36,7 +62,7 @@ export default function DashboardHeader() {
               <section className="mt-3 text-sm text-gray-700">
                 {unreadMessages.length > 0 &&
                   unreadMessages.map((msg, index) => (
-                    <div className="border-b py-2 truncate" key={index}>
+                    <div className="truncate border-b py-2" key={index}>
                       📢{" "}
                       {typeof msg.content == "string" &&
                       msg.content.includes("https://andikauploader.s3") ? (
@@ -81,13 +107,25 @@ export default function DashboardHeader() {
               <section className="mt-3 text-sm text-gray-700">
                 {updates.length > 0 &&
                   updates.map((update, index) => (
-                    <div className="border-b py-2 truncate" key={index}>
+                    <div className="truncate border-b py-2" key={index}>
                       🔔 {update.content}
                     </div>
                   ))}
 
                 {updates.length === 0 && (
                   <div className="my-5 text-center">No new updates!</div>
+                )}
+                {updates.length > 0 && (
+                  <div className="mt-6 flex justify-end">
+                    <Button
+                      size={"sm"}
+                      loading={mutateUpdates.isPending}
+                      variant={"outline"}
+                      onClick={() => mutateUpdates.mutateAsync()}
+                    >
+                      Mark all as read
+                    </Button>
+                  </div>
                 )}
               </section>
             </PopoverContent>

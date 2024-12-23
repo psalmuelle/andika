@@ -26,10 +26,16 @@ export class NotificationsService {
   }
 
   async markAllAsRead(userId: number) {
-    return this.prismaService.notification.deleteMany({
-      where: {
-        userId,
-      },
+    const notificationExists = await this.prismaService.notification.findMany({
+      where: { userId },
     });
+    if (notificationExists.length > 0) {
+      return this.prismaService.notification.deleteMany({
+        where: {
+          userId,
+        },
+      });
+    }
+    return;
   }
 }

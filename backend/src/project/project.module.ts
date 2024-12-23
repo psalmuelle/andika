@@ -6,10 +6,11 @@ import { MailgunService } from 'src/mailgun/mailgun.service';
 import { UploadService } from 'src/upload/upload.service';
 import { ConfigService } from '@nestjs/config';
 import { NotificationsService } from 'src/notifications/notifications.service';
+import { NotificationsModule } from 'src/notifications/notifications.module';
 
 @Module({
-  imports: [MailgunModule, NotificationsService],
+  imports: [MailgunModule, NotificationsModule],
   controllers: [ProjectController],
-  providers: [ProjectService, MailgunService, UploadService, ConfigService],
+  providers: [ProjectService, MailgunService, UploadService, ConfigService, NotificationsService],
 })
 export class ProjectModule {}
