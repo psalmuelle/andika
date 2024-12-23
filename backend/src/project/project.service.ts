@@ -10,12 +10,14 @@ import {
   UpdateTimelineDto,
 } from './dto';
 import { UploadService } from 'src/upload/upload.service';
+import { NotificationsService } from 'src/notifications/notifications.service';
 
 @Injectable()
 export class ProjectService {
   constructor(
     private prismaService: PrismaService,
     private uploadService: UploadService,
+    private notificationService: NotificationsService,
   ) {}
 
   async create(data: CreateProjectDto, adminId: number) {
@@ -32,6 +34,11 @@ export class ProjectService {
         assignedPMId: adminId,
       },
     });
+
+    await this.notificationService.createNotification(
+      project.ownerId,
+      `A new project '${project.title}' has been created`,
+    );
 
     return project;
   }
@@ -192,6 +199,18 @@ export class ProjectService {
         projectId: data.projectId,
       },
     });
+
+    const project = await this.prismaService.project.findUnique({
+      where: {
+        id: activity.projectId,
+      },
+    });
+
+    await this.notificationService.createNotification(
+      project?.ownerId as number,
+      `A new activity '${activity.activity}' has been added to project '${project?.title}'`,
+    );
+
     return activity;
   }
 
@@ -213,6 +232,7 @@ export class ProjectService {
         activity: activity,
       },
     });
+    return updatedActivity;
   }
 
   async createPayment(data: CreateTimelineDto, file: Express.Multer.File) {
@@ -233,6 +253,16 @@ export class ProjectService {
         },
       });
 
+      const project = await this.prismaService.project.findUnique({
+        where: {
+          id: data.projectId,
+        },
+      });
+
+      await this.notificationService.createNotification(
+        project?.ownerId as number,
+        `A payment invoice of ${payment.amount} has been added to project '${project?.title}'`,
+      );
       return payment;
     } catch (err) {
       throw err;
