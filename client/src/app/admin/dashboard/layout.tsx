@@ -1,5 +1,5 @@
 "use client";
-import "./../globals.css";
+import "./../../globals.css";
 import Footer from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -10,6 +10,7 @@ import { AxiosError } from "axios";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import { ToastAction } from "@/components/ui/toast";
+import AdminHeader from "@/components/layout/adminDashboardHeader";
 
 const queryClient = new QueryClient();
 
@@ -23,11 +24,13 @@ export default function RootLayout({
   useEffect(() => {
     async function isAuthorized() {
       try {
-        if (window.location.pathname.startsWith("/admin/auth")) return;
         const res = await axiosInstance.get("auth/status", {
           withCredentials: true,
         });
-        return res;
+        if (res.data.isAdmin === false) {
+          throw new Error();
+        }
+        return;
       } catch (error) {
         toast({
           variant: "destructive",
@@ -35,10 +38,10 @@ export default function RootLayout({
           description:
             error instanceof AxiosError
               ? error.response?.data.message
-              : "There was a problem with your request.",
+              : "You are not authorized to access this page.",
           action: <ToastAction altText="Try again">Try again</ToastAction>,
         });
-        router.replace("/admin/auth/login");
+        router.replace("/admin/login");
       }
     }
     isAuthorized();
@@ -54,6 +57,7 @@ export default function RootLayout({
               </div>
             }
           >
+            <AdminHeader />
             {children}
             <Footer />
             <Toaster />

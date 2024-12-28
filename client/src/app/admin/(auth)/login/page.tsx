@@ -13,7 +13,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Typography from "@/components/ui/typography";
-import Link from "next/link";
 import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
@@ -85,12 +84,7 @@ export default function Login() {
 
   return (
     <>
-      <header className="sticky top-0 z-20 bg-white/70 px-[5%] py-3 text-center shadow-sm backdrop-blur">
-        <h1 className="scroll-m-20 font-mono text-xl font-semibold tracking-tight text-zinc-800">
-          Andika
-        </h1>
-      </header>
-      <div className="flex min-h-[90vh] flex-col items-center justify-center px-[5%]">
+      <div className="flex min-h-[80vh] flex-col items-center justify-center px-[5%]">
         <div className="mt-8 text-center">
           <Typography as="h4">Admin Authentication</Typography>
           <p className="font-medium">Welcome back!</p>
@@ -135,12 +129,6 @@ export default function Login() {
               </Button>
             </form>
           </Form>
-          <Link
-            href={"/admin/auth/register"}
-            className="mt-6 block text-center underline"
-          >
-            Sign up
-          </Link>
         </section>
       </div>
     </>

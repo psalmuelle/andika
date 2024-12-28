@@ -52,7 +52,7 @@ export default function Register() {
       return response;
     },
     onSuccess() {
-      router.push("/admin/auth/login");
+      router.push("/admin/login");
     },
     onError(error) {
       toast({
@@ -73,11 +73,6 @@ export default function Register() {
 
   return (
     <>
-      <header className="sticky top-0 z-20 bg-white/70 px-[5%] py-3 text-center shadow-sm backdrop-blur">
-        <h1 className="scroll-m-20 font-mono text-xl font-semibold tracking-tight text-zinc-800">
-          Andika
-        </h1>
-      </header>
       <div className="flex min-h-[90vh] flex-col items-center justify-center px-[5%]">
         <div className="mt-8 text-center">
           <Typography as="h4">Admin Authentication</Typography>
@@ -137,7 +132,7 @@ export default function Register() {
             </form>
           </Form>
           <Link
-            href={"/admin/auth/login"}
+            href={"/admin/login"}
             className="mt-6 block text-center underline"
           >
             Sign in
