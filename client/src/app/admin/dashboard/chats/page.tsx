@@ -45,16 +45,21 @@ export default function Chat() {
   useEffect(() => {
     if (!users && !admin) return;
     async function getChat() {
-      users?.forEach(async (user) => {
-        const res = await axiosInstance.get(`/chat/${user.userId}`, {
-          withCredentials: true,
-        });
-        if (res.data.length > 0) {
-          setUsersMessages((prev) => [...prev, res.data]);
-        }
-      });
+      const messagesMap: { [key: number]: MessageType[] } = {};
+      await Promise.all(
+        users?.map(async (user) => {
+          const res = await axiosInstance.get(`/chat/${user.userId}`, {
+            withCredentials: true,
+          });
+          if (res.data.length > 0) {
+            messagesMap[user.userId] = res.data;
+          }
+        }) || [],
+      );
+      setUsersMessages(Object.values(messagesMap));
     }
-    getChat();
+    const intervalId = setInterval(getChat, 10000);
+    return () => clearInterval(intervalId);
   }, [users, admin]);
 
   return (
@@ -87,11 +92,7 @@ export default function Chat() {
             />
           )}
         </div>
-        <AdminChatbox
-          admin={admin}
-          usersMessages={usersMessages}
-          users={users}
-        />
+        <AdminChatbox admin={admin} usersMessages={usersMessages} />
       </div>
     </div>
   );

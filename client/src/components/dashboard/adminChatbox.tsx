@@ -25,11 +25,9 @@ interface MessageType {
 export default function AdminChatbox({
   admin,
   usersMessages,
-  users,
 }: {
   admin: ProfileType | undefined;
   usersMessages: MessageType[][] | undefined;
-  users: ProfileType[] | undefined;
 }) {
   const [socket, setSocket] = useState<Socket>();
   const [userIsTyping, setUserIsTyping] = useState<boolean>();
@@ -54,6 +52,38 @@ export default function AdminChatbox({
       setMessages([]);
     }
   }, [usersMessages, activeChatId]);
+
+  // Mark messages as Read
+  useEffect(() => {
+    const markMessagesAsRead = async () => {
+      try {
+        if (messages.length > 0) {
+          const unReadMsgs = messages.filter(
+            (msg) => msg.isRead === false && msg.receiverId === admin?.userId,
+          );
+
+          if (
+            unReadMsgs.length > 0 &&
+            socket &&
+            activeChatId !== null &&
+            admin
+          ) {
+            unReadMsgs.forEach((msg) => {
+              socket.emit("markAsRead", {
+                id: msg.id,
+                user: admin?.userId,
+                admin: activeChatId,
+              });
+            });
+          }
+        }
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    markMessagesAsRead();
+  }, [activeChatId, messages, admin, socket]);
+
   useEffect(() => {
     if (messages && bottomRef.current) {
       bottomRef.current.scrollTop = bottomRef.current.scrollHeight;
