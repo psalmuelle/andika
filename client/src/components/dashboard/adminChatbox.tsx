@@ -1,49 +1,51 @@
 "use client";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ScrollArea } from "../ui/scroll-area";
 import { MessageBox } from "./chatWidget";
 import { Paperclip, Send } from "lucide-react";
 import { Button } from "../ui/button";
-import { ReloadIcon } from "@radix-ui/react-icons";
 import { Upload } from "antd";
 import { Input } from "react-chat-elements";
-import axiosInstance from "@/config/axios";
+import useActiveChat from "@/context/activeChat";
+import { ProfileType } from "types";
 
-const messages = [
-  {
-    id: 1,
-    content: "Hey, how are you doing?",
-    senderId: 2,
-    receiverId: 1,
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
-    createdAt: "10:30 AM",
-    isSelf: false,
-  },
-  {
-    id: 2,
-    content: "I'm good, thanks! How about you?",
-    senderId: 1,
-    receiverId: 2,
-    createdAt: "10:31 AM",
-    isSelf: true,
-  },
-  {
-    id: 3,
-    content: "Just finished a great meeting. Want to grab lunch later?",
-    senderId: 2,
-    receiverId: 1,
-    avatar:
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=150",
-    createdAt: "10:32 AM",
-    isSelf: false,
-  },
-];
+interface MessageType {
+  id: number;
+  senderId: number;
+  receiverId: number;
+  content: string;
+  createdAt: string;
+  isRead: boolean;
+}
 
-export default function AdminChatbox() {
+export default function AdminChatbox({
+  admin,
+  usersMessages,
+  users,
+}: {
+  admin: ProfileType | undefined;
+  usersMessages: MessageType[][] | undefined;
+  users: ProfileType[] | undefined;
+}) {
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const [messages, setMessages] = useState<MessageType[]>([]);
+  const { activeChatId } = useActiveChat();
 
+  useEffect(() => {
+    if (usersMessages && activeChatId !== null) {
+      const usermessages = usersMessages.find(
+        (msg) =>
+          msg[0].receiverId === activeChatId ||
+          msg[0].senderId === activeChatId,
+      );
+
+      setMessages(usermessages || []);
+    }
+    if (activeChatId === null) {
+      setMessages([]);
+    }
+  }, [usersMessages, activeChatId]);
   useEffect(() => {
     if (messages && bottomRef.current) {
       bottomRef.current.scrollTop = bottomRef.current.scrollHeight;
@@ -78,9 +80,14 @@ export default function AdminChatbox() {
               createdAt={msg.createdAt}
               receiverId={msg.receiverId}
               senderId={msg.senderId}
-              userId={1}
+              userId={admin?.userId!}
             />
           ))}
+        {activeChatId === null && (
+          <div className="mt-10 text-center">
+            Start a conversation with a client!
+          </div>
+        )}
         {/* 
         {(adminLoading || !socket) && (
           <div className="min-h-60 w-full">

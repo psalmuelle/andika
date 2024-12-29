@@ -2,6 +2,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ProfileType } from "types";
 import { formatDistance } from "date-fns";
+import useActiveChat from "@/context/activeChat";
 
 interface ChatListItemProps {
   messages: MessageType[];
@@ -22,8 +23,12 @@ export function ChatListItem({ messages, user, admin }: ChatListItemProps) {
   const timeAgo = (date: string) => {
     return formatDistance(new Date(date), new Date(), { addSuffix: true });
   };
+  const { activeChatId, setActiveChatId } = useActiveChat();
   return (
-    <div className="flex cursor-pointer items-center gap-3 p-4 hover:bg-zinc-100">
+    <div
+      onClick={() => setActiveChatId(user.userId)}
+      className={`flex cursor-pointer items-center gap-3 p-4 hover:bg-zinc-100 ${activeChatId === user.userId ? "bg-zinc-100" : ""}`}
+    >
       <Avatar>
         <AvatarImage
           src={user.avatar || "https://avatar.iran.liara.run/public/23"}

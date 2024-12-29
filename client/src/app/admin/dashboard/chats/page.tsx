@@ -2,8 +2,10 @@
 import AdminChatbox from "@/components/dashboard/adminChatbox";
 import { ChatList } from "@/components/dashboard/adminChatList";
 import axiosInstance from "@/config/axios";
+import useActiveChat from "@/context/activeChat";
 import { useQuery } from "@tanstack/react-query";
-import { MessageSquare } from "lucide-react";
+import { Button } from "antd";
+import { MessageSquare, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Socket } from "socket.io-client";
 import { ProfileType } from "types";
@@ -22,6 +24,7 @@ export default function Chat() {
   const [messages, setMessages] = useState<MessageType[]>();
 
   const [socket, setSocket] = useState<Socket | null>(null);
+  const { activeChatId, setActiveChatId } = useActiveChat();
 
   const { data: users, isPending: usersLoading } = useQuery({
     queryKey: ["users"],
@@ -58,7 +61,7 @@ export default function Chat() {
     }
     getChat();
   }, [users, admin]);
- 
+
   return (
     <div className="flex">
       {/* Left sidebar */}
@@ -74,10 +77,26 @@ export default function Chat() {
 
       {/* Right chat area */}
       <div className="flex flex-1 flex-col">
-        <div className="border-b p-4">
-          <h2 className="font-semibold">Alice Johnson</h2>
+        <div className="flex items-center justify-between border-b p-4">
+          <h2 className="font-semibold">
+            {activeChatId
+              ? `${users?.find((a) => a.userId === activeChatId)?.name} - ${users?.find((a) => a.userId === activeChatId)?.user.email}`
+              : "Chat"}
+          </h2>
+          {activeChatId && (
+            <Button
+              onClick={() => setActiveChatId(null)}
+              shape="circle"
+              type="text"
+              icon={<XIcon className="h-4" />}
+            />
+          )}
         </div>
-        <AdminChatbox />
+        <AdminChatbox
+          admin={admin}
+          usersMessages={usersMessages}
+          users={users}
+        />
       </div>
     </div>
   );
