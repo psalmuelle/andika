@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Send, Phone, VideoIcon, Paperclip } from "lucide-react";
+import { Send, Phone, Paperclip } from "lucide-react";
 import { Card } from "../ui/card";
 import { Button } from "../ui/button";
 import { useQuery } from "@tanstack/react-query";
@@ -31,11 +31,9 @@ type MessageBoxProps = Pick<
   userId: number;
 };
 
-function MessageBox({ senderId, content, userId }: MessageBoxProps) {
+export function MessageBox({ senderId, content, userId }: MessageBoxProps) {
   return (
-    <div
-      className={`${senderId === userId && "flex w-full justify-end"}`}
-    >
+    <div className={`${senderId === userId && "flex w-full justify-end"}`}>
       <p
         className={`mb-3 w-fit max-w-[70%] whitespace-pre-line rounded-2xl p-2 ${senderId === userId ? "rounded-tr-none bg-white" : "rounded-tl-none bg-accent-foreground text-white"}`}
       >
@@ -191,7 +189,7 @@ function ChatWidget() {
   };
 
   return (
-    <Card className="flex min-h-[400px] w-full h-full flex-col">
+    <Card className="flex h-full min-h-[400px] w-full flex-col">
       <div className="flex items-center justify-between border-b p-4">
         <Spin spinning={adminLoading}>
           <div className="flex items-center gap-3">
@@ -226,10 +224,7 @@ function ChatWidget() {
           </Button>
         </div>
       </div>
-      <ScrollArea
-        ref={bottomRef}
-        className="h-64 flex-1 bg-accent p-2"
-      >
+      <ScrollArea ref={bottomRef} className="h-64 flex-1 bg-accent p-2">
         {messages.length > 0 &&
           messages.map((msg) => (
             <MessageBox

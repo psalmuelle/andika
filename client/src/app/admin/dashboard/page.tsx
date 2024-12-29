@@ -2,7 +2,6 @@
 import ProjectStat from "@/components/dashboard/projectStat";
 import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
-import { LayoutDashboard } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/config/axios";
 import { ProjectRequestType, ProjectType } from "types";
@@ -12,7 +11,6 @@ import AdminMessages from "@/components/dashboard/allMessages";
 import UsersList from "@/components/dashboard/usersList";
 import AdminRecentActivities from "@/components/dashboard/AdminActivities";
 import RevenueOverview from "@/components/dashboard/RevenueOverview";
-import CallSchedules from "@/components/dashboard/CallSchedules";
 import ProjectRequestDrawer from "@/components/dashboard/projects/ProjectRequesDrawer";
 
 export default function Dashboard() {
@@ -31,6 +29,17 @@ export default function Dashboard() {
     queryKey: ["projectRequests"],
     queryFn: async () => {
       const response = await axiosInstance.get("/project-request/all", {
+        withCredentials: true,
+      });
+      return response.data;
+    },
+    refetchInterval: 25000,
+  });
+
+  const { data: users, isPending: usersLoading } = useQuery({
+    queryKey: ["users"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/profile/all", {
         withCredentials: true,
       });
       return response.data;
@@ -61,19 +70,19 @@ export default function Dashboard() {
 
         {/* Recent Activities */}
         <div className="mt-12 space-y-6">
-          <div className="flex gap-6">
+          <div className="flex gap-6 max-sm:flex-wrap">
             <RecentProjects projects={projects as ProjectType[]} />
             <RevenueOverview />
           </div>
 
-          <div className="flex justify-between gap-6">
-            <CallSchedules />
+          <div className="flex justify-between gap-6 max-md:flex-wrap">
+            {/* <CallSchedules /> */}
             <AdminMessages />
             <AdminRecentActivities />
           </div>
 
-          <div className="flex justify-between gap-6">
-            <UsersList />
+          <div className="flex justify-between gap-6 max-lg:flex-wrap max-sm:flex-wrap">
+            <UsersList users={users} isLoading={usersLoading} />
             <WriterOverview />
           </div>
         </div>
