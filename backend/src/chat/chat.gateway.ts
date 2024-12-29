@@ -47,24 +47,12 @@ export class ChatGateway {
     client.emit('joinedRoom', room);
   }
 
-  @SubscribeMessage('leaveRoom')
-  handleLeaveRoom(
-    @MessageBody() data: { user: string; admin: string },
-    @ConnectedSocket() client: Socket,
-  ) {
-    const room = this.getRoomName(data.user, data.admin);
-    client.leave(room);
-    client.emit('leftRoom', room);
-  }
-
   @SubscribeMessage('isTyping')
   handleIsTyping(
     @MessageBody() data: { user: string; admin: string; isTyping: boolean },
   ) {
     const room = this.getRoomName(data.user, data.admin);
-    this.server
-      .to(room)
-      .emit('typing', { user: data.user, isTyping: data.isTyping });
+    return this.server.to(room).emit('isTyping', {user: data.user, isTyping: data.isTyping});
   }
 
   @SubscribeMessage('markAsRead')
@@ -73,7 +61,7 @@ export class ChatGateway {
   ) {
     const room = this.getRoomName(data.user, data.admin);
     const messages = await this.chatService.markMessagesAsRead(data.id);
-    this.server.to(room).emit('messagesRead', messages);
+    return this.server.to(room).emit('messagesRead', messages);
   }
 
   @SubscribeMessage('unreadMessages')

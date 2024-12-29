@@ -8,6 +8,10 @@ import { Upload } from "antd";
 import { Input } from "react-chat-elements";
 import useActiveChat from "@/context/activeChat";
 import { ProfileType } from "types";
+import { Socket } from "socket.io-client";
+import socketInstance from "@/config/socket";
+import { ReloadIcon } from "@radix-ui/react-icons";
+import axiosInstance from "@/config/axios";
 
 interface MessageType {
   id: number;
@@ -27,10 +31,14 @@ export default function AdminChatbox({
   usersMessages: MessageType[][] | undefined;
   users: ProfileType[] | undefined;
 }) {
+  const [socket, setSocket] = useState<Socket>();
+  const [userIsTyping, setUserIsTyping] = useState<boolean>();
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [messages, setMessages] = useState<MessageType[]>([]);
+  const [newMessage, setNewMessage] = useState<string>("");
   const { activeChatId } = useActiveChat();
+  const [isUploadingFile, setIsUploadingFile] = useState(false);
 
   useEffect(() => {
     if (usersMessages && activeChatId !== null) {
@@ -50,7 +58,71 @@ export default function AdminChatbox({
     if (messages && bottomRef.current) {
       bottomRef.current.scrollTop = bottomRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, userIsTyping]);
+
+  useEffect(() => {
+    if (!messages || !admin || activeChatId === null) return;
+
+    const socketio = socketInstance();
+    setSocket(socketio);
+
+    const roomData = {
+      user: activeChatId.toString(),
+      admin: admin?.userId.toString(),
+    };
+    socketio.emit("joinRoom", roomData);
+
+    // Listen for incoming private messages
+    socketio.on("chat", (newMessage) => {
+      setMessages((prev) => [...prev, newMessage]);
+    });
+
+    // Listen for other user typing
+    socketio.on("isTyping", (data) => {
+      if (data.user === activeChatId.toString()) {
+        setUserIsTyping(data.isTyping);
+      }
+    });
+
+    // Cleanup on component unmount
+    return () => {
+      socketio.disconnect();
+    };
+  }, [messages, admin, activeChatId]);
+
+  const onTyping = () => {
+    if (socket && activeChatId !== null) {
+      socket.emit("isTyping", {
+        user: admin?.userId.toString(),
+        admin: activeChatId.toString(),
+        isTyping: true,
+      });
+    }
+  };
+
+  const onTypingEnd = () => {
+    if (socket && activeChatId !== null) {
+      socket.emit("isTyping", {
+        user: admin?.userId.toString(),
+        admin: activeChatId.toString(),
+        isTyping: false,
+      });
+    }
+  };
+
+  const onSendMessage = () => {
+    if (newMessage.length > 1 && socket && activeChatId && admin) {
+      socket.emit("chat", {
+        senderId: admin?.userId,
+        receiverId: activeChatId,
+        content: newMessage,
+      });
+      if (inputRef.current) {
+        inputRef.current.value = "";
+        inputRef.current.style.height = "40px";
+      }
+    }
+  };
 
   return (
     <div>
@@ -88,41 +160,21 @@ export default function AdminChatbox({
             Start a conversation with a client!
           </div>
         )}
-        {/* 
-        {(adminLoading || !socket) && (
-          <div className="min-h-60 w-full">
-            <Spin
-              spinning={true}
-              className="flex min-h-60 items-center justify-center"
-            />
-          </div>
-        )}
-
-        {!adminLoading && messages.length === 0 && (
-          <div className="min-h-60 w-full">
-            <p className="mt-8 flex min-h-60 items-center justify-center text-center text-white">
-              No messages yet!
-            </p>
-          </div>
-        )}
 
         {userIsTyping && (
           <p
-            className={`mb-3 w-fit animate-bounce whitespace-pre-line rounded-2xl rounded-tl-none bg-accent-foreground/60 p-2 text-xs text-white`}
+            className={`mb-3 w-fit animate-bounce whitespace-pre-line rounded-2xl rounded-tl-none bg-accent-foreground/60 p-2 text-white`}
           >
             Typing...
           </p>
-        )} */}
+        )}
       </ScrollArea>
       <div className="border-y p-2">
         <div className="">
           <Input
             referance={inputRef}
-            onFocus={() => {
-              //   onTyping();
-              //   markMessagesAsRead();
-            }}
-            // onBlur={onTypingEnd}
+            onFocus={onTyping}
+            onBlur={onTypingEnd}
             multiline
             minHeight={40}
             maxHeight={200}
@@ -136,33 +188,33 @@ export default function AdminChatbox({
                 onChange={(info) => {
                   const { status } = info.file;
                   if (status === "uploading") {
-                    // setIsUploadingFile(true);
+                    setIsUploadingFile(true);
                   }
                   if (status === "done") {
-                    // setIsUploadingFile(false);
-                    // if (socket) {
-                    //   const res = axiosInstance.post(
-                    //     "upload/get-url",
-                    //     {
-                    //       fileName: [info.file.response.fileName],
-                    //     },
-                    //     {
-                    //       withCredentials: true,
-                    //     },
-                    //   );
-                    //   Promise.resolve(res).then((data) => {
-                    //     if (data.data.length > 0) {
-                    //       socket.emit("chat", {
-                    //         senderId: user?.id,
-                    //         receiverId: admin?.userId,
-                    //         content: data.data[0],
-                    //       });
-                    //     }
-                    //   });
-                    // }
+                    setIsUploadingFile(false);
+                    if (socket) {
+                      const res = axiosInstance.post(
+                        "upload/get-url",
+                        {
+                          fileName: [info.file.response.fileName],
+                        },
+                        {
+                          withCredentials: true,
+                        },
+                      );
+                      Promise.resolve(res).then((data) => {
+                        if (data.data.length > 0) {
+                          socket.emit("chat", {
+                            senderId: admin?.userId,
+                            receiverId: activeChatId,
+                            content: data.data[0],
+                          });
+                        }
+                      });
+                    }
                   }
                   if (status === "error") {
-                    // setIsUploadingFile(false);
+                    setIsUploadingFile(false);
                   }
                 }}
               >
@@ -172,22 +224,19 @@ export default function AdminChatbox({
             rightButtons={
               <Button
                 type="submit"
-                // onClick={onSendMessage}
+                onClick={onSendMessage}
                 size={"icon"}
                 className="rounded-full"
               >
-                {/* {isUploadingFile ? (
+                {isUploadingFile ? (
                   <ReloadIcon className={`h-4 animate-spin`} />
                 ) : (
                   <Send className="h-4" />
-                )} */}
-
-                {/* Temporary */}
-                <Send className="h-4" />
+                )}
               </Button>
             }
             onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-              //   setNewMessage(e.target.value)
+              setNewMessage(e.target.value);
             }}
             placeholder="Type your message..."
           />

@@ -22,7 +22,7 @@ export default function AdminHeader() {
               {},
               { withCredentials: true },
             );
-            window.location.href = "/admin/auth/login";
+            window.location.href = "/admin/login";
           }}
           variant={"link"}
           size={"sm"}

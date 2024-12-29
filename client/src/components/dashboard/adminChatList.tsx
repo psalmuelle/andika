@@ -31,7 +31,7 @@ export function ChatListItem({ messages, user, admin }: ChatListItemProps) {
     >
       <Avatar>
         <AvatarImage
-          src={user.avatar || "https://avatar.iran.liara.run/public/23"}
+          src={user.avatar}
           alt={user.name}
         />
         <AvatarFallback>
@@ -53,12 +53,12 @@ export function ChatListItem({ messages, user, admin }: ChatListItemProps) {
         </p>
       </div>
       {messages.filter(
-        (m) => m.isRead === false && m.receiverId === admin.userId,
+        (m) => m.isRead === false && m.receiverId === admin?.userId,
       ).length > 0 && (
         <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-white">
           {
             messages.filter(
-              (m) => m.isRead === false && m.receiverId === admin.userId,
+              (m) => (m.isRead === false && m.receiverId === admin.userId),
             ).length
           }
         </div>

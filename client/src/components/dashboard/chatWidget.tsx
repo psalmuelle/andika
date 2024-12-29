@@ -67,7 +67,7 @@ function ChatWidget() {
     if (messages && bottomRef.current) {
       bottomRef.current.scrollTop = bottomRef.current.scrollHeight;
     }
-  }, [messages]);
+  }, [messages, userIsTyping]);
 
   useEffect(() => {
     (async function () {
@@ -104,9 +104,7 @@ function ChatWidget() {
       user: user?.id.toString(),
       admin: admin?.userId.toString(),
     };
-    socketio.emit("joinRoom", roomData, (room: any) => {
-      console.log("Joined Room", room);
-    });
+    socketio.emit("joinRoom", roomData);
 
     // Listen for incoming private messages
     socketio.on("chat", (newMessage) => {
@@ -115,8 +113,7 @@ function ChatWidget() {
 
     // Listen for other user typing
     socketio.on("isTyping", (data) => {
-      console.log("isTyping", data);
-      if (data.senderId === admin?.userId) {
+      if (data.user === admin?.userId.toString()) {
         setUserIsTyping(data.isTyping);
       }
     });
@@ -169,11 +166,12 @@ function ChatWidget() {
       }
     }
   };
+
   const onTyping = () => {
     if (socket) {
       socket.emit("isTyping", {
-        senderId: user?.id,
-        receiverId: admin?.userId,
+        user: user?.id.toString(),
+        admin: admin?.userId.toString(),
         isTyping: true,
       });
     }
@@ -181,8 +179,8 @@ function ChatWidget() {
   const onTypingEnd = () => {
     if (socket) {
       socket.emit("isTyping", {
-        senderId: user?.id,
-        receiverId: admin?.userId,
+        user: user?.id.toString(),
+        admin: admin?.userId.toString(),
         isTyping: false,
       });
     }
@@ -273,7 +271,7 @@ function ChatWidget() {
 
         {userIsTyping && (
           <p
-            className={`mb-3 w-fit animate-bounce whitespace-pre-line rounded-2xl rounded-tl-none bg-accent-foreground/60 p-2 text-xs text-white`}
+            className={`mb-3 w-fit animate-bounce whitespace-pre-line rounded-2xl rounded-tl-none bg-accent-foreground/60 p-2 text-white`}
           >
             Typing...
           </p>

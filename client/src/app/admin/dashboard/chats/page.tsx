@@ -7,7 +7,6 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "antd";
 import { MessageSquare, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Socket } from "socket.io-client";
 import { ProfileType } from "types";
 
 interface MessageType {
@@ -21,12 +20,9 @@ interface MessageType {
 
 export default function Chat() {
   const [usersMessages, setUsersMessages] = useState<MessageType[][]>([]);
-  const [messages, setMessages] = useState<MessageType[]>();
-
-  const [socket, setSocket] = useState<Socket | null>(null);
   const { activeChatId, setActiveChatId } = useActiveChat();
 
-  const { data: users, isPending: usersLoading } = useQuery({
+  const { data: users } = useQuery({
     queryKey: ["users"],
     queryFn: async () => {
       const response = await axiosInstance.get("/profile/all", {
@@ -34,10 +30,9 @@ export default function Chat() {
       });
       return response.data as ProfileType[];
     },
-    refetchInterval: 25000,
   });
 
-  const { data: admin, isPending: adminLoading } = useQuery({
+  const { data: admin } = useQuery({
     queryKey: ["admin"],
     queryFn: async () => {
       const response = await axiosInstance.get("/profile/admin/get", {
