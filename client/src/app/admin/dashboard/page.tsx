@@ -1,17 +1,16 @@
 "use client";
 import ProjectStat from "@/components/dashboard/projectStat";
-import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
 import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/config/axios";
 import { ProjectRequestType, ProjectType } from "types";
 import RecentProjects from "@/components/dashboard/projects/RecentProjects";
-import WriterOverview from "@/components/dashboard/writerOverview";
-import AdminMessages from "@/components/dashboard/allMessages";
 import UsersList from "@/components/dashboard/usersList";
-import AdminRecentActivities from "@/components/dashboard/AdminActivities";
 import RevenueOverview from "@/components/dashboard/RevenueOverview";
 import ProjectRequestDrawer from "@/components/dashboard/projects/ProjectRequesDrawer";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { MessageSquare } from "lucide-react";
 
 export default function Dashboard() {
   const { data: projects, isPending } = useQuery({
@@ -57,7 +56,12 @@ export default function Dashboard() {
               isLoading={projectRequestLoading}
               data={projectRequests}
             />
-            <Button variant={"outline"}>Message Client</Button>
+            <Button asChild variant={"secondary"}>
+              <Link href="/admin/dashboard/chats">
+                <MessageSquare className="mr-2 h-4 w-4" />
+                Chats
+              </Link>
+            </Button>
           </div>
         </div>
 
@@ -75,16 +79,7 @@ export default function Dashboard() {
             <RevenueOverview />
           </div>
 
-          <div className="flex justify-between gap-6 max-md:flex-wrap">
-            {/* <CallSchedules /> */}
-            <AdminMessages />
-            <AdminRecentActivities />
-          </div>
-
-          <div className="flex justify-between gap-6 max-lg:flex-wrap max-sm:flex-wrap">
-            <UsersList users={users} isLoading={usersLoading} />
-            <WriterOverview />
-          </div>
+          <UsersList users={users} isLoading={usersLoading} />
         </div>
       </div>
     </>

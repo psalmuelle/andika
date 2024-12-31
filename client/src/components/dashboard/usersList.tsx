@@ -31,7 +31,7 @@ export default function UsersList({
   ];
 
   return (
-    <Card className="w-full max-w-5xl">
+    <Card className="w-full">
       <Spin spinning={isLoading}>
         <CardHeader className="border-b">
           <CardTitle className="flex flex-row items-center justify-between">

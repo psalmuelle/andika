@@ -12,6 +12,7 @@ import Link from "next/link";
 import { ProjectRequestType } from "types";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { formatDistance } from "date-fns";
+import { Badge } from "antd";
 
 export default function ProjectRequestDrawer({
   data,
@@ -26,7 +27,9 @@ export default function ProjectRequestDrawer({
   return (
     <Drawer>
       <DrawerTrigger asChild>
+        <Badge showZero count={data?.filter((projectRequest) => projectRequest?.status === "NEW").length}>
         <Button>New Project</Button>
+        </Badge>
       </DrawerTrigger>
 
       <DrawerContent>

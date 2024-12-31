@@ -42,15 +42,25 @@ function NotificationProvider({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const res = await axiosInstance.get(`/profile/admin/support`, {
+      const adminRes = await axiosInstance.get(`/profile/admin/support`, {
+        withCredentials: true,
+      });
+      const userRes = await axiosInstance.get(`/profile`, {
         withCredentials: true,
       });
 
+      return {
+        adminId: adminRes.data?.userId.toString(),
+        userId: userRes.data?.userId.toString(),
+      };
+    };
+
+    fetchData().then(({ adminId, userId }) => {
       const socketio = socketInstance();
 
       socketio.emit("unreadMessages", {
-        user: "1",
-        admin: res.data?.userId.toString(),
+        user: userId,
+        admin: adminId,
       });
       socketio.on("unreadMessages", (messages) => {
         setUnreadMessages(messages);
@@ -60,10 +70,8 @@ function NotificationProvider({ children }: { children: React.ReactNode }) {
       return () => {
         socketio.disconnect();
       };
-    };
-
-    fetchData();
-  }, []);
+    });
+  }, [unreadMessages]);
 
   useEffect(() => {
     if (updateData) {
