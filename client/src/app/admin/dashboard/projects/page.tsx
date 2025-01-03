@@ -1,6 +1,6 @@
 "use client";
 import ProjectInfoCard from "@/components/dashboard/projects/adminProjectCard";
-import { Button } from "@/components/ui/button";
+import CreateProjectForm from "@/components/dashboard/projects/project-forms/CreateProject";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -13,13 +13,14 @@ import Typography from "@/components/ui/typography";
 import axiosInstance from "@/config/axios";
 import { useQuery } from "@tanstack/react-query";
 import { Spin } from "antd";
-import { Plus, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { ProjectType } from "types";
 
 export default function Projects() {
   const [allProjects, setAllProjects] = useState<ProjectType[]>([]);
   const [filter, setFilter] = useState<string>("");
+  const [search, setSearch] = useState<string>("");
 
   const { data: projects, isPending } = useQuery({
     queryKey: ["projects"],
@@ -30,6 +31,16 @@ export default function Projects() {
       return response.data as ProjectType[];
     },
     refetchInterval: 25000,
+  });
+
+  const { data: profile } = useQuery({
+    queryKey: ["profile"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/profile/admin/get", {
+        withCredentials: true,
+      });
+      return response.data;
+    },
   });
 
   useEffect(() => {
@@ -43,21 +54,32 @@ export default function Projects() {
       );
       setAllProjects(filteredProjects);
     }
-  }, [projects, filter]);
+
+    if (search.length > 0 && projects) {
+      const filteredProjects = projects.filter(
+        (project) =>
+          project.title.toLowerCase().includes(search.toLowerCase()) ||
+          project.owner?.name.toLowerCase().includes(search.toLowerCase()),
+      );
+      setAllProjects(filteredProjects);
+    }
+  }, [projects, filter, search]);
 
   return (
     <div>
       <main className="min-h-[90vh] px-[5%]">
         <div className="mt-8 flex items-center justify-between">
           <Typography as={"h4"}>Projects</Typography>
-          <Button>
-            <Plus className="mr-2 h-4 w-4" /> Create Project
-          </Button>
+          <CreateProjectForm admin={profile} />
         </div>
         <section className="mt-8 flex gap-6">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400" />
-            <Input placeholder="Search projects..." className="pl-10" />
+            <Input
+              placeholder="Search projects by title or client name..."
+              className="pl-10"
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
           <Select
             onValueChange={(e) => {
@@ -83,7 +105,7 @@ export default function Projects() {
               No projects found
             </div>
           )}
-          
+
           {!isPending &&
             allProjects &&
             allProjects?.length > 0 &&

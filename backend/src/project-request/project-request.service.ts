@@ -188,7 +188,7 @@ export class ProjectRequestService {
       if (!userIsAdmin)
         throw new HttpException('Unauthorized', HttpStatus.FORBIDDEN);
 
-      return this.prismaService.projectRequest.findUnique({
+      const res = await this.prismaService.projectRequest.findUnique({
         where: {
           id,
         },
@@ -200,6 +200,8 @@ export class ProjectRequestService {
           user: true,
         },
       });
+      if (res) return res;
+      throw new HttpException('Request not found', HttpStatus.NOT_FOUND);
     } catch (err) {
       throw err;
     }

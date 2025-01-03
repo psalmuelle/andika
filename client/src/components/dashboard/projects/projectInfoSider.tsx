@@ -23,7 +23,7 @@ export default function ProjectInfoSidebar({
       {/* Assigned Writer */}
       <Card className="w-full max-w-[264px]">
         <CardHeader>
-          <CardTitle>Assigned Writer</CardTitle>
+          <CardTitle>Assigned Manager</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="flex items-center space-x-3">

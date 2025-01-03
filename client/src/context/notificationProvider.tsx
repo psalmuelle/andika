@@ -1,5 +1,4 @@
 import { createContext, useEffect, useState } from "react";
-import socketInstance from "@/config/socket";
 import axiosInstance from "@/config/axios";
 import { useQuery } from "@tanstack/react-query";
 
@@ -40,38 +39,22 @@ function NotificationProvider({ children }: { children: React.ReactNode }) {
     refetchInterval: 30000,
   });
 
+  const { data: unreadMsgs } = useQuery({
+    queryKey: ["unreadMessages"],
+    queryFn: async () => {
+      const res = await axiosInstance.get("/chat/unread/all", {
+        withCredentials: true,
+      });
+      return res.data;
+    },
+    refetchInterval: 30000,
+  });
+
   useEffect(() => {
-    const fetchData = async () => {
-      const adminRes = await axiosInstance.get(`/profile/admin/support`, {
-        withCredentials: true,
-      });
-      const userRes = await axiosInstance.get(`/profile`, {
-        withCredentials: true,
-      });
-
-      return {
-        adminId: adminRes.data?.userId.toString(),
-        userId: userRes.data?.userId.toString(),
-      };
-    };
-
-    fetchData().then(({ adminId, userId }) => {
-      const socketio = socketInstance();
-
-      socketio.emit("unreadMessages", {
-        user: userId,
-        admin: adminId,
-      });
-      socketio.on("unreadMessages", (messages) => {
-        setUnreadMessages(messages);
-      });
-
-      // Cleanup on component unmount
-      return () => {
-        socketio.disconnect();
-      };
-    });
-  }, [unreadMessages]);
+    if (unreadMsgs) {
+      setUnreadMessages(unreadMsgs);
+    }
+  }, [unreadMsgs]);
 
   useEffect(() => {
     if (updateData) {

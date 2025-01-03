@@ -1,6 +1,15 @@
-import { Controller, Get, Param, ParseIntPipe, Req } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { ChatService } from './chat.service';
+import { AuthorizedGaurd } from 'src/auth/guard';
 
+@UseGuards(AuthorizedGaurd)
 @Controller('chat')
 export class ChatController {
   constructor(private readonly chatService: ChatService) {}
@@ -15,5 +24,16 @@ export class ChatController {
       firstUserId: userId,
       secondUserId: otherUserId,
     });
+  }
+
+  @Get('/unread/all')
+  async getAllUnreadMessages(@Req() req: any) {
+    try {
+      const userId = req.user?.id as number;
+      const unreadMsgs = await this.chatService.getUnreadMessages(userId);
+      return unreadMsgs;
+    } catch (err) {
+      throw err;
+    }
   }
 }

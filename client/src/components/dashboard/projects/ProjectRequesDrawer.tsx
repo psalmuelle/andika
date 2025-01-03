@@ -27,8 +27,14 @@ export default function ProjectRequestDrawer({
   return (
     <Drawer>
       <DrawerTrigger asChild>
-        <Badge showZero count={data?.filter((projectRequest) => projectRequest?.status === "NEW").length}>
-        <Button>New Project</Button>
+        <Badge
+          showZero
+          count={
+            data?.filter((projectRequest) => projectRequest?.status === "NEW")
+              .length
+          }
+        >
+          <Button>New Project</Button>
         </Badge>
       </DrawerTrigger>
 
@@ -65,7 +71,7 @@ export default function ProjectRequestDrawer({
                       </div>
                       <Button asChild className="w-full">
                         <Link
-                          href={`/admin/dashboard/projects/create?requestId=${projectRequest?.id}`}
+                          href={`/admin/dashboard/projects?create=${projectRequest?.id}`}
                         >
                           Start Project
                         </Link>

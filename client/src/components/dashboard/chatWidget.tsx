@@ -263,7 +263,7 @@ function ChatWidget() {
 
         {!adminLoading && messages.length === 0 && (
           <div className="min-h-60 w-full">
-            <p className="mt-8 flex min-h-60 items-center justify-center text-center text-white">
+            <p className="mt-8 flex min-h-60 items-center justify-center text-center">
               No messages yet!
             </p>
           </div>

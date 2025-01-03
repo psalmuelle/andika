@@ -116,8 +116,9 @@ export default function DashboardHeader() {
                   <div className="my-5 text-center">No new updates!</div>
                 )}
                 {updates.length > 0 && (
-                  <div className="mt-6 flex justify-end">
+                  <div className="mt-6 w-full">
                     <Button
+                      className="w-full"
                       size={"sm"}
                       loading={mutateUpdates.isPending}
                       variant={"outline"}
