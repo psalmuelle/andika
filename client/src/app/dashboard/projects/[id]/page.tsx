@@ -51,7 +51,7 @@ export default function ProjectPage({ params }: Props) {
       <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-b pb-2">
         <div>
           <Typography as="p" className="text-sm font-semibold">
-            Project #PRJB{project?.id}-{project?.createdAt.slice(0, 4)}
+            Project #PRJB{project?.id}-{project?.createdAt.slice(0, 10)}
           </Typography>
           <p>{project?.title}</p>
         </div>
@@ -63,7 +63,7 @@ export default function ProjectPage({ params }: Props) {
                 Message PM
               </Button>
             </SheetTrigger>
-            <SheetContent>
+            <SheetContent className="w-[400px] sm:w-[540px]">
               <div className="mt-5 h-[85vh] w-full text-sm">
                 <ChatWidget />
               </div>

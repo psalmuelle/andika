@@ -100,21 +100,43 @@ export class ProjectService {
   }
 
   async getOne(id: number, ownerId: number) {
-    const project = await this.prismaService.project.findUnique({
+    let project;
+
+    const user = await this.prismaService.user.findUnique({
       where: {
-        id,
-        owner: {
-          userId: ownerId,
-        },
-      },
-      include: {
-        activities: true,
-        tasks: true,
-        payments: true,
-        assignedPM: true,
-        owner: true,
+        id: ownerId,
       },
     });
+    if (user && user.isAdmin) {
+      project = await this.prismaService.project.findUnique({
+        where: {
+          id,
+        },
+        include: {
+          activities: true,
+          tasks: true,
+          payments: true,
+          assignedPM: true,
+          owner: true,
+        },
+      });
+    } else if (user && !user?.isAdmin) {
+      project = await this.prismaService.project.findUnique({
+        where: {
+          id,
+          owner: {
+            userId: ownerId,
+          },
+        },
+        include: {
+          activities: true,
+          tasks: true,
+          payments: true,
+          assignedPM: true,
+          owner: true,
+        },
+      });
+    }
     if (!project) {
       throw new HttpException('Project not found', 404);
     }

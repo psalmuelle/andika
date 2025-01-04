@@ -1,4 +1,5 @@
 "use client";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import useProfileStore from "@/context/profile";
 import { useQuery } from "@tanstack/react-query";
@@ -22,11 +23,15 @@ export default function AccountPage() {
           <Spin spinning={isPending}>
             <CardHeader className="border-b">
               <div className="flex items-center gap-2">
-                <img
-                  src={profile?.avatar ? profile.avatar : "https://img.icons8.com/fluency-systems-filled/50/user.png"}
-                  alt={profile?.name}
-                  className="h-14 w-14 rounded-full"
-                />
+                <Avatar>
+                  <AvatarImage src={profile?.avatar} alt={profile?.name} />
+                  <AvatarFallback>
+                    {profile?.name
+                      .split(" ")
+                      .map((n) => n[0])
+                      .join("")}
+                  </AvatarFallback>
+                </Avatar>
                 <div className="">
                   <h2 className="font-semibold">{profile?.name}</h2>
                   <p className="text-muted-foreground">
