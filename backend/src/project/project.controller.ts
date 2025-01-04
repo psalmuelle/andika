@@ -18,6 +18,7 @@ import {
   CreateProjectDto,
   CreateTaskDto,
   CreateTimelineDto,
+  UpdateProjectDto,
   UpdateTaskDto,
   UpdateTimelineDto,
 } from './dto';
@@ -66,7 +67,7 @@ export class ProjectController {
   @Put('update/:id')
   async update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() data: CreateProjectDto,
+    @Body() data: UpdateProjectDto,
     @Req() req: any,
   ) {
     try {

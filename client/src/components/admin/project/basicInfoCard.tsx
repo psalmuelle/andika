@@ -17,17 +17,19 @@ interface Props {
 const { Paragraph } = Typography;
 
 export default function InfoCard({ project }: Props) {
-  const [projectTitle, setProjectTitle] = useState("");
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
   const mutateProjectTitle = useMutation({
     mutationKey: ["project", "title"],
     mutationFn: async (title: string) => {
-      const response = await axiosInstance.post(
+      const response = await axiosInstance.put(
         `/project/update/${project.id}`,
         {
           title,
+        },
+        {
+          withCredentials: true,
         },
       );
       return response.data;
@@ -38,7 +40,7 @@ export default function InfoCard({ project }: Props) {
         title: "Title Updated Successfully",
         description: "The project title has been updated.",
       });
-      queryClient.invalidateQueries({ queryKey: ["projects"] });
+      queryClient.invalidateQueries({ queryKey: ["project"] });
     },
     onError(error) {
       toast({
@@ -49,10 +51,6 @@ export default function InfoCard({ project }: Props) {
     },
   });
 
-  useEffect(() => {
-    if(projectTitle.length === 0)
-    setProjectTitle(project?.title);
-  }, [project, projectTitle]);
   return (
     <div className="mt-8 flex items-center justify-between gap-4 border-b pb-2">
       <div className="w-full">
@@ -62,25 +60,14 @@ export default function InfoCard({ project }: Props) {
         <Paragraph
           className="mt-2"
           editable={{
-            onChange: (value)=> {
-                console.log(value)
-                setProjectTitle(value);
+            onChange: (value) => {
+              mutateProjectTitle.mutate(value);
             },
             icon: "✏️",
-            onCancel() {  
-                console.log('OnCancel')
-             }
-            ,
-            onEnd() {
-                console.log(projectTitle, project.title);
-              if (projectTitle !== project.title) {
-                mutateProjectTitle.mutate(projectTitle);
-              }
-              return;
-            },
+            tooltip: "Click to edit project title",
           }}
         >
-          {projectTitle}
+          {project?.title}
         </Paragraph>
       </div>
       <div className="flex gap-4">
