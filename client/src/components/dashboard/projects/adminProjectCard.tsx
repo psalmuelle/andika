@@ -54,7 +54,10 @@ export default function ProjectInfoCard({ project }: { project: ProjectType }) {
           </p>
 
           <p>
-            <span className="text-gray-600">Budget:</span> ${project.fee}
+            <span className="text-gray-600">Budget:</span> ${" "}
+            {project?.payments?.reduce((sum, payment) => {
+              return sum + (parseFloat(payment.amount) || 0);
+            }, 0)}
           </p>
 
           <p>

@@ -97,9 +97,11 @@ declare module "types" {
     }[];
     payments: {
       id: number;
+      title: string;
       amount: string;
       dueDate: string;
       status: string;
+      invoice: string;
       datePaid: string?;
     }[];
     files: string[];

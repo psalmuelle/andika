@@ -1,6 +1,7 @@
 "use client";
 import InfoCard from "@/components/admin/project/basicInfoCard";
 import ProjectOverview from "@/components/admin/project/overview";
+import ProjectPayments from "@/components/admin/project/payment";
 import { ProjectProgress } from "@/components/admin/project/progress";
 import axiosInstance from "@/config/axios";
 import { useQuery } from "@tanstack/react-query";
@@ -44,14 +45,19 @@ export default function ProjectPage({ params }: Props) {
       <div className="mt-8">
         <InfoCard project={project!} />
       </div>
-      <div className="mt-6 w-full max-w-2xl space-y-6">
-        {project !== undefined && (
-          <>
-            <ProjectOverview project={project} />
-            <ProjectProgress isLoading={isPending} project={project} />
-            {/* <ProjectPayments project={project} /> */}
-          </>
-        )}
+      <div className="mt-6 flex gap-4 max-lg:flex-wrap">
+        <div className="mt-6 w-full max-w-2xl space-y-6">
+          {project !== undefined && (
+            <>
+              <ProjectOverview project={project} />
+              <ProjectProgress isLoading={isPending} project={project} />
+              <ProjectPayments project={project} />
+            </>
+          )}
+        </div>
+        {/* {project !== undefined && (
+        <ProjectInfoSidebar isLoading={isPending} project={project} />
+      )} */}
       </div>
     </main>
   );

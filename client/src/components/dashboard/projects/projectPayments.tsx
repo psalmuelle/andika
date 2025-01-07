@@ -5,49 +5,61 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tag } from "antd";
+import { Table, Tag } from "antd";
 import { ProjectType } from "types";
 
 export default function ProjectPayments({ project }: { project: ProjectType }) {
+  const columns = [
+    {
+      title: "Description",
+      dataIndex: "title",
+      key: "title",
+    },
+    {
+      title: "Amount",
+      dataIndex: "amount",
+      key: "amount",
+      render: (amount: string) => `$${parseFloat(amount).toLocaleString()}`,
+    },
+    {
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
+      render: (status: string) => (
+        <Tag
+          className="capitalize"
+          color={status === "PAID" ? "success" : "processing"}
+        >
+          {status.toLowerCase()}
+        </Tag>
+      ),
+    },
+  ];
   return (
     <Card>
       <CardHeader>
         <CardTitle>Payments Made</CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="space-y-4">
-          {project?.payments
-            .sort((a, b) => a.id - b.id)
-            .map((payment) => (
-              <div
-                key={payment.id}
-                className="flex items-center justify-between"
-              >
-                <span className="text-muted-foreground">
-                  {payment.id}
-                  {payment.id == 1
-                    ? "st Payment"
-                    : payment.id == 2
-                      ? "nd Payment"
-                      : payment.id == 3
-                        ? "rd Payment"
-                        : "th Payment"}{" "}
-                  <Tag
-                    color={payment.status === "Paid" ? "success" : "warning"}
-                  >
-                    {payment.status}
-                  </Tag>
-                </span>
-                <span className="font-medium">${payment?.amount}</span>
-              </div>
-            ))}
+        <div>
+          <Table
+            pagination={false}
+            dataSource={project?.payments}
+            columns={columns}
+          />
         </div>
-        <hr className="mt-4" />
       </CardContent>
       <CardFooter>
-        <div className="flex w-full items-center justify-between">
+        <div className="flex w-full max-w-[420px] items-center justify-between px-4">
           <span className="font-medium">Total</span>
-          <span className="text-base font-medium">${project?.fee}</span>
+          <span className="text-base font-medium">
+            $
+            {project?.payments
+              ?.reduce((sum, payment) => {
+                return sum + (parseFloat(payment.amount) || 0);
+              }, 0)
+              .toLocaleString()}
+          </span>
         </div>
       </CardFooter>
     </Card>

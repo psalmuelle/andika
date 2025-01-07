@@ -6,15 +6,13 @@ import {
   CalendarIcon,
 } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
-import { Empty, Tag } from "antd";
+import { Empty } from "antd";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ProjectType } from "types";
 import {
   Select,
   SelectContent,
-  SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -40,7 +38,7 @@ import { PopoverClose } from "@radix-ui/react-popover";
 
 const formSchema = z.object({
   task: z.string().min(3, {
-    message: "Enter your name",
+    message: "Enter task name",
   }),
   dueDate: z.date(),
 });
@@ -53,7 +51,6 @@ export function ProjectProgress({
   isLoading: boolean;
 }) {
   const [editName, setEditName] = useState<string>();
-  const [taskInput, setTaskInput] = useState<string>("");
   const [addBtnLoading, setAddBtnLoading] = useState<boolean>(false);
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -185,14 +182,6 @@ export function ProjectProgress({
     form.reset();
   }
 
-  function changeDateFormat(date: string): string {
-    const dueDate = new Date(date).toLocaleDateString("en-US", {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
-    });
-    return dueDate;
-  }
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -303,7 +292,7 @@ export function ProjectProgress({
                   </Popover>
 
                   <span className="text-sm text-gray-500">
-                    {changeDateFormat(milestone.dueDate)}
+                    {format(milestone.dueDate, 'PP')}
                   </span>
                 </div>
               ))}

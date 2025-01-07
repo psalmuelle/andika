@@ -266,7 +266,7 @@ export class ProjectService {
           amount: data.amount,
           dueDate: data.dueDate,
           status: data.status,
-          projectId: data.projectId,
+          projectId: parseInt(data.projectId),
           datePaid: data.datePaid,
           invoiceId: uploadInvoice.fileName,
           title: data.title,
@@ -275,7 +275,7 @@ export class ProjectService {
 
       const project = await this.prismaService.project.findUnique({
         where: {
-          id: data.projectId,
+          id: parseInt(data.projectId),
         },
       });
 
