@@ -86,8 +86,7 @@ declare module "types" {
     fee: string;
     tasks: {
       id: number;
-      title: string;
-      description: string;
+      task: string;
       status: "COMPLETED" | "IN_PROGRESS" | "NEW";
       dueDate: string;
     }[];

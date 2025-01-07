@@ -151,8 +151,7 @@ export class ProjectService {
   async createTask(data: CreateTaskDto) {
     const task = await this.prismaService.projectTask.create({
       data: {
-        title: data.title,
-        description: data.description,
+        task: data.task,
         projectId: data.projectId,
         dueDate: data.dueDate,
       },
@@ -175,8 +174,7 @@ export class ProjectService {
         id,
       },
       data: {
-        title: data.title,
-        description: data.description,
+        task: data.task,
         status: data.status,
         dueDate: data.dueDate,
       },

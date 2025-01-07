@@ -54,7 +54,7 @@ export function ProjectProgress({
                           : "text-gray-600"
                       }
                     >
-                      {milestone.title}
+                      {milestone.task}
                     </span>
                   </div>
                   <span className="text-sm text-gray-500">

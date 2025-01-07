@@ -1,6 +1,7 @@
 "use client";
 import InfoCard from "@/components/admin/project/basicInfoCard";
 import ProjectOverview from "@/components/admin/project/overview";
+import { ProjectProgress } from "@/components/admin/project/progress";
 import axiosInstance from "@/config/axios";
 import { useQuery } from "@tanstack/react-query";
 import { Spin } from "antd";
@@ -47,8 +48,8 @@ export default function ProjectPage({ params }: Props) {
         {project !== undefined && (
           <>
             <ProjectOverview project={project} />
-            {/* <ProjectProgress isLoading={isPending} project={project} />
-                    <ProjectPayments project={project} /> */}
+            <ProjectProgress isLoading={isPending} project={project} />
+            {/* <ProjectPayments project={project} /> */}
           </>
         )}
       </div>
