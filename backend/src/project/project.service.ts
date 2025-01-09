@@ -15,6 +15,7 @@ import {
 } from './dto';
 import { UploadService } from 'src/upload/upload.service';
 import { NotificationsService } from 'src/notifications/notifications.service';
+import { CreateReviewDto } from './dto/create-review.dto';
 
 @Injectable()
 export class ProjectService {
@@ -125,6 +126,7 @@ export class ProjectService {
           assignedPM: true,
           owner: true,
           files: true,
+          feedback: true,
         },
       });
     } else if (user && !user?.isAdmin) {
@@ -142,6 +144,7 @@ export class ProjectService {
           assignedPM: true,
           owner: true,
           files: true,
+          feedback: true,
         },
       });
     }
@@ -355,6 +358,32 @@ export class ProjectService {
         throw new HttpException('An error occurred while uploading file', 500);
       }
       return uploadedProject;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async createReview(data: CreateReviewDto) {
+    try {
+      const review = await this.prismaService.projectFeedback.create({
+        data: {
+          rating: data.rating,
+          feedback: data.feedback,
+          projectId: data.projectId,
+        },
+      });
+      return review;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  async getReviews(isAdmin: boolean) {
+    try {
+      if (!isAdmin) {
+        throw new UnauthorizedException();
+      }
+      return this.prismaService.projectFeedback.findMany();
     } catch (err) {
       throw err;
     }

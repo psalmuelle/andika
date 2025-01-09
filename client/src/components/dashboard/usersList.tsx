@@ -42,7 +42,7 @@ export default function UsersList({
         <CardContent>
           <Table
             dataSource={users}
-            loading={false}
+            loading={isLoading}
             columns={columns}
             rowKey="id"
           />

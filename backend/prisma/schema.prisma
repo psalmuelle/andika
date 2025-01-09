@@ -125,7 +125,7 @@ model Project {
   fee             String
   payments        Payment[]
   files           ProjectFile[]
-  feedback        String[]
+  feedback        ProjectFeedback?
   createdAt       DateTime          @default(now())
 }
 
@@ -135,6 +135,15 @@ model ProjectFile {
   projectId Int
   hostname  String
   url       String
+}
+
+model ProjectFeedback {
+  id        Int      @id @default(autoincrement())
+  rating    Int
+  feedback  String
+  project   Project  @relation(fields: [projectId], references: [id])
+  projectId Int      @unique
+  createdAt DateTime @default(now())
 }
 
 model ProjectTask {

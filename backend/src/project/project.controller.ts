@@ -25,6 +25,7 @@ import {
 import { AuthorizedGaurd } from 'src/auth/guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CreateProjectFileDto } from './dto/create-project-file.dto';
+import { CreateReviewDto } from './dto/create-review.dto';
 
 @UseGuards(AuthorizedGaurd)
 @Controller('project')
@@ -206,6 +207,25 @@ export class ProjectController {
         hostname: createDto.hostname,
         url: createDto.url,
       });
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @Post('review')
+  async createReview(@Body() data: CreateReviewDto) {
+    try {
+      return this.projectService.createReview(data);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @Get('review/all')
+  async getAllReviews(@Req() req: any) {
+    try {
+      const isAdmin = req.user.isAdmin;
+      return this.projectService.getReviews(isAdmin);
     } catch (err) {
       throw err;
     }

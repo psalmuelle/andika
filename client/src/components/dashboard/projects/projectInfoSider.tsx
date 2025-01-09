@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ProjectType } from "types";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { formatDistance } from "date-fns";
-import { Empty, Table, Tag } from "antd";
+import { Empty, Rate, Table, Tag } from "antd";
 import {
   Dialog,
   DialogContent,
@@ -14,10 +14,30 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import axiosInstance from "@/config/axios";
+import { StarFilledIcon } from "@radix-ui/react-icons";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { Textarea } from "@/components/ui/textarea";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { useToast } from "@/hooks/use-toast";
+import { useState } from "react";
 
 const timeAgo = (date: string) => {
   return formatDistance(new Date(date), new Date(), { addSuffix: true });
 };
+
+const formSchema = z.object({
+  rate: z.number(),
+  feedback: z.string(),
+});
 
 export default function ProjectInfoSidebar({
   project,
@@ -26,6 +46,51 @@ export default function ProjectInfoSidebar({
   project: ProjectType;
   isLoading: boolean;
 }) {
+  const { toast } = useToast();
+  const [btnLoading, setBtnLoading] = useState(false);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      rate: 0,
+      feedback: "",
+    },
+  });
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    try {
+      setBtnLoading(true);
+
+      await axiosInstance.post(
+        "/project/review",
+        {
+          projectId: project.id,
+          rating: values.rate,
+          feedback: values.feedback,
+        },
+        {
+          withCredentials: true,
+        },
+      );
+
+      setBtnLoading(false);
+      form.reset();
+      toast({
+        variant: "default",
+        title: "Review Submitted Successfully",
+        description:
+          "Thank you for your feedback. We appreciate your time and effort.",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+      });
+      setBtnLoading(false);
+    }
+  }
+
   const columns = [
     {
       title: "Description",
@@ -217,6 +282,79 @@ export default function ProjectInfoSidebar({
                         {file.hostname}
                       </Button>
                     ))}
+                </div>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button
+                disabled={
+                  project.status !== "COMPLETED" || project.feedback !== null
+                }
+                className="w-full"
+                variant={"secondary"}
+              >
+                <StarFilledIcon className="mr-3 h-5 w-5" color="gold" />
+                Drop a Review
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Drop a Review</DialogTitle>
+                <DialogDescription>
+                  Share your thoughts and feedback on the project.
+                </DialogDescription>
+
+                <div className="pt-6">
+                  <Form {...form}>
+                    <form
+                      onSubmit={form.handleSubmit(onSubmit)}
+                      className="space-y-4"
+                    >
+                      <FormField
+                        control={form.control}
+                        name="rate"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Rate Our Service</FormLabel>
+                            <FormControl className="block">
+                              <Rate allowHalf {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="feedback"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Message</FormLabel>
+                            <FormControl>
+                              <Textarea
+                                placeholder="Write your message here"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <Button
+                        type="submit"
+                        disabled={project.feedback !== null}
+                        loading={btnLoading}
+                        className="w-full"
+                        size="lg"
+                      >
+                        Submit
+                      </Button>
+                    </form>
+                  </Form>
                 </div>
               </DialogHeader>
             </DialogContent>

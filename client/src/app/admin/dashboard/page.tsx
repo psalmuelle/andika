@@ -11,12 +11,24 @@ import ProjectRequestDrawer from "@/components/dashboard/projects/ProjectRequesD
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { MessageSquare } from "lucide-react";
+import ClientReviews from "@/components/admin/clientReviews";
 
 export default function Dashboard() {
   const { data: projects, isPending } = useQuery({
     queryKey: ["projects"],
     queryFn: async () => {
       const response = await axiosInstance.get("/project/get/all", {
+        withCredentials: true,
+      });
+      return response.data;
+    },
+    refetchInterval: 25000,
+  });
+
+  const { data: reviews, isPending: reviewsLoading } = useQuery({
+    queryKey: ["reviews"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("project/review/all", {
         withCredentials: true,
       });
       return response.data;
@@ -80,6 +92,7 @@ export default function Dashboard() {
           </div>
 
           <UsersList users={users} isLoading={usersLoading} />
+          <ClientReviews reviews={reviews} isPending={reviewsLoading} />
         </div>
       </div>
     </>
