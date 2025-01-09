@@ -24,6 +24,7 @@ import {
 } from './dto';
 import { AuthorizedGaurd } from 'src/auth/guard';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { CreateProjectFileDto } from './dto/create-project-file.dto';
 
 @UseGuards(AuthorizedGaurd)
 @Controller('project')
@@ -186,6 +187,25 @@ export class ProjectController {
       const userIsAdmin = req.user.isAdmin === true;
       if (!userIsAdmin) throw new UnauthorizedException();
       return this.projectService.updatePaymentTimeline(updateDto, id);
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @Post('file/create')
+  async createProjectFiles(
+    @Body() createDto: CreateProjectFileDto,
+    @Req() req: any,
+  ) {
+    try {
+      const isAdmin = req.user.isAdmin;
+
+      return await this.projectService.addFinishedFileUrl({
+        isAdmin,
+        projectId: createDto.projectId,
+        hostname: createDto.hostname,
+        url: createDto.url,
+      });
     } catch (err) {
       throw err;
     }

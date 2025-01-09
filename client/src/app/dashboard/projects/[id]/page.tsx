@@ -81,8 +81,8 @@ export default function ProjectPage({ params }: Props) {
           </Button>
         </div>
       </div>
-      <div className="mt-6 flex gap-4 max-lg:flex-wrap">
-        <div className="w-full max-w-2xl space-y-6">
+      <div className="mx-auto mt-6 flex gap-4 max-lg:flex-wrap">
+        <div className="w-full space-y-6">
           {project !== undefined && (
             <>
               <ProjectOverview project={project} />

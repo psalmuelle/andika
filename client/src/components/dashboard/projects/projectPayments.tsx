@@ -46,11 +46,12 @@ export default function ProjectPayments({ project }: { project: ProjectType }) {
             pagination={false}
             dataSource={project?.payments}
             columns={columns}
+            rowKey={(record) => record.id}
           />
         </div>
       </CardContent>
       <CardFooter>
-        <div className="flex w-full max-w-[420px] items-center justify-between px-4">
+        <div className="flex w-[67%] items-center justify-between px-4">
           <span className="font-medium">Total</span>
           <span className="text-base font-medium">
             $

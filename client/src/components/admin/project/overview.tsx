@@ -67,7 +67,7 @@ export default function ProjectOverview({ project }: { project: ProjectType }) {
   });
 
   return (
-    <Card className="w-full max-w-2xl">
+    <Card className="w-full">
       <CardHeader>
         <div className="grid grid-cols-3 gap-4 max-sm:grid-cols-1">
           <div className="flex items-center gap-0.5">

@@ -47,7 +47,7 @@ import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ProjectType } from "types";
-import { z } from "zod";
+import { date, z } from "zod";
 import { Popover as PopoverAntd } from "antd";
 
 const formSchema = z.object({
@@ -62,15 +62,15 @@ const formSchema = z.object({
 
 const PaymentPopoverContent = ({
   status,
-
   handleClick,
 }: {
   status: string;
-  handleClick: () => void;
+  handleClick: (dateIso: string) => void;
 }) => {
   const [isActive, setIsActive] = useState(false);
+  const [dateIso, setDateIso] = useState<string>();
   const handlePayments = async () => {
-    handleClick();
+    handleClick(dateIso!);
   };
   return (
     <div>
@@ -84,8 +84,18 @@ const PaymentPopoverContent = ({
           {status === "PAID" ? "Mark as Pending" : "Mark as Paid"}
         </label>
       </div>
+
+      <Input
+        className="mb-4 mt-2 h-7"
+        type={"date"}
+        onChange={(e) => {
+          if (e.currentTarget.valueAsDate) {
+            setDateIso(e.currentTarget.valueAsDate?.toISOString());
+          }
+        }}
+      />
       <Button
-        disabled={!isActive}
+        disabled={!isActive || !dateIso}
         size={"sm"}
         variant={"outline"}
         className="mt-2 w-full"
@@ -143,11 +153,16 @@ export default function ProjectPayments({ project }: { project: ProjectType }) {
 
   const mutatePayment = useMutation({
     mutationKey: ["project", "payment", "update"],
-    mutationFn: async (data: { status: string; id: number }) => {
+    mutationFn: async (data: {
+      status: string;
+      id: number;
+      datePaid: string | null;
+    }) => {
       const response = await axiosInstance.put(
         `/project/payment/update/${data.id}`,
         {
           status: data.status,
+          datePaid: data.datePaid,
         },
         {
           withCredentials: true,
@@ -199,9 +214,10 @@ export default function ProjectPayments({ project }: { project: ProjectType }) {
           content={
             <PaymentPopoverContent
               status={status}
-              handleClick={() =>
+              handleClick={(dateIso) =>
                 mutatePayment.mutate({
                   status: status === "PAID" ? "PENDING" : "PAID",
+                  datePaid: status === "PENDING" ? dateIso : null,
                   id: data.id,
                 })
               }
@@ -347,7 +363,7 @@ export default function ProjectPayments({ project }: { project: ProjectType }) {
                   name="file"
                   render={() => (
                     <FormItem>
-                      <FormLabel>Amount</FormLabel>
+                      <FormLabel>Upload Invoice</FormLabel>
                       <FormControl>
                         <Input
                           type={"file"}
@@ -379,11 +395,12 @@ export default function ProjectPayments({ project }: { project: ProjectType }) {
             pagination={false}
             dataSource={project?.payments}
             columns={columns}
+            rowKey={(record) => record.id}
           />
         </div>
       </CardContent>
       <CardFooter>
-        <div className="flex w-full max-w-[420px] items-center justify-between px-4">
+        <div className="flex w-full max-w-[464px] items-center justify-between px-4">
           <span className="font-medium">Total</span>
           <span className="text-base font-medium">
             $

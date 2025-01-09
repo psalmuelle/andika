@@ -104,7 +104,11 @@ declare module "types" {
       invoice: string;
       datePaid: string?;
     }[];
-    files: string[];
+    files: {
+      id: number;
+      hostname: string;
+      url: string;
+    }[];
     feedback: string[];
     createdAt: string;
   }

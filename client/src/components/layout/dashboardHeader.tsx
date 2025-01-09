@@ -10,6 +10,7 @@ import { Paperclip } from "lucide-react";
 import axiosInstance from "@/config/axios";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { ScrollArea } from "../ui/scroll-area";
 
 export default function DashboardHeader() {
   const { unreadMessages, updates } = useContext(NotificationContext);
@@ -105,12 +106,14 @@ export default function DashboardHeader() {
                 Notifications
               </h3>
               <section className="mt-3 text-sm text-gray-700">
-                {updates.length > 0 &&
-                  updates.map((update, index) => (
-                    <div className="truncate border-b py-2" key={index}>
-                      🔔 {update.content}
-                    </div>
-                  ))}
+                <ScrollArea className="h-48 py-2">
+                  {updates.length > 0 &&
+                    updates.map((update, index) => (
+                      <div className="truncate border-b py-2" key={index}>
+                        🔔 {update.content}
+                      </div>
+                    ))}
+                </ScrollArea>
 
                 {updates.length === 0 && (
                   <div className="my-5 text-center">No new updates!</div>

@@ -1,4 +1,8 @@
-import { HttpException, Injectable, UploadedFile } from '@nestjs/common';
+import {
+  HttpException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import {
   CreateProjectDto,
@@ -79,6 +83,7 @@ export class ProjectService {
             payments: true,
             assignedPM: true,
             owner: true,
+            files: true,
           },
         });
       } else {
@@ -91,6 +96,7 @@ export class ProjectService {
             tasks: true,
             payments: true,
             assignedPM: true,
+            files: true,
           },
         });
       }
@@ -118,6 +124,7 @@ export class ProjectService {
           payments: true,
           assignedPM: true,
           owner: true,
+          files: true,
         },
       });
     } else if (user && !user?.isAdmin) {
@@ -134,6 +141,7 @@ export class ProjectService {
           payments: true,
           assignedPM: true,
           owner: true,
+          files: true,
         },
       });
     }
@@ -318,5 +326,37 @@ export class ProjectService {
       },
     });
     return updatedTimeline;
+  }
+
+  async addFinishedFileUrl({
+    isAdmin,
+    projectId,
+    hostname,
+    url,
+  }: {
+    isAdmin: boolean;
+    projectId: number;
+    hostname: string;
+    url: string;
+  }) {
+    try {
+      if (!isAdmin) {
+        throw new UnauthorizedException();
+      }
+      const uploadedProject = await this.prismaService.projectFile.create({
+        data: {
+          projectId,
+          url,
+          hostname,
+        },
+      });
+
+      if (!uploadedProject) {
+        throw new HttpException('An error occurred while uploading file', 500);
+      }
+      return uploadedProject;
+    } catch (err) {
+      throw err;
+    }
   }
 }

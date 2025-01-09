@@ -124,18 +124,26 @@ model Project {
   activities      ProjectActivity[]
   fee             String
   payments        Payment[]
-  files           String[]
+  files           ProjectFile[]
   feedback        String[]
   createdAt       DateTime          @default(now())
 }
 
+model ProjectFile {
+  id        Int     @id @default(autoincrement())
+  project   Project @relation(fields: [projectId], references: [id])
+  projectId Int
+  hostname  String
+  url       String
+}
+
 model ProjectTask {
-  id          Int        @id @default(autoincrement())
-  task        String
-  status      TaskStatus @default(NEW)
-  project     Project    @relation(fields: [projectId], references: [id])
-  projectId   Int
-  dueDate     DateTime
+  id        Int        @id @default(autoincrement())
+  task      String
+  status    TaskStatus @default(NEW)
+  project   Project    @relation(fields: [projectId], references: [id])
+  projectId Int
+  dueDate   DateTime
 }
 
 model ProjectActivity {
