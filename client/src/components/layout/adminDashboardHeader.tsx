@@ -1,6 +1,7 @@
 import { LayoutDashboard } from "lucide-react";
 import { Button } from "../ui/button";
 import axiosInstance from "@/config/axios";
+import Link from "next/link";
 
 export default function AdminHeader() {
   return (
@@ -10,8 +11,12 @@ export default function AdminHeader() {
           Andika
         </h1>
 
-        <Button variant={"secondary"} size={"sm"}>
-          Dashbord <LayoutDashboard className="pl-2" />
+        <Button variant={"secondary"} size={"sm"} asChild>
+          <Link href={"/admin/dashboard"}>
+            <p className="flex items-center">
+              Dashbord <LayoutDashboard className="pl-2" />
+            </p>
+          </Link>
         </Button>
       </div>
       <div>

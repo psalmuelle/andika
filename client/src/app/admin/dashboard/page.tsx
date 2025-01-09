@@ -76,7 +76,7 @@ export default function Dashboard() {
         <div className="mt-12 space-y-6">
           <div className="flex gap-6 max-sm:flex-wrap">
             <RecentProjects projects={projects as ProjectType[]} />
-            <RevenueOverview />
+            <RevenueOverview projects={projects as ProjectType[]} />
           </div>
 
           <UsersList users={users} isLoading={usersLoading} />

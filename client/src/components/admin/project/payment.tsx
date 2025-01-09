@@ -47,7 +47,7 @@ import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ProjectType } from "types";
-import { date, z } from "zod";
+import { z } from "zod";
 import { Popover as PopoverAntd } from "antd";
 
 const formSchema = z.object({
