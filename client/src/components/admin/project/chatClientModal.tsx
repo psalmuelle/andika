@@ -290,23 +290,10 @@ function AdminChatClient({ admin, client }: Props) {
                   if (status === "done") {
                     setIsUploadingFile(false);
                     if (socket) {
-                      const res = axiosInstance.post(
-                        "upload/get-url",
-                        {
-                          fileName: [info.file.response.fileName],
-                        },
-                        {
-                          withCredentials: true,
-                        },
-                      );
-                      Promise.resolve(res).then((data) => {
-                        if (data.data.length > 0) {
-                          socket.emit("chat", {
-                            senderId: admin.userId,
-                            receiverId: client?.userId,
-                            content: data.data[0],
-                          });
-                        }
+                      socket.emit("chat", {
+                        senderId: admin.userId,
+                        receiverId: client?.userId,
+                        content: info.file.response.fileUrl,
                       });
                     }
                   }

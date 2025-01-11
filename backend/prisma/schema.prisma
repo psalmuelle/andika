@@ -40,13 +40,14 @@ model Profile {
 }
 
 model AdminProfile {
-  id        Int       @id @default(autoincrement())
-  user      User      @relation(fields: [userId], references: [id])
-  userId    Int       @unique
+  id        Int        @id @default(autoincrement())
+  user      User       @relation(fields: [userId], references: [id])
+  userId    Int        @unique
   name      String
   position  String
   avatar    String?
-  createdAt DateTime  @default(now())
+  createdAt DateTime   @default(now())
+  blogPosts BlogPost[]
   projects  Project[]
 }
 
@@ -183,6 +184,32 @@ model Message {
   content    String
   isRead     Boolean  @default(false)
   createdAt  DateTime @default(now())
+}
+
+model BlogPost {
+  id            Int          @id @default(autoincrement())
+  title         String
+  slug          String       @unique
+  content       String       @db.Text
+  excerpt       String       @db.Text
+  featuredImage String?
+  published     Boolean      @default(false)
+  author        AdminProfile @relation(fields: [authorId], references: [id])
+  authorId      Int
+  likes         BlogLike[]
+  tags          String[]
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model BlogLike {
+  id        Int      @id @default(autoincrement())
+  ipAddress String
+  post      BlogPost @relation(fields: [postId], references: [id])
+  postId    Int
+  createdAt DateTime @default(now())
+
+  @@unique([ipAddress, postId])
 }
 
 model Notification {

@@ -10,7 +10,7 @@ import RevenueOverview from "@/components/dashboard/RevenueOverview";
 import ProjectRequestDrawer from "@/components/dashboard/projects/ProjectRequesDrawer";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import { MessageSquare } from "lucide-react";
+import { MessageSquare, RssIcon } from "lucide-react";
 import ClientReviews from "@/components/admin/clientReviews";
 
 export default function Dashboard() {
@@ -72,6 +72,13 @@ export default function Dashboard() {
               <Link href="/admin/dashboard/chats">
                 <MessageSquare className="mr-2 h-4 w-4" />
                 Chats
+              </Link>
+            </Button>
+
+            <Button asChild variant={"secondary"}>
+              <Link href="/admin/dashboard/blog">
+                <RssIcon className="mr-2 h-4 w-4" />
+                Blog
               </Link>
             </Button>
           </div>

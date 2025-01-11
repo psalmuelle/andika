@@ -151,10 +151,6 @@ export class ProjectService {
     if (!project) {
       throw new HttpException('Project not found', 404);
     }
-    project.payments.forEach(async (payment) => {
-      const invoice = await this.uploadService.getFileUrl(payment.invoiceId);
-      payment.invoice = invoice.fileUrl;
-    });
 
     return project;
   }
@@ -279,7 +275,7 @@ export class ProjectService {
           status: data.status,
           projectId: parseInt(data.projectId),
           datePaid: data.datePaid,
-          invoiceId: uploadInvoice.fileName,
+          invoiceId: uploadInvoice.fileUrl,
           title: data.title,
         },
       });
@@ -306,10 +302,6 @@ export class ProjectService {
         where: {
           projectId,
         },
-      });
-      payments.forEach(async (payment) => {
-        const invoice = await this.uploadService.getFileUrl(payment.invoiceId);
-        payment.invoice = invoice.fileUrl;
       });
       return payments;
     } catch (err) {

@@ -124,17 +124,17 @@ export class ProjectRequestService {
         status: 'NEW',
       });
 
-      const fileNames = await Promise.all(
+      const fileUrls = await Promise.all(
         files.map(async (file) => {
-          const { fileName } = await this.uploadService.upload(file);
-          return fileName;
+          const { fileUrl } = await this.uploadService.upload(file);
+          return fileUrl;
         }),
       );
 
       await this.prismaService.editingRequest.create({
         data: {
           projectRequestId: projectReq.id,
-          drafts: fileNames,
+          drafts: fileUrls,
           info: data.info,
           usefulLinks: data.usefulLinks,
         },

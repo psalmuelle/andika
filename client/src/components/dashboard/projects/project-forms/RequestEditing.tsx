@@ -19,7 +19,6 @@ import { z } from "zod";
 import { Upload, type UploadProps } from "antd";
 import { Textarea } from "@/components/ui/textarea";
 import { InboxIcon } from "lucide-react";
-import { Input } from "@/components/ui/input";
 
 const { Dragger } = Upload;
 

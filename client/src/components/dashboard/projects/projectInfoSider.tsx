@@ -126,9 +126,7 @@ export default function ProjectInfoSidebar({
           <Button
             size={"sm"}
             onClick={() => {
-              getInvoiceUrl(record.invoiceId).then((url) => {
-                window.open(url, "_blank");
-              });
+              record.invoiceId && window.open(record.invoiceId, "_blank");
             }}
           >
             Pay Now
@@ -137,19 +135,6 @@ export default function ProjectInfoSidebar({
     },
   ];
 
-  async function getInvoiceUrl(fileName: string) {
-    const response = await axiosInstance.post(
-      "/upload/get-url",
-      {
-        fileName: [fileName],
-      },
-      {
-        withCredentials: true,
-      },
-    );
-
-    return response.data[0];
-  }
   return (
     <div className="flex w-full grid-cols-2 flex-col gap-6 max-lg:grid max-sm:grid-cols-1 lg:max-w-[290px]">
       {/* Assigned Writer */}

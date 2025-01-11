@@ -223,23 +223,10 @@ export default function AdminChatbox({
                   if (status === "done") {
                     setIsUploadingFile(false);
                     if (socket) {
-                      const res = axiosInstance.post(
-                        "upload/get-url",
-                        {
-                          fileName: [info.file.response.fileName],
-                        },
-                        {
-                          withCredentials: true,
-                        },
-                      );
-                      Promise.resolve(res).then((data) => {
-                        if (data.data.length > 0) {
-                          socket.emit("chat", {
-                            senderId: admin?.userId,
-                            receiverId: activeChatId,
-                            content: data.data[0],
-                          });
-                        }
+                      socket.emit("chat", {
+                        senderId: admin?.userId,
+                        receiverId: activeChatId,
+                        content: info.file.response.fileUrl,
                       });
                     }
                   }

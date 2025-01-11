@@ -1,10 +1,5 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
-import {
-  PutObjectCommand,
-  GetObjectCommand,
-  S3Client,
-} from '@aws-sdk/client-s3';
-import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 import { ConfigService } from '@nestjs/config';
 import { nanoid } from 'nanoid';
 import * as sharp from 'sharp';
@@ -25,7 +20,7 @@ export class UploadService {
     this.bucketName = this.configService.getOrThrow('AWS_S3_BUCKET_NAME');
   }
 
-  async upload(file: Express.Multer.File): Promise<{ fileName: string }> {
+  async upload(file: Express.Multer.File): Promise<{ fileUrl: string }> {
     try {
       const fileName = `${nanoid(16)}-${file.originalname}`;
       let fileBuffer = file.buffer;
@@ -44,29 +39,19 @@ export class UploadService {
         Key: fileName,
         Body: fileBuffer,
         ContentType: file.mimetype,
+        ACL: 'public-read',
       });
       await this.s3Client.send(command);
 
-      return { fileName };
+      const encodedFileName = encodeURIComponent(fileName);
+      const region = this.configService.getOrThrow('AWS_S3_REGION');
+
+      const fileUrl = `https://${this.bucketName}.s3.${region}.amazonaws.com/${encodedFileName}`;
+
+      return { fileUrl };
     } catch (error) {
       console.error('Error uploading file to S3:', error);
       throw new InternalServerErrorException('Failed to upload file.');
-    }
-  }
-
-  async getFileUrl(fileName: string): Promise<{ fileUrl: string }> {
-    try {
-      const command = new GetObjectCommand({
-        Bucket: this.bucketName,
-        Key: fileName,
-      });
-      const url = await getSignedUrl(this.s3Client, command, {
-        expiresIn: 43200,
-      });
-      return { fileUrl: url };
-    } catch (err) {
-      console.error('Error getting upload url:', err);
-      throw new InternalServerErrorException('Failed to get upload url.');
     }
   }
 }

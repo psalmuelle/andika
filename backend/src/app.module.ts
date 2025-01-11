@@ -15,6 +15,7 @@ import { ChatModule } from './chat/chat.module';
 import { ChatGateway } from './chat/chat.gateway';
 import { ChatService } from './chat/chat.service';
 import { NotificationsModule } from './notifications/notifications.module';
+import { BlogModule } from './blog/blog.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     ProjectModule,
     UploadModule,
     NotificationsModule,
+    BlogModule,
   ],
   controllers: [AppController],
   providers: [AppService, MailgunService, ChatGateway, ChatService],
