@@ -54,9 +54,9 @@ export default function Header() {
                 </NavigationMenuContent>
               </NavigationMenuItem>
               <NavigationMenuItem>
-                <Link href="#testimonial" legacyBehavior passHref>
+                <Link href="/blog" legacyBehavior passHref>
                   <NavigationMenuLink className={navigationMenuTriggerStyle()}>
-                    Testimonial
+                    Blog
                   </NavigationMenuLink>
                 </Link>
               </NavigationMenuItem>
@@ -90,13 +90,16 @@ export default function Header() {
         {openMobileMenu && (
           <div className="absolute left-0 top-full mt-3 flex w-full flex-col gap-2 rounded-b-lg border-y bg-white px-6 py-8 sm:hidden">
             <Button variant={"link"}>
-              <Link href="#testimonial">Testimonial</Link>
+              <Link href="/blog">Blog</Link>
             </Button>
             <Button variant={"link"}>
               <Link href="/contact">Contact</Link>
             </Button>
             <Button className="mt-2 w-full rounded-full" size={"lg"}>
-              <Link href={"/auth/login"} className="w-full flex justify-center items-center">
+              <Link
+                href={"/auth/login"}
+                className="flex w-full items-center justify-center"
+              >
                 Start Project <ArrowRightIcon className="ml-2 font-bold" />
               </Link>
             </Button>

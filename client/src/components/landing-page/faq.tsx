@@ -16,7 +16,7 @@ export default function Faq() {
       {faqs.map((item, i) => {
         return (
           <AccordionItem value={`item-${i}`} key={i}>
-            <AccordionTrigger>{item.question}</AccordionTrigger>
+            <AccordionTrigger className="text-left">{item.question}</AccordionTrigger>
             <AccordionContent>{item.answer}</AccordionContent>
           </AccordionItem>
         );

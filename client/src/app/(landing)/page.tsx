@@ -7,6 +7,7 @@ import {
   ChatBubbleIcon,
   ChevronRightIcon,
   DrawingPinIcon,
+  Pencil2Icon,
   RocketIcon,
   StarIcon,
   TargetIcon,
@@ -44,7 +45,7 @@ export default function Home() {
           From API documentation to whitepapers, we craft clear, concise, and
           impactful content that speaks to your audience.
         </Typography>
-        <div className="mx-auto mt-6 flex w-fit items-center gap-4 px-[5%]">
+        <div className="mx-auto mt-6 flex w-fit flex-wrap items-center justify-center gap-4 px-[5%]">
           <Button size={"lg"} variant={"outline"} className="rounded-full">
             <Link
               href={"/contact"}
@@ -191,6 +192,30 @@ export default function Home() {
           {pricelist.map((tag) => (
             <PriceCard key={tag.id} tag={tag} />
           ))}
+        </div>
+      </section>
+
+      <section className="mt-10 px-[5%]">
+        <div className="mx-auto mb-6 flex w-fit cursor-pointer items-center justify-center rounded-full border bg-white">
+          <Button variant={"link"} size={"icon"} className="rounded-full">
+            <Pencil2Icon />
+          </Button>
+          <p className="mr-2.5 font-medium">Blog</p>
+        </div>
+
+        <div className="mb-8">
+          <Typography as="h3" className="text-center">
+            Latest Blog Posts
+          </Typography>
+          <p className="mt-2 text-center">
+            Our blog provides expert insights, tips, and resources designed to
+            help startups communicate their technical vision clearly and
+            effectively.
+          </p>
+        </div>
+
+        <div className="mx-auto mb-6 mt-12 flex flex-wrap justify-center gap-4">
+          COME BACK TO ADD BLOG POSTS
         </div>
       </section>
 

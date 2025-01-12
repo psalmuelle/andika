@@ -18,15 +18,12 @@ export class MailgunService {
     text: string;
     html?: string;
   }) {
-    return this.mailgunClient.messages.create(
-      'sandboxc904a821b64b46bb81c758d4c14b7558.mailgun.org',
-      {
-        from: 'Sam from Andika <mailgun@sandboxc904a821b64b46bb81c758d4c14b7558.mailgun.org>',
-        to: [to],
-        subject,
-        text,
-        html,
-      },
-    );
+    return this.mailgunClient.messages.create('andikadocs.tech', {
+      from: 'Sam from Andika <sam@andikadocs.tech>',
+      to: [to],
+      subject,
+      text,
+      html,
+    });
   }
 }
