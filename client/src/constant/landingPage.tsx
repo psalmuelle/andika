@@ -10,19 +10,9 @@ const clients = [
     image: "/company-2.png",
   },
   {
-    id: 3,
-    name: "Bocotea Tech",
-    image: "/company-3.jpg",
-  },
-  {
     id: 4,
     name: "Mon AI",
     image: "/company-4.jpg",
-  },
-  {
-    id: 5,
-    name: "Laid Inc.",
-    image: "/company-5.jpg",
   },
 ];
 const offers = [

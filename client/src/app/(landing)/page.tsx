@@ -20,6 +20,7 @@ import Features from "@/components/landing-page/features";
 import PriceCard from "@/components/landing-page/pricing";
 import Faq from "@/components/landing-page/faq";
 import Testimonials from "@/components/landing-page/testimonial";
+import BlogPreview from "@/components/blog/landing-page-preview";
 
 export default function Home() {
   return (
@@ -80,12 +81,13 @@ export default function Home() {
               autoFill
               pauseOnHover
               gradient
-              className="flex w-full items-center justify-between gap-5"
+              gradientWidth={125}
+              className="flex w-full items-center justify-between gap-8"
             >
               {clients.map((client) => (
                 <div
                   key={client.id}
-                  className="flex flex-col items-center justify-center px-4"
+                  className="flex flex-col items-center justify-center px-6"
                 >
                   {client.name}
                   <img src={client.image} alt={client.name} className="h-8" />
@@ -207,15 +209,15 @@ export default function Home() {
           <Typography as="h3" className="text-center">
             Latest Blog Posts
           </Typography>
-          <p className="mt-2 text-center">
+          <p className="mx-auto mt-2 max-w-2xl text-center">
             Our blog provides expert insights, tips, and resources designed to
             help startups communicate their technical vision clearly and
             effectively.
           </p>
         </div>
 
-        <div className="mx-auto mb-6 mt-12 flex flex-wrap justify-center gap-4">
-          COME BACK TO ADD BLOG POSTS
+        <div className="mx-auto mb-20 mt-12 w-full">
+          <BlogPreview />
         </div>
       </section>
 

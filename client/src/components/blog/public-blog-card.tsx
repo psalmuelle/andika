@@ -15,12 +15,12 @@ export function PublicBlogCard({ blog, className }: BlogPreviewCardProps) {
   return (
     <Card className={cn("flex h-full flex-col", className)}>
       {blog.featuredImage && (
-        <div className="relative h-48 w-full">
+        <div className="relative h-48 w-full rounded-t-xl">
           <Image
             src={blog.featuredImage}
             alt={blog.title}
             fill
-            className="object-cover"
+            className="rounded-t-xl object-cover"
           />
         </div>
       )}

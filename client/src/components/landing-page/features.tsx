@@ -75,15 +75,15 @@ export default function Features() {
           );
         })}
       </div>
-      <div className="w-full h-full rounded-lg bg-neutral-100">
+      <div className="relative h-full w-full rounded-lg bg-neutral-100">
         <Carousel
           opts={{
-            align: 'center',
+            align: "center",
             loop: true,
           }}
           plugins={[
             Autoplay({
-              delay: 3000,
+              delay: 3200,
             }),
           ]}
           setApi={setApi}
@@ -95,7 +95,7 @@ export default function Features() {
               return (
                 <CarouselItem key={img.id} className="mx-auto basis-full">
                   <Image
-                    className="mx-auto my-4 block"
+                    className="mx-auto my-4 block h-full min-h-max object-cover"
                     src={img.src}
                     width={400}
                     height={500}
@@ -106,6 +106,7 @@ export default function Features() {
             })}
           </CarouselContent>
         </Carousel>
+        <div className="absolute top-0 h-full w-full bg-transparent" />
       </div>
     </div>
   );

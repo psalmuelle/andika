@@ -12,9 +12,9 @@ import Link from "next/link";
 import { CalendarIcon, ChevronLeft, Heart } from "lucide-react";
 import { LikeButton } from "@/components/blog/like-button";
 import ReactMarkdown from "react-markdown";
-import rehypeHighlight from "rehype-highlight"; // Syntax highlighting
-import rehypeRaw from "rehype-raw"; // To render raw HTML in markdown
-import remarkGfm from "remark-gfm"; // Support for GitHub-flavored Markdown (tables, strikethrough, etc.)
+import rehypeHighlight from "rehype-highlight";
+import rehypeRaw from "rehype-raw";
+import remarkGfm from "remark-gfm";
 import rehypeSlug from "rehype-slug";
 
 interface BlogPostPageProps {
@@ -79,7 +79,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
             Back to Blog
           </Button>
         </Link>
-        <div className="space-y-5">
+        <div className="space-y-4">
           <h1 className="text-5xl font-bold max-sm:text-3xl">{post.title}</h1>
 
           <div className="flex flex-wrap gap-2">
@@ -94,7 +94,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
               <Avatar>
                 <AvatarImage src={post.author.avatar} />
                 <AvatarFallback>
-                  {post.author.name.charAt(0).toUpperCase()}
+                  {post.author?.name
+                    .split(" ")
+                    .map((n) => n[0])
+                    .join("")}
                 </AvatarFallback>
               </Avatar>
               <div>
