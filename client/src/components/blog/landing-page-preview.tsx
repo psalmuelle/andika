@@ -35,7 +35,7 @@ export default function BlogPreview() {
     };
 
     avaialblePosts();
-  }, []);
+  }, [getBlogPosts]);
   return (
     <Carousel
       opts={{ align: "center" }}

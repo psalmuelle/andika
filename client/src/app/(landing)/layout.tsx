@@ -6,7 +6,8 @@ import "./../globals.css";
 
 export const metadata: Metadata = {
   title: "Andika",
-  description: "",
+  description:
+    "Andika is a leading technical writing agency specializing in crafting clear, concise, and impactful documentation for startups. We help bring your ideas to life with expertly written user manuals, API docs, and more.",
 };
 
 export default function RootLayout({

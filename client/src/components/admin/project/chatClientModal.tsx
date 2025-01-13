@@ -2,18 +2,15 @@ import React, { useEffect, useRef, useState } from "react";
 import { Send, Phone, Paperclip } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useQuery } from "@tanstack/react-query";
 import axiosInstance from "@/config/axios";
 import { Socket } from "socket.io-client";
 import socketInstance from "@/config/socket";
-import { useUserContext } from "@/context/UserProvider";
 import { Input } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Spin, Upload } from "antd";
 import { ReactElement } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import { getCalApi } from "@calcom/embed-react";
 import { ProfileType } from "types";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 

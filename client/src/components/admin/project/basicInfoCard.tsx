@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Typography } from "antd";
 import { MessageSquare } from "lucide-react";
-import { useEffect, useState } from "react";
 import { ProfileType, ProjectType } from "types";
 import AdminChatClient from "./chatClientModal";
 import { useMutation, useQueryClient } from "@tanstack/react-query";

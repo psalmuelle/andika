@@ -17,19 +17,20 @@ import { useSearchParams } from "next/navigation";
 const projectTypes = [
   {
     title: "Technical Articles",
-    description: "Get your technical articles written by our experts",
+    description: "Expertly crafted technical articles for your audience",
   },
   {
     title: "Whitepapers",
-    description: "Get your whitepapers written by our experts",
+    description: "Professional whitepapers to showcase your expertise",
   },
   {
     title: "API/SDK Documentation",
-    description: "Get your API/SDK doc written by our experts",
+    description:
+      "Clear and concise API/SDK documentation tailored for developers",
   },
   {
     title: "Editing and Proofreading",
-    description: "Edit and proofread your articles and writeups",
+    description: "Polish your articles and documents with precision editing",
   },
 ];
 
