@@ -42,25 +42,33 @@ export default function Chat() {
     },
   });
 
+  const getAllUsersMsgs = async () => {
+    const messagesMap: { [key: number]: MessageType[] } = {};
+    await Promise.all(
+      users?.map(async (user) => {
+        const res = await axiosInstance.get(`/chat/${user?.userId}`, {
+          withCredentials: true,
+        });
+
+        if (res.data.length > 0) {
+          messagesMap[user.userId] = res.data;
+        }
+      }) || [],
+    );
+
+    setUsersMessages(Object.values(messagesMap));
+  };
+
   useEffect(() => {
     if (!users && !admin) return;
-    async function getChat() {
-      const messagesMap: { [key: number]: MessageType[] } = {};
-      await Promise.all(
-        users?.map(async (user) => {
-          const res = await axiosInstance.get(`/chat/${user.userId}`, {
-            withCredentials: true,
-          });
-          if (res.data.length > 0) {
-            messagesMap[user.userId] = res.data;
-          }
-        }) || [],
-      );
-      setUsersMessages(Object.values(messagesMap));
-    }
-    const intervalId = setInterval(getChat, 10000);
-    return () => clearInterval(intervalId);
+    getAllUsersMsgs();
   }, [users, admin]);
+
+  useEffect(() => {
+    if (usersMessages.length === 0) return;
+    const intervalId = setInterval(getAllUsersMsgs, 20000);
+    return () => clearInterval(intervalId);
+  }, [usersMessages]);
 
   return (
     <div className="flex">

@@ -30,10 +30,7 @@ export function ChatListItem({ messages, user, admin }: ChatListItemProps) {
       className={`flex cursor-pointer items-center gap-3 p-4 hover:bg-zinc-100 ${activeChatId === user.userId ? "bg-zinc-100" : ""}`}
     >
       <Avatar>
-        <AvatarImage
-          src={user.avatar}
-          alt={user.name}
-        />
+        <AvatarImage src={user.avatar} alt={user.name} />
         <AvatarFallback>
           {user.name
             .split(" ")
@@ -49,7 +46,9 @@ export function ChatListItem({ messages, user, admin }: ChatListItemProps) {
           </span>
         </div>
         <p className="max-w-52 truncate text-sm text-slate-500">
-          {messages[messages.length - 1]?.content}
+          {messages[messages.length - 1]?.content.includes("https://andika")
+            ? "📎 Attachment"
+            : messages[messages.length - 1]?.content}
         </p>
       </div>
       {messages.filter(
@@ -58,7 +57,7 @@ export function ChatListItem({ messages, user, admin }: ChatListItemProps) {
         <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-white">
           {
             messages.filter(
-              (m) => (m.isRead === false && m.receiverId === admin.userId),
+              (m) => m.isRead === false && m.receiverId === admin.userId,
             ).length
           }
         </div>
@@ -79,10 +78,10 @@ export function ChatList({
   return (
     <ScrollArea className="h-[70vh]">
       <div className="flex flex-col">
-        {usersMessages?.map((messages) => (
+        {usersMessages?.map((messages, i) => (
           <ChatListItem
             admin={admin!}
-            key={messages[0].id}
+            key={i}
             messages={messages}
             user={
               users?.find(
