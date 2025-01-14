@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import { Toaster } from "@/components/ui/toaster";
@@ -23,6 +24,7 @@ export default function RootLayout({
         <Footer />
         <Toaster />
       </body>
+      <GoogleAnalytics gaId="G-LQVHFN1G5M" />
     </html>
   );
 }

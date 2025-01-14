@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   InputOTP,
   InputOTPGroup,
@@ -35,7 +35,7 @@ const FormSchema = z.object({
 export default function VerifyEmail() {
   const router = useRouter();
   const { toast } = useToast();
-  const email = localStorage.getItem("email");
+  const [email, setEmail] = useState<string | null>(null);
   const [btnLoading, setBtnLoading] = useState(false);
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
@@ -43,6 +43,10 @@ export default function VerifyEmail() {
       pin: "",
     },
   });
+
+  useEffect(() => {
+    setEmail(localStorage.getItem("email"));
+  }, []);
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
     try {
