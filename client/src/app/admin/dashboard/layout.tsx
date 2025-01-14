@@ -19,8 +19,9 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { toast } = useToast();
   const router = useRouter();
+  const { toast } = useToast();
+
   useEffect(() => {
     async function isAuthorized() {
       try {

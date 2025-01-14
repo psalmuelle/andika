@@ -20,6 +20,7 @@ import { ToastAction } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
 import useUserStore from "@/context/auth";
 import { AxiosError } from "axios";
+import Image from "next/image";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -117,7 +118,7 @@ export default function Login() {
           </p>
           <Button asChild size={"lg"} variant={"outline"} className="w-full">
             <Link href={"http://localhost:8000/api/auth/google"}>
-              <img
+              <Image
                 width="32"
                 height="32"
                 className="pr-2"
@@ -132,7 +133,7 @@ export default function Login() {
           href={"/auth/register"}
           className="mt-6 block text-center underline"
         >
-          Don't have an account? Sign up
+          Don&apos;t have an account? Sign up
         </Link>
       </section>
     </div>

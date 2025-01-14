@@ -24,9 +24,8 @@ export default function Dashboard() {
     queryFn: getProjects,
   });
 
-  const categories = ["PENDING", "IN_PROGRESS", "COMPLETED"];
-
   useEffect(() => {
+    const categories = ["PENDING", "IN_PROGRESS", "COMPLETED"];
     if (projects && projects?.length > 0) {
       const activeProjects = projects.filter(
         (project) =>

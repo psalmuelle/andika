@@ -56,6 +56,7 @@ export default function Contact() {
           "We have received your message. We will get back to you shortly",
       });
     } catch (error) {
+      console.log(error);
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -69,7 +70,7 @@ export default function Contact() {
       <div className="mx-auto max-w-4xl text-center">
         <h1 className="text-2xl font-bold md:text-3xl">Get in Touch</h1>
         <p className="mx-auto mt-4 max-w-2xl">
-          Have questions or want to discuss a project? We'd love to hear from
+          Have questions or want to discuss a project? We&apos;d love to hear from
           you. Fill out the form below or reach us via email.
         </p>
       </div>

@@ -9,7 +9,7 @@ interface UserContextType {
   user: UserType;
   isPending: boolean;
   isError: boolean;
-  error: any;
+  error: unknown;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -27,8 +27,8 @@ export function UserProvider({ children }: { children: ReactNode }) {
     queryFn: getUser,
   });
   useEffect(() => {
-    if (error instanceof AxiosError) {
-      error.status === 403 && window.location.replace("/auth/login");
+    if (error instanceof AxiosError && error.status === 403) {
+      window.location.replace("/auth/login");
     }
   }, [error, isError]);
 

@@ -7,7 +7,7 @@ interface ProfileState {
   createProfile: (profile: any) => Promise<any>;
 }
 
-const useProfileStore = create<ProfileState>((set) => ({
+const useProfileStore = create<ProfileState>(() => ({
   profile: null,
 
   getProfile: async () => {

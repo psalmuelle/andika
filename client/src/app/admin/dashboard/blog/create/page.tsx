@@ -2,7 +2,7 @@
 
 import { BlogForm } from "@/components/blog/blog-form";
 import { Button } from "@/components/ui/button";
-import { createBlogPost } from "@/lib/blog";
+import { type CreateBlogPost, createBlogPost } from "@/lib/blog";
 import { useMutation } from "@tanstack/react-query";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -11,7 +11,7 @@ import { useRouter } from "next/navigation";
 export default function CreateBlogPost() {
   const router = useRouter();
   const mutateForm = useMutation({
-    mutationFn: (post: any) => createBlogPost(post),
+    mutationFn: (post: CreateBlogPost) => createBlogPost(post),
     onSuccess: () => {
       router.push("/admin/dashboard/blog");
     },

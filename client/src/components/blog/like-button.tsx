@@ -49,6 +49,7 @@ export function LikeButton({ slug, initialLikes }: LikeButtonProps) {
         });
       }
     } catch (error) {
+      console.error(error)
       toast({
         title: "Error",
         description: "An error occurred while liking the post",

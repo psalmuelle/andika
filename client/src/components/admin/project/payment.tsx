@@ -207,7 +207,7 @@ export default function ProjectPayments({ project }: { project: ProjectType }) {
       title: "Status",
       dataIndex: "status",
       key: "status",
-      render: (status: string, data: any) => (
+      render: (status: string, data: { id: number }) => (
         <PopoverAntd
           title="Change Payment Status"
           trigger={"click"}
@@ -255,7 +255,7 @@ export default function ProjectPayments({ project }: { project: ProjectType }) {
             <DialogHeader>
               <DialogTitle>Add Payment</DialogTitle>
               <DialogDescription>
-                Add payment and invoice to project. Click save when you're done.
+                Add payment and invoice to project. Click save when you&apos;re done.
               </DialogDescription>
             </DialogHeader>
             <Form {...form}>

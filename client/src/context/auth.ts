@@ -19,7 +19,7 @@ interface UserState {
   logout: () => Promise<void>;
 }
 
-const useUserStore = create<UserState>((set) => ({
+const useUserStore = create<UserState>(() => ({
   getUser: async () => {
     try {
       const response = await axiosInstance.get("/auth/status", {

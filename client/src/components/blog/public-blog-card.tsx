@@ -31,7 +31,7 @@ export function PublicBlogCard({ blog, className }: BlogPreviewCardProps) {
         <div className="flex items-center gap-x-2 pt-1 text-sm text-muted-foreground">
           <div className="flex items-center gap-2">
             {blog.author.avatar && (
-              <img
+              <Image
                 src={blog.author.avatar}
                 alt={blog.author.name}
                 width={32}

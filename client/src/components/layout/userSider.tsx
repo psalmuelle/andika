@@ -22,6 +22,7 @@ import useUserStore from "@/context/auth";
 import useProfileStore from "@/context/profile";
 import { useQuery } from "@tanstack/react-query";
 import { Skeleton } from "../ui/skeleton";
+import Image from "next/image";
 
 // Menu items.
 const items = [
@@ -68,7 +69,9 @@ export default function AppSidebar() {
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <span className="pl-4 font-mono text-xl font-semibold tracking-tight text-zinc-800">
-                <img
+                <Image
+                  width={28}
+                  height={28}
                   src="/logo.png"
                   alt="logo"
                   className="max-h-[28px] w-full max-w-[28px]"

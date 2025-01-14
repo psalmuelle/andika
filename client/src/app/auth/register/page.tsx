@@ -20,6 +20,7 @@ import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 import { useRouter } from "next/navigation";
 import { AxiosError } from "axios";
+import Image from "next/image";
 
 const formSchema = z.object({
   email: z.string().email({
@@ -119,7 +120,7 @@ export default function Register() {
           </p>
           <Button asChild variant={"outline"} size={"lg"} className="w-full">
             <Link href={"http://localhost:8000/api/auth/google"}>
-              <img
+              <Image
                 width="32"
                 height="32"
                 className="pr-2"

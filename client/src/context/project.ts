@@ -11,7 +11,7 @@ interface ProjectState {
   createEditingRequest: (request: any) => Promise<any>;
 }
 
-const useProjectStore = create<ProjectState>((set) => ({
+const useProjectStore = create<ProjectState>(() => ({
   getProjects: async () => {
     try {
       const response = await axiosInstance.get("/project/get/all", {

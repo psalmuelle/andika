@@ -11,7 +11,6 @@ import { ProfileType } from "types";
 import { Socket } from "socket.io-client";
 import socketInstance from "@/config/socket";
 import { ReloadIcon } from "@radix-ui/react-icons";
-import axiosInstance from "@/config/axios";
 
 interface MessageType {
   id: number;
@@ -157,7 +156,7 @@ export default function AdminChatbox({
   return (
     <div>
       <ScrollArea ref={bottomRef} className="h-[65vh] flex-1 bg-accent p-4">
-        {messages.length > 0 &&
+        {messages && messages.length > 0 &&
           messages.map((msg) => (
             <MessageBox
               key={msg.id}

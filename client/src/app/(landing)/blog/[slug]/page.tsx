@@ -30,7 +30,8 @@ export async function generateMetadata({
       title: `${post.title} | Andika Blog`,
       description: post.excerpt,
     };
-  } catch (error) {
+  } catch (err) {
+    console.log(err);
     return {
       title: "Blog Post Not Found | Andika",
       description: "The requested blog post could not be found.",
@@ -61,7 +62,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   let post;
   try {
     post = await getBlogPost(params.slug);
-  } catch (error) {
+  } catch (err) {
+    console.log(err);
     notFound();
   }
   if (!post.published) {

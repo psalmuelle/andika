@@ -14,6 +14,7 @@ import { Spin, Upload } from "antd";
 import { ReactElement } from "react";
 import { ReloadIcon } from "@radix-ui/react-icons";
 import { getCalApi } from "@calcom/embed-react";
+import Image from "next/image";
 
 interface MessageType {
   id: number;
@@ -191,7 +192,7 @@ function ChatWidget() {
       <div className="flex items-center justify-between border-b p-4">
         <Spin spinning={adminLoading}>
           <div className="flex items-center gap-3">
-            <img
+            <Image
               src={admin?.avatar || "https://avatar.iran.liara.run/public/23"}
               alt={admin?.name}
               width={32}

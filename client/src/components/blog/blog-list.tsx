@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
+import Image from "next/image";
 
 interface BlogListProps {
   posts: BlogPost[];
@@ -46,11 +47,11 @@ export function BlogList({ posts, onPublishToggle, onDelete }: BlogListProps) {
       {posts.map((post) => (
         <Card key={post.id}>
           <CardHeader>
-            <img
+            <Image
               width={300}
               height={200}
               className="mb-4 h-48 w-full rounded-lg object-cover"
-              src={post.featuredImage}
+              src={post.featuredImage!}
               alt={post.title}
             />
             <div className="flex items-center justify-between">

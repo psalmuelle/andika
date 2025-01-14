@@ -25,7 +25,7 @@ export default function RequestSuccessDialogue({
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <p>
-            Your request has been submitted successfully. We'll respond shortly,
+            Your request has been submitted successfully. We&apos;ll respond shortly,
             typically within 5 minutes.
           </p>
           <strong>What to expect next:</strong>
@@ -35,10 +35,10 @@ export default function RequestSuccessDialogue({
               A project manager will reach out to you on this app to discuss your request.
             </li>
             <li>
-              You'll receive a notification when your request is accepted.
+              You&apos;ll receive a notification when your request is accepted.
             </li>
             <li>
-              You'll be able to track the progress of your request on your
+              You&apos;ll be able to track the progress of your request on your
               dashboard.
             </li>
           </ul>

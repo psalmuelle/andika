@@ -13,7 +13,7 @@ export default function Testimonials() {
             <div>
               <div className="min-h-20">
                 <Typography as="p" className="italic">
-                  "{testimonial.comment}"
+                &quot;{testimonial.comment}&quot;
                 </Typography>
               </div>
               <div className="mt-4 flex items-center gap-2.5">

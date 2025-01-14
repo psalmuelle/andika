@@ -57,6 +57,7 @@ export function BlogForm({ initialData, onSubmit, loading }: BlogFormProps) {
         description: initialData ? "Blog post updated" : "Blog post created",
       });
     } catch (error) {
+      console.error(error);
       toast({
         title: "Error",
         description: "Something went wrong",

@@ -90,7 +90,7 @@ export default function Home() {
                   className="flex flex-col items-center justify-center px-6"
                 >
                   {client.name}
-                  <img src={client.image} alt={client.name} className="h-8" />
+                  <Image height={32} width={32} src={client.image} alt={client.name} className="h-8" />
                 </div>
               ))}
             </Marquee>
@@ -240,7 +240,7 @@ export default function Home() {
         <div>
           <p className="font-semibold">Still Have Questions?</p>
           <p className="text-accent-foreground/90">
-            Our team is ready to help. Reach out to us and let's get started!
+            Our team is ready to help. Reach out to us and let&apos;s get started!
           </p>
         </div>
         <Button className="rounded-full" asChild>

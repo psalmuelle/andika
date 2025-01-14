@@ -36,7 +36,7 @@ const projectTypes = [
 
 export default function CreateProjectPage() {
   const searchParams = useSearchParams();
-  const [selectedService, setSelectedService] = useState<String>("");
+  const [selectedService, setSelectedService] = useState<string>("");
   const [step, setStep] = useState<number>(0);
 
   useEffect(() => {
@@ -54,7 +54,7 @@ export default function CreateProjectPage() {
           Make Request for your technical writings
         </h1>
         <p className="mx-auto max-w-xl">
-          We'll ask a little question and everything is going to be okay!
+          We&apos;ll ask a little question and everything is going to be okay!
         </p>
       </div>
 

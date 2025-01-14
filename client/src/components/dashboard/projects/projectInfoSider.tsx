@@ -29,6 +29,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
 import { useState } from "react";
+import Image from "next/image";
 
 const timeAgo = (date: string) => {
   return formatDistance(new Date(date), new Date(), { addSuffix: true });
@@ -82,6 +83,7 @@ export default function ProjectInfoSidebar({
           "Thank you for your feedback. We appreciate your time and effort.",
       });
     } catch (error) {
+      console.error(error);
       toast({
         variant: "destructive",
         title: "Uh oh! Something went wrong.",
@@ -144,7 +146,9 @@ export default function ProjectInfoSidebar({
         </CardHeader>
         <CardContent>
           <div className="flex items-center space-x-3">
-            <img
+            <Image
+              width={36}
+              height={36}
               src={
                 project?.assignedPM.avatar
                   ? project.assignedPM.avatar
