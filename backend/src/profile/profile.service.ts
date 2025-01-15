@@ -1,7 +1,7 @@
 import { HttpException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateProfileDto } from './dto/create-profile.dto';
-import { MailgunService } from 'src/mailgun/mailgun.service';
+import { MailService } from 'src/mail/mail.service';
 import { OnboardingMessage } from './onboarding-template.email';
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { CreateAdminProfileDto } from './dto/create-admin-profile.dto';
@@ -10,7 +10,7 @@ import { CreateAdminProfileDto } from './dto/create-admin-profile.dto';
 export class ProfileService {
   constructor(
     private prismaService: PrismaService,
-    private mailgunService: MailgunService,
+    private mailService: MailService,
     private onboardingMsg: OnboardingMessage,
   ) {}
 
@@ -40,12 +40,13 @@ export class ProfileService {
       if (!newProfile) {
         throw new HttpException('Profile not created', 400);
       }
-      await this.mailgunService.sendEmail({
-        to: newProfile.user.email,
-        subject: 'Welcome To Andika',
-        html: this.onboardingMsg.message(),
-        text: "Welcome to Andika! We're excited to have you on board. Let's get started by creating your first project. Head over to dashboard to create your first project.",
-      });
+
+      await this.mailService.sendMail(
+        newProfile.user.email,
+        'Welcome To Andika',
+        "Welcome to Andika! We're excited to have you on board. Let's get started by creating your first project. Head over to dashboard to create your first project.",
+        this.onboardingMsg.message(),
+      );
       return newProfile;
     } catch (err) {
       if (err instanceof PrismaClientKnownRequestError) {

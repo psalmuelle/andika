@@ -16,6 +16,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useToast } from "@/hooks/use-toast";
+import axiosInstance from "@/config/axios";
 
 const formSchema = z.object({
   name: z.string().min(3, {
@@ -44,9 +45,11 @@ export default function Contact() {
     try {
       setBtnLoading(true);
 
-      //Some actions here!
-
-      console.log(values);
+      await axiosInstance.post("/mail", {
+        name: values.name,
+        email: values.email,
+        message: values.message,
+      });
       setBtnLoading(false);
       form.reset();
       toast({
@@ -70,8 +73,8 @@ export default function Contact() {
       <div className="mx-auto max-w-4xl text-center">
         <h1 className="text-2xl font-bold md:text-3xl">Get in Touch</h1>
         <p className="mx-auto mt-4 max-w-2xl">
-          Have questions or want to discuss a project? We&apos;d love to hear from
-          you. Fill out the form below or reach us via email.
+          Have questions or want to discuss a project? We&apos;d love to hear
+          from you. Fill out the form below or reach us via email.
         </p>
       </div>
 

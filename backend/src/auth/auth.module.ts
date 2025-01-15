@@ -5,8 +5,8 @@ import { LocalStrategy } from './strategies/localStrategy';
 import { GoogleStrategy } from './strategies/oauthStrategy';
 import { AuthController } from './auth.controller';
 import { ConfigService } from '@nestjs/config';
-import { MailgunModule } from 'src/mailgun/mailgun.module';
-import { MailgunService } from 'src/mailgun/mailgun.service';
+import { MailModule } from 'src/mail/mail.module';
+import { MailService } from 'src/mail/mail.service';
 import { VerifyEmailTemplate } from './email/verify-email.template';
 import { SessionSerializer } from './session.serializer';
 import { PassportModule } from '@nestjs/passport';
@@ -14,7 +14,7 @@ import { PassportModule } from '@nestjs/passport';
 @Module({
   imports: [
     UserModule,
-    MailgunModule,
+    MailModule,
     PassportModule.register({ session: true }),
   ],
   providers: [
@@ -22,7 +22,7 @@ import { PassportModule } from '@nestjs/passport';
     ConfigService,
     LocalStrategy,
     GoogleStrategy,
-    MailgunService,
+    MailService,
     VerifyEmailTemplate,
     SessionSerializer,
   ],

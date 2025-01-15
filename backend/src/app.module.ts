@@ -5,8 +5,6 @@ import { PrismaModule } from './prisma/prisma.module';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
-import { MailgunService } from './mailgun/mailgun.service';
-import { MailgunModule } from './mailgun/mailgun.module';
 import { ProfileModule } from './profile/profile.module';
 import { ProjectModule } from './project/project.module';
 import { ProjectRequestModule } from './project-request/project-request.module';
@@ -16,6 +14,7 @@ import { ChatGateway } from './chat/chat.gateway';
 import { ChatService } from './chat/chat.service';
 import { NotificationsModule } from './notifications/notifications.module';
 import { BlogModule } from './blog/blog.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -24,16 +23,15 @@ import { BlogModule } from './blog/blog.module';
     ConfigModule.forRoot(),
     AuthModule,
     UserModule,
-    MailgunModule,
     ProfileModule,
     ProjectRequestModule,
     ProjectModule,
     UploadModule,
     NotificationsModule,
     BlogModule,
+    MailModule,
   ],
   controllers: [AppController],
-  providers: [AppService, MailgunService, ChatGateway, ChatService],
-  exports: [MailgunService],
+  providers: [AppService, ChatGateway, ChatService],
 })
 export class AppModule {}

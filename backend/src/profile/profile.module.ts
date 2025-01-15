@@ -1,13 +1,13 @@
 import { Module } from '@nestjs/common';
-import { MailgunModule } from 'src/mailgun/mailgun.module';
-import { MailgunService } from 'src/mailgun/mailgun.service';
+import { MailService } from 'src/mail/mail.service';
+import { MailModule } from 'src/mail/mail.module';
 import { ProfileService } from './profile.service';
 import { ProfileController } from './profile.controller';
 import { OnboardingMessage } from './onboarding-template.email';
 
 @Module({
-  imports: [ MailgunModule],
+  imports: [ MailModule],
   controllers: [ ProfileController],
-  providers: [ProfileService, MailgunService, OnboardingMessage]
+  providers: [ProfileService, MailService, OnboardingMessage]
 })
 export class ProfileModule {}

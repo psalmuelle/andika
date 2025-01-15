@@ -3,7 +3,7 @@ import { UserService } from 'src/user/user.service';
 import * as bcrypt from 'bcrypt';
 import { RegisterUserDto } from './dto/register.dto';
 import * as crypto from 'crypto';
-import { MailgunService } from '../mailgun/mailgun.service';
+import { MailService } from 'src/mail/mail.service';
 import { VerifyEmailTemplate } from './email/verify-email.template';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { ConfigService } from '@nestjs/config';
@@ -12,7 +12,7 @@ import { ConfigService } from '@nestjs/config';
 export class AuthService {
   constructor(
     private userService: UserService,
-    private mailgunService: MailgunService,
+    private mailService: MailService,
     private emailTemplate: VerifyEmailTemplate,
     private prismaService: PrismaService,
     private configService: ConfigService,
@@ -58,13 +58,13 @@ export class AuthService {
         verificationCode,
       });
 
-      await this.mailgunService
-        .sendEmail({
-          to: user.email,
-          subject: 'Confirm Your Email for Andika',
-          text: `Your verification code is ${verificationCode}`,
-          html: this.emailTemplate.generateTemplate(verificationCode),
-        })
+      await this.mailService
+        .sendMail(
+          user.email,
+          'Confirm Your Email for Andika',
+          `Your verification code is ${verificationCode}`,
+          this.emailTemplate.generateTemplate(verificationCode),
+        )
         .catch(async (err) => {
           await this.userService.delete(user.email);
           throw new HttpException(err, HttpStatus.UNAUTHORIZED);
