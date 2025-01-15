@@ -4,8 +4,8 @@ import { MailController } from './mail.controller';
 import { ConfigService } from '@nestjs/config';
 
 @Module({
-  providers: [MailService],
-  controllers: [MailController, ConfigService],
+  providers: [MailService, ConfigService],
+  controllers: [MailController],
   exports: [MailService],
 })
 export class MailModule {}
