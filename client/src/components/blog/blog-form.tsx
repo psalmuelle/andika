@@ -138,7 +138,7 @@ export function BlogForm({ initialData, onSubmit, loading }: BlogFormProps) {
                   listType={"picture-card"}
                   maxCount={1}
                   withCredentials={true}
-                  action={"http://localhost:8000/api/upload"}
+                  action={`${process.env.NEXT_PUBLIC_API_URL}/upload`}
                   onChange={(info) => {
                     const { status } = info.file;
                     if (status === "done") {

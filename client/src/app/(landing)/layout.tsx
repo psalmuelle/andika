@@ -24,7 +24,7 @@ export default function RootLayout({
         <Footer />
         <Toaster />
       </body>
-      <GoogleAnalytics gaId="G-LQVHFN1G5M" />
+      <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_ANALYTICS_ID || ""} />
     </html>
   );
 }

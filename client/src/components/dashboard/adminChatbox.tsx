@@ -213,7 +213,7 @@ export default function AdminChatbox({
                 maxCount={1}
                 showUploadList={false}
                 withCredentials={true}
-                action={"http://localhost:8000/api/upload"}
+                action={`${process.env.NEXT_PUBLIC_API_URL}/upload`}
                 onChange={(info) => {
                   const { status } = info.file;
                   if (status === "uploading") {

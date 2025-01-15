@@ -117,7 +117,7 @@ export default function Login() {
             OR CONTINUE WITH
           </p>
           <Button asChild size={"lg"} variant={"outline"} className="w-full">
-            <Link href={"http://localhost:8000/api/auth/google"}>
+            <Link href={`${process.env.NEXT_PUBLIC_API_URL}/auth/google`}>
               <Image
                 width="32"
                 height="32"

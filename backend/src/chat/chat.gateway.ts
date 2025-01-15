@@ -5,14 +5,16 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
+import Redis from 'ioredis';
 import { Server, Socket } from 'socket.io';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { ChatService } from './chat.service';
 
 @WebSocketGateway({
   cors: {
-    origin: 'http://localhost:3000', // Frontend origin
-    credentials: true, // Allow credentials
+    transports: ['websocket'],
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    credentials: true,
   },
 })
 export class ChatGateway {
@@ -52,7 +54,9 @@ export class ChatGateway {
     @MessageBody() data: { user: string; admin: string; isTyping: boolean },
   ) {
     const room = this.getRoomName(data.user, data.admin);
-    return this.server.to(room).emit('isTyping', {user: data.user, isTyping: data.isTyping});
+    return this.server
+      .to(room)
+      .emit('isTyping', { user: data.user, isTyping: data.isTyping });
   }
 
   @SubscribeMessage('markAsRead')

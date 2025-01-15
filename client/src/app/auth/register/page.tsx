@@ -119,7 +119,7 @@ export default function Register() {
             OR CONTINUE WITH
           </p>
           <Button asChild variant={"outline"} size={"lg"} className="w-full">
-            <Link href={"http://localhost:8000/api/auth/google"}>
+            <Link href={`${process.env.NEXT_PUBLIC_API_URL}/auth/google`}>
               <Image
                 width="32"
                 height="32"

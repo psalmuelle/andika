@@ -1,9 +1,12 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
-import { IoAdapter } from '@nestjs/platform-socket.io';
 import * as session from 'express-session';
 import * as passport from 'passport';
+import helmet from 'helmet';
+import { RedisStore } from 'connect-redis';
+import { Redis } from 'ioredis';
+import { RedisIoAdapter } from './adapters/websocket-redis.adapter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,22 +15,35 @@ async function bootstrap() {
       whitelist: true,
     }),
   );
+
+  const redisClient = new Redis({
+    host: process.env.REDIS_HOST || 'localhost',
+    port: parseInt(process.env.REDIS_PORT || '6379'),
+  });
+
   app.use(
     session({
-      secret: process.env.SESSION_SECRET,
+      store: new RedisStore({ client: redisClient }),
+      secret: process.env.SESSION_SECRET || 'secret',
       resave: false,
       saveUninitialized: false,
       cookie: {
-        maxAge: 43200000,
+        secure: process.env.NODE_ENV === 'production',
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24,
       },
     }),
   );
 
-  const ioAdapter = new IoAdapter(app);
-  app.useWebSocketAdapter(ioAdapter);
+  app.use(helmet());
+
+  const redisIoAdapter = new RedisIoAdapter(app);
+  await redisIoAdapter.connectToRedis();
+
+  app.useWebSocketAdapter(redisIoAdapter);
 
   app.enableCors({
-    origin: 'http://localhost:3000',
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
     credentials: true,
   });
 
