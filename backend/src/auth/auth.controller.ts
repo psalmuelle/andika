@@ -17,12 +17,14 @@ import { AuthorizedGaurd } from './guard';
 import { LocalAuthGuard } from './guard';
 import { GoogleAuthGuard } from './guard';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { ConfigService } from '@nestjs/config';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private authService: AuthService,
     private prismaService: PrismaService,
+    private configService: ConfigService,
   ) {}
 
   @Post('email/register')
@@ -53,7 +55,7 @@ export class AuthController {
           userId: req.user.id,
         },
       });
-      
+
       return {
         user: req.user,
         redirectUrl: userHasProfile ? '/dashboard' : '/profile',
@@ -77,10 +79,12 @@ export class AuthController {
         },
       });
       res.redirect(
-        `http://localhost:3000/${userHasProfile ? 'dashboard' : 'profile'}`,
+        `${this.configService.get('FRONTEND_URL')}/${userHasProfile ? 'dashboard' : 'profile'}`,
       );
     } else {
-      res.redirect('http://localhost:3000/login?error=Invalid%20Credentials');
+      res.redirect(
+        `${this.configService.get('FRONTEND_URL')}/login?error=Invalid%20Credentials`,
+      );
     }
   }
 
