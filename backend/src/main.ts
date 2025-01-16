@@ -7,6 +7,7 @@ import helmet from 'helmet';
 import { RedisStore } from 'connect-redis';
 import { Redis } from 'ioredis';
 import { RedisIoAdapter } from './adapters/websocket-redis.adapter';
+import { IoAdapter } from '@nestjs/platform-socket.io';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -17,7 +18,7 @@ async function bootstrap() {
   );
 
   const redisClient = new Redis({
-    host: process.env.REDIS_HOST || 'localhost',
+    host: process.env.REDIS_HOST || 'redis://localhost',
     port: parseInt(process.env.REDIS_PORT || '6379'),
   });
 
@@ -37,10 +38,13 @@ async function bootstrap() {
 
   app.use(helmet());
 
-  const redisIoAdapter = new RedisIoAdapter(app);
-  await redisIoAdapter.connectToRedis();
+  // const redisIoAdapter = new RedisIoAdapter(app);
+  // await redisIoAdapter.connectToRedis();
 
-  app.useWebSocketAdapter(redisIoAdapter);
+  // app.useWebSocketAdapter(redisIoAdapter);
+
+  const ioAdapter = new IoAdapter(app);
+  app.useWebSocketAdapter(ioAdapter);
 
   app.enableCors({
     origin: process.env.FRONTEND_URL || 'http://localhost:3000',
