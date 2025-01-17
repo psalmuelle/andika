@@ -48,8 +48,7 @@ async function bootstrap() {
   app.useWebSocketAdapter(ioAdapter);
 
   app.enableCors({
-    // origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-    origin: ['https://andikadocs.tech', 'https://www.andikadocs.tech'],
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
     credentials: true,
   });
 
