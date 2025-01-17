@@ -20,6 +20,7 @@ async function bootstrap() {
   const redisClient = new Redis({
     host: process.env.REDIS_HOST || 'redis://localhost',
     port: parseInt(process.env.REDIS_PORT || '6379'),
+    tls: {}
   });
 
   app.use(
