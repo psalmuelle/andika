@@ -20,7 +20,7 @@ async function bootstrap() {
   const redisClient = new Redis({
     host: process.env.REDIS_HOST || 'redis://localhost',
     port: parseInt(process.env.REDIS_PORT || '6379'),
-    tls: {}
+    tls: {},
   });
 
   app.use(
@@ -48,7 +48,8 @@ async function bootstrap() {
   app.useWebSocketAdapter(ioAdapter);
 
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    // origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: ['https://andikadocs.tech', 'https://www.andikadocs.tech'],
     credentials: true,
   });
 
