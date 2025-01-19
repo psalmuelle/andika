@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateChatDto } from './dto/create-chat.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 
@@ -60,7 +60,7 @@ export class ChatService {
   async markMessagesAsRead(id: number) {
     const markMessages = await this.prismaService.message.update({
       where: {
-       id: id
+        id: id,
       },
       data: {
         isRead: true,
@@ -68,5 +68,38 @@ export class ChatService {
     });
 
     return markMessages;
+  }
+
+  async deleteUserChats({
+    userId,
+    adminId,
+    isAdmin,
+  }: {
+    userId: number;
+    adminId: number;
+    isAdmin: boolean;
+  }) {
+    try {
+      if (!isAdmin) {
+        throw new UnauthorizedException();
+      }
+
+      await this.prismaService.message.deleteMany({
+        where: {
+          OR: [
+            {
+              senderId: userId,
+              receiverId: adminId,
+            },
+            {
+              senderId: adminId,
+              receiverId: userId,
+            },
+          ],
+        },
+      });
+    } catch (err) {
+      throw err;
+    }
   }
 }

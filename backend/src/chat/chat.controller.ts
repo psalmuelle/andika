@@ -1,5 +1,6 @@
 import {
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
@@ -32,6 +33,24 @@ export class ChatController {
       const userId = req.user?.id as number;
       const unreadMsgs = await this.chatService.getUnreadMessages(userId);
       return unreadMsgs;
+    } catch (err) {
+      throw err;
+    }
+  }
+
+  @Delete('/delete/:otherUserId')
+  async deleteChats(
+    @Param('otherUserId', ParseIntPipe) otherUserId: number,
+    @Req() req: any,
+  ) {
+    try {
+      const userId = req.user?.id as number;
+      const userIsAdmin = req.user?.isAdmin as boolean;
+      await this.chatService.deleteUserChats({
+        userId: otherUserId,
+        adminId: userId,
+        isAdmin: userIsAdmin,
+      });
     } catch (err) {
       throw err;
     }

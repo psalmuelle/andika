@@ -28,6 +28,12 @@ export default function UsersList({
       key: "6",
       sorter: (a, b) => a._count.projects - b._count.projects,
     },
+    {
+      title: "Date Joined",
+      dataIndex: "createdAt",
+      key: "7",
+      render: (date) => new Date(date).toDateString(),
+    },
   ];
 
   return (

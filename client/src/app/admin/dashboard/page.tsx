@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { MessageSquare, RssIcon } from "lucide-react";
 import ClientReviews from "@/components/admin/clientReviews";
+import ContactUsTicket from "@/components/dashboard/contactTicket";
 
 export default function Dashboard() {
   const { data: projects, isPending } = useQuery({
@@ -58,6 +59,17 @@ export default function Dashboard() {
     refetchInterval: 25000,
   });
 
+  const { data: contactTickets, isPending: contactTicketsLoading } = useQuery({
+    queryKey: ["contactTickets"],
+    queryFn: async () => {
+      const response = await axiosInstance.get("/mail", {
+        withCredentials: true,
+      });
+      return response.data;
+    },
+    refetchInterval: 35000,
+  });
+
   return (
     <>
       <div className="min-h-[90vh] px-[5%]">
@@ -100,6 +112,10 @@ export default function Dashboard() {
 
           <UsersList users={users} isLoading={usersLoading} />
           <ClientReviews reviews={reviews} isPending={reviewsLoading} />
+          <ContactUsTicket
+            tickets={contactTickets}
+            isLoading={contactTicketsLoading}
+          />
         </div>
       </div>
     </>

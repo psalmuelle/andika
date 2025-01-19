@@ -156,7 +156,8 @@ export default function AdminChatbox({
   return (
     <div>
       <ScrollArea ref={bottomRef} className="h-[65vh] flex-1 bg-accent p-4">
-        {messages && messages.length > 0 &&
+        {messages &&
+          messages.length > 0 &&
           messages.map((msg) => (
             <MessageBox
               key={msg.id}

@@ -88,7 +88,10 @@ export default function Header() {
         </div>
 
         {openMobileMenu && (
-          <div className="absolute left-0 top-full mt-3 flex w-full flex-col gap-2 rounded-b-lg border-y bg-white px-6 py-8 sm:hidden">
+          <div
+            className="absolute left-0 top-full mt-3 flex w-full flex-col gap-2 rounded-b-lg border-y bg-white px-6 py-8 sm:hidden"
+            onClick={() => setOpenMobileMenu(false)}
+          >
             <Button variant={"link"}>
               <Link href="/blog">Blog</Link>
             </Button>

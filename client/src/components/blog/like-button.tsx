@@ -30,16 +30,7 @@ export function LikeButton({ slug, initialLikes }: LikeButtonProps) {
 
   const handleLike = async () => {
     try {
-      if (liked) {
-        await unlikeBlogPost(slug);
-        setLikeCount((prev) => prev - 1);
-        setLiked(false);
-
-        toast({
-          title: "Removed like from post",
-          description: "Removed like from post",
-        });
-      } else {
+      if (!liked) {
         await likeBlogPost(slug);
         setLikeCount((prev) => prev + 1);
         setLiked(true);
@@ -49,7 +40,7 @@ export function LikeButton({ slug, initialLikes }: LikeButtonProps) {
         });
       }
     } catch (error) {
-      console.error(error)
+      console.error(error);
       toast({
         title: "Error",
         description: "An error occurred while liking the post",
@@ -59,8 +50,8 @@ export function LikeButton({ slug, initialLikes }: LikeButtonProps) {
 
   return (
     <Button
-      variant="secondary"
-      size="lg"
+      variant="outline"
+      size="sm"
       className="gap-2"
       onClick={handleLike}
       disabled={loading}

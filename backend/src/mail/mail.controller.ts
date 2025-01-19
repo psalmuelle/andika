@@ -5,8 +5,8 @@ import {
   Req,
   UseGuards,
   Body,
-  Put,
   Param,
+  Delete,
 } from '@nestjs/common';
 import { AuthorizedGaurd } from 'src/auth/guard';
 import { MailService } from './mail.service';
@@ -38,11 +38,11 @@ export class MailController {
   }
 
   @UseGuards(AuthorizedGaurd)
-  @Put('update/:id')
+  @Delete('delete/:id')
   async updateContactTeam(@Req() req: any, @Param('id') id: string) {
     try {
       const userIsAdmin = req.user?.isAdmin as boolean;
-      return this.mailService.markContactTeamAsRead({ userIsAdmin, id });
+      return this.mailService.deleteContactTeamAsRead({ userIsAdmin, id });
     } catch (error) {
       throw error;
     }

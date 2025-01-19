@@ -80,7 +80,7 @@ export class MailService {
     }
   }
 
-  async markContactTeamAsRead({
+  async deleteContactTeamAsRead({
     id,
     userIsAdmin,
   }: {
@@ -91,13 +91,10 @@ export class MailService {
       if (!userIsAdmin) {
         throw new UnauthorizedException();
       }
-      await this.prismaSevice.contactTeam.update({
+      await this.prismaSevice.contactTeam.delete({
         where: {
           id: parseInt(id),
-        },
-        data: {
-          status: true,
-        },
+        }
       });
     } catch (err) {
       console.log('Error marking contact team as read:', err);
