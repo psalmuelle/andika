@@ -173,7 +173,7 @@ export class ProfileService {
         where: {
           position: 'Project Manager',
           user: {
-            email: 'admin@andika.com',
+            email: 'sam@andika.com',
           },
         },
         include: {
