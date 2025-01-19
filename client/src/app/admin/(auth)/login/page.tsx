@@ -63,7 +63,7 @@ export default function Login() {
         error instanceof AxiosError &&
         error.response?.data.message === "Profile not found"
       ) {
-        router.push("/admin/auth/profile");
+        router.push("/admin/profile");
         return;
       }
       toast({
