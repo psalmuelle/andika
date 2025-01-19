@@ -65,12 +65,13 @@ export default function Home() {
           <picture>
             <source
               className="rounded-t-lg"
-              srcSet="/dashboard.png"
-              media="(min-width: 768px)"
+              srcSet="/dashboard-small.png"
+              media="(max-width: 768px)"
+              src="/dashboard-small.png"
             />
             <img
               className="rounded-t-lg"
-              src="/dashboard-small.png"
+              src="/dashboard.png"
               alt="Andika dashboard for managing projects"
             />
           </picture>
@@ -90,7 +91,7 @@ export default function Home() {
                   className="flex flex-col items-center justify-center px-6"
                 >
                   {client.name}
-                  <Image height={32} width={32} src={client.image} alt={client.name} className="h-8" />
+                  <img src={client.image} alt={client.name} className="h-8" />
                 </div>
               ))}
             </Marquee>
@@ -236,11 +237,12 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-[5%] mb-6 mt-8 flex flex-wrap items-center justify-between gap-4 rounded-lg bg-neutral-100 p-4 sm:p-6">
+      <section className="mx-[5%] mb-10 mt-8 flex flex-wrap items-center justify-between gap-4 rounded-lg bg-neutral-100 p-4 sm:p-6">
         <div>
           <p className="font-semibold">Still Have Questions?</p>
           <p className="text-accent-foreground/90">
-            Our team is ready to help. Reach out to us and let&apos;s get started!
+            Our team is ready to help. Reach out to us and let&apos;s get
+            started!
           </p>
         </div>
         <Button className="rounded-full" asChild>

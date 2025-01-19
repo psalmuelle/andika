@@ -161,10 +161,10 @@ export default function Contact() {
                 <h3 className="font-medium text-gray-900">Email</h3>
                 <p className="text-sm text-gray-600">
                   <a
-                    href="mailto:hello@andika.com"
+                    href="mailto:sam@andikadocs.tech"
                     className="text-blue-600 hover:underline"
                   >
-                    hello@andika.com
+                    sam@andikadocs.tech
                   </a>
                 </p>
               </div>
@@ -172,10 +172,7 @@ export default function Contact() {
                 <h3 className="font-medium text-gray-900">Social Media</h3>
                 <p className="text-sm text-gray-600">
                   Follow us on:{" "}
-                  <a
-                    href="https://twitter.com/andika"
-                    className="text-blue-600 hover:underline"
-                  >
+                  <a href="#" className="text-blue-600 hover:underline">
                     Twitter
                   </a>
                   ,{" "}
