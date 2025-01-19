@@ -79,11 +79,6 @@ export default function Profile() {
   }
   return (
     <>
-      <header className="sticky top-0 z-20 bg-white/70 px-[5%] py-3 text-center shadow-sm backdrop-blur">
-        <h1 className="scroll-m-20 font-mono text-xl font-semibold tracking-tight text-zinc-800">
-          Andika
-        </h1>
-      </header>
       <div className="flex min-h-[90vh] flex-col items-center justify-center px-[5%]">
         <div className="mx-auto mt-12 w-full max-w-[420px]">
           <CardHeader className="text-center">
