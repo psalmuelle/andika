@@ -62,19 +62,18 @@ export default function Home() {
           </Button>
         </div>
         <div className="mx-auto mt-10 max-w-4xl px-[5%]">
-          <picture>
-            <source
-              className="rounded-t-lg"
-              srcSet="/dashboard-small.png"
-              media="(max-width: 768px)"
-              src="/dashboard-small.png"
-            />
-            <img
-              className="rounded-t-lg"
-              src="/dashboard.png"
-              alt="Andika dashboard for managing projects"
-            />
-          </picture>
+          {/* For small screens */}
+          <img
+            className="block rounded-t-lg md:hidden"
+            src="/dashboard-small.png"
+            alt="Andika dashboard for managing projects"
+          />
+          {/* For medium and larger screens */}
+          <img
+            className="hidden rounded-t-lg md:block"
+            src="/dashboard.png"
+            alt="Andika dashboard for managing projects"
+          />
         </div>
         <div className="w-full border-b bg-white px-[5%] py-5">
           <div className="mx-auto w-full max-w-[650px]">
