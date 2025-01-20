@@ -24,7 +24,7 @@ export default function Support() {
     (async function () {
       const cal = await getCalApi({ namespace: "30min" });
       cal("ui", {
-        styles: { branding: { brandColor: "#000000" } },
+        theme: "light",
         hideEventTypeDetails: false,
         layout: "month_view",
       });
@@ -61,8 +61,8 @@ export default function Support() {
                 <Button
                   className="w-full"
                   data-cal-namespace="30min"
-                  data-cal-link="erinle-samuel-1zabaa/30min"
-                  data-cal-config='{"layout":"month_view", "theme": "light"}'
+                  data-cal-link="sam-andika/30min"
+                  data-cal-config='{"layout":"month_view","theme":"light"}'
                 >
                   {channel.action}
                 </Button>

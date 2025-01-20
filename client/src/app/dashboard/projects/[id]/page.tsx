@@ -36,9 +36,9 @@ export default function ProjectPage({ params }: Props) {
 
   useEffect(() => {
     (async function () {
-      const cal = await getCalApi({ namespace: "30min" });
+      const cal = await getCalApi({ namespace: "project-meeting" });
       cal("ui", {
-        styles: { branding: { brandColor: "#000000" } },
+        theme: "light",
         hideEventTypeDetails: false,
         layout: "month_view",
       });
@@ -71,9 +71,9 @@ export default function ProjectPage({ params }: Props) {
           </Sheet>
 
           <Button
-            data-cal-namespace="30min"
-            data-cal-link="erinle-samuel-1zabaa/30min"
-            data-cal-config='{"layout":"month_view", "theme": "light"}'
+            data-cal-namespace="project-meeting"
+            data-cal-link="sam-andika/project-meeting"
+            data-cal-config='{"layout":"month_view","theme":"light"}'
             variant={"outline"}
           >
             <Phone className="pr-2" />
