@@ -171,9 +171,8 @@ export class ProfileService {
     try {
       const supportProfile = await this.prismaService.adminProfile.findFirst({
         where: {
-          position: 'Project Manager',
           user: {
-            email: 'sam@andika.com',
+            email: 'sam@andikadocs.tech',
           },
         },
         include: {

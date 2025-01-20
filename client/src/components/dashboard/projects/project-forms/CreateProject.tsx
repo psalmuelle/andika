@@ -109,7 +109,7 @@ export default function CreateProjectForm({ admin }: { admin: ProfileType }) {
         {
           ...values,
           assignedPMId: admin.userId,
-          ownerId: projectRequest.userId,
+          ownerId: projectRequest.user.id,
           status: "PENDING",
         },
         {
