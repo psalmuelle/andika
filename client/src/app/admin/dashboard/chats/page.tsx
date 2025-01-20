@@ -2,11 +2,13 @@
 import AdminChatbox from "@/components/dashboard/adminChatbox";
 import { ChatList } from "@/components/dashboard/adminChatList";
 import axiosInstance from "@/config/axios";
+import socketInstance from "@/config/socket";
 import useActiveChat from "@/context/activeChat";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Popover } from "antd";
 import { EllipsisIcon, MessageSquare, XIcon } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Socket } from "socket.io-client";
 import { ProfileType } from "types";
 
 interface MessageType {
@@ -19,9 +21,12 @@ interface MessageType {
 }
 
 export default function Chat() {
-  const [usersMessages, setUsersMessages] = useState<MessageType[][]>([]);
+  const [usersMessages, setUsersMessages] = useState<
+    { user: ProfileType; messages: MessageType[] }[]
+  >([]);
   const { activeChatId, setActiveChatId } = useActiveChat();
   const [open, setOpen] = useState(false);
+  const [socket, setSocket] = useState<Socket>();
 
   const handleOpenChange = (newOpen: boolean) => {
     setOpen(newOpen);
@@ -58,32 +63,70 @@ export default function Chat() {
   });
 
   const getAllUsersMsgs = async () => {
-    const messagesMap: { [key: number]: MessageType[] } = {};
+    const messagesMap: { user: ProfileType; messages: MessageType[] }[] = [];
     await Promise.all(
       users?.map(async (user) => {
         const res = await axiosInstance.get(`/chat/${user?.userId}`, {
           withCredentials: true,
         });
-
-        if (res.data.length > 0) {
-          messagesMap[user.userId] = res.data;
-        }
+        messagesMap.push({ user: user, messages: res.data });
       }) || [],
     );
-
-    setUsersMessages(Object.values(messagesMap));
+    setUsersMessages(messagesMap);
   };
 
   useEffect(() => {
-    if (!users && !admin) return;
+    if (!users) return;
     getAllUsersMsgs();
-  }, [users, admin]);
+  }, [users]);
 
+  // Join and leave all rooms
   useEffect(() => {
-    if (usersMessages.length === 0) return;
-    const intervalId = setInterval(getAllUsersMsgs, 20000);
-    return () => clearInterval(intervalId);
+    if (!usersMessages) return;
+
+    const newSocket = socketInstance();
+
+    usersMessages.forEach(({ user }) => {
+      newSocket.emit("joinRoom", { user: user.userId, admin: admin?.userId });
+    });
+
+    setSocket(newSocket);
+    return () => {
+      usersMessages.forEach(({ user }) => {
+        newSocket.emit("leaveRoom", {
+          user: user.userId,
+          admin: admin?.userId,
+        });
+      });
+
+      newSocket.disconnect();
+    };
   }, [usersMessages]);
+
+  //Listen to messages from all users
+  useEffect(() => {
+    if (!socket || !usersMessages) return;
+
+    socket.on("chat", (newMessage: MessageType) => {
+      const newUsersMessages = usersMessages.map((userMsg) => {
+        if (
+          userMsg.user.userId === newMessage.senderId ||
+          userMsg.user.userId === newMessage.receiverId
+        ) {
+          return {
+            user: userMsg.user,
+            messages: [...userMsg.messages, newMessage],
+          };
+        }
+        return userMsg;
+      });
+      setUsersMessages(newUsersMessages);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, [socket, usersMessages]);
 
   return (
     <div className="flex">
@@ -95,7 +138,7 @@ export default function Chat() {
             <h1 className="text-base font-semibold">Messages</h1>
           </div>
         </div>
-        <ChatList admin={admin} usersMessages={usersMessages} users={users} />
+        <ChatList admin={admin} usersMessages={usersMessages} />
       </div>
 
       {/* Right chat area */}
@@ -104,7 +147,7 @@ export default function Chat() {
           <div className="flex items-center gap-2">
             <h2 className="font-semibold">
               {activeChatId
-                ? `${users?.find((a) => a.userId === activeChatId)?.name} - ${users?.find((a) => a.userId === activeChatId)?.user.email}`
+                ? `${usersMessages.find((a) => a.user.userId === activeChatId)?.user.name} - ${usersMessages?.find((a) => a.user.userId === activeChatId)?.user.user.email}`
                 : "Chat"}
             </h2>
             <Popover
@@ -147,7 +190,11 @@ export default function Chat() {
             />
           )}
         </div>
-        <AdminChatbox admin={admin} usersMessages={usersMessages} />
+        <AdminChatbox
+          admin={admin}
+          usersMessages={usersMessages}
+          socket={socket}
+        />
       </div>
     </div>
   );

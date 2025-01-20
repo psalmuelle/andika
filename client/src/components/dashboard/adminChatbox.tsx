@@ -24,11 +24,12 @@ interface MessageType {
 export default function AdminChatbox({
   admin,
   usersMessages,
+  socket,
 }: {
   admin: ProfileType | undefined;
-  usersMessages: MessageType[][] | undefined;
+  usersMessages: { user: ProfileType; messages: MessageType[] }[] | undefined;
+  socket: Socket | undefined;
 }) {
-  const [socket, setSocket] = useState<Socket>();
   const [userIsTyping, setUserIsTyping] = useState<boolean>();
   const bottomRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -39,13 +40,8 @@ export default function AdminChatbox({
 
   useEffect(() => {
     if (usersMessages && activeChatId !== null) {
-      const usermessages = usersMessages.find(
-        (msg) =>
-          msg[0].receiverId === activeChatId ||
-          msg[0].senderId === activeChatId,
-      );
-
-      setMessages(usermessages || []);
+      const userMsg = usersMessages.find((a) => a.user.userId === activeChatId);
+      setMessages(userMsg?.messages || []);
     }
     if (activeChatId === null) {
       setMessages([]);
@@ -80,7 +76,12 @@ export default function AdminChatbox({
         console.log(e);
       }
     };
+
     markMessagesAsRead();
+
+    return () => {
+      socket?.off("markAsRead");
+    };
   }, [activeChatId, messages, admin, socket]);
 
   useEffect(() => {
@@ -90,34 +91,15 @@ export default function AdminChatbox({
   }, [messages, userIsTyping]);
 
   useEffect(() => {
-    if (!messages || !admin || activeChatId === null) return;
-
-    const socketio = socketInstance();
-    setSocket(socketio);
-
-    const roomData = {
-      user: activeChatId.toString(),
-      admin: admin?.userId.toString(),
-    };
-    socketio.emit("joinRoom", roomData);
-
-    // Listen for incoming private messages
-    socketio.on("chat", (newMessage) => {
-      setMessages((prev) => [...prev, newMessage]);
-    });
+    if (!socket || activeChatId === null) return;
 
     // Listen for other user typing
-    socketio.on("isTyping", (data) => {
+    socket.on("isTyping", (data) => {
       if (data.user === activeChatId.toString()) {
         setUserIsTyping(data.isTyping);
       }
     });
-
-    // Cleanup on component unmount
-    return () => {
-      socketio.disconnect();
-    };
-  }, [messages, admin, activeChatId]);
+  }, [socket, activeChatId]);
 
   const onTyping = () => {
     if (socket && activeChatId !== null) {
@@ -241,7 +223,9 @@ export default function AdminChatbox({
             rightButtons={
               <Button
                 type="submit"
-                onClick={onSendMessage}
+                onClick={() => {
+                  onSendMessage();
+                }}
                 size={"icon"}
                 className="rounded-full"
               >

@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ChatService } from './chat.service';
 import { ChatController } from './chat.controller';
-import { ChatGateway } from './chat.gateway';
 import { RedisModule } from '@nestjs-modules/ioredis';
 
 @Module({
@@ -13,7 +12,7 @@ import { RedisModule } from '@nestjs-modules/ioredis';
       }),
     }),
   ],
-  providers: [ChatService, ChatGateway],
+  providers: [ChatService],
   controllers: [ChatController],
 })
 export class ChatModule {}

@@ -97,33 +97,43 @@ function ChatWidget() {
 
   useEffect(() => {
     if (!user || !admin) return;
-
-    const socketio = socketInstance();
-    setSocket(socketio);
+    const newSocket = socketInstance();
 
     const roomData = {
       user: user?.id.toString(),
       admin: admin?.userId.toString(),
     };
-    socketio.emit("joinRoom", roomData);
 
-    // Listen for incoming private messages
-    socketio.on("chat", (newMessage) => {
+    newSocket.emit("joinRoom", roomData);
+    setSocket(newSocket);
+
+    return () => {
+      newSocket.emit("leaveRoom", roomData);
+      newSocket.disconnect();
+    };
+  }, [user, admin]);
+
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("chat", (newMessage: MessageType) => {
       setMessages((prev) => [...prev, newMessage]);
     });
+    return () => {
+      socket.disconnect();
+    };
+  }, [socket]);
 
-    // Listen for other user typing
-    socketio.on("isTyping", (data) => {
+  useEffect(() => {
+    if (!socket) return;
+    socket.on("isTyping", (data) => {
       if (data.user === admin?.userId.toString()) {
         setUserIsTyping(data.isTyping);
       }
     });
-
-    // Cleanup on component unmount
     return () => {
-      socketio.disconnect();
+      socket.off("isTyping");
     };
-  }, [user, admin]);
+  }, [socket]);
 
   // Mark messages as Read
   const markMessagesAsRead = async () => {
@@ -324,7 +334,9 @@ function ChatWidget() {
             rightButtons={
               <Button
                 type="submit"
-                onClick={onSendMessage}
+                onClick={() => {
+                  onSendMessage();
+                }}
                 size={"icon"}
                 className="rounded-full"
               >

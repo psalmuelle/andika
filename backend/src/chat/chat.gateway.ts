@@ -33,9 +33,7 @@ export class ChatGateway {
     const roomExists = this.server.sockets.adapter.rooms.has(room);
     if (roomExists) {
       const message = await this.chatService.saveMessage(data);
-      return this.server.to(room).emit('chat', message);
-    } else {
-      return;
+      this.server.to(room).emit('chat', message);
     }
   }
 
@@ -49,12 +47,22 @@ export class ChatGateway {
     client.emit('joinedRoom', room);
   }
 
+  @SubscribeMessage('leaveRoom')
+  handleLeaveRoom(
+    @MessageBody() data: { user: string; admin: string },
+    @ConnectedSocket() client: Socket,
+  ) {
+    const room = this.getRoomName(data.user, data.admin);
+    client.leave(room);
+    client.emit('leftRoom', room);
+  }
+
   @SubscribeMessage('isTyping')
   handleIsTyping(
     @MessageBody() data: { user: string; admin: string; isTyping: boolean },
   ) {
     const room = this.getRoomName(data.user, data.admin);
-    return this.server
+    this.server
       .to(room)
       .emit('isTyping', { user: data.user, isTyping: data.isTyping });
   }
@@ -65,7 +73,7 @@ export class ChatGateway {
   ) {
     const room = this.getRoomName(data.user, data.admin);
     const messages = await this.chatService.markMessagesAsRead(data.id);
-    return this.server.to(room).emit('messagesRead', messages);
+    this.server.to(room).emit('messagesRead', messages);
   }
 
   @SubscribeMessage('unreadMessages')
