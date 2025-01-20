@@ -13,7 +13,7 @@ export default function ProjectPage() {
     queryFn: getProjects,
   });
   return (
-    <div className="mt-6 px-[3%] pb-6">
+    <div className="mt-6 px-[3%] min-h-[70vh] pb-6">
       <h1 className="mt-8 font-semibold">All projects</h1>
 
       {isPending ? (

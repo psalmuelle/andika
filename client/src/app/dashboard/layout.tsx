@@ -39,9 +39,9 @@ export default function RootLayout({
                     <main className="mx-auto w-full max-w-[1440px] text-sm">
                       <DashboardHeader />
                       {children}
+                      <Footer />
                     </main>
                   </SidebarProvider>
-                  <Footer />
                   <Toaster />
                 </Suspense>
               </UserProvider>

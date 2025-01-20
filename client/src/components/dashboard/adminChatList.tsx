@@ -78,18 +78,21 @@ export function ChatList({
   return (
     <ScrollArea className="h-[70vh]">
       <div className="flex flex-col">
-        {usersMessages?.map((messages, i) => (
-          <ChatListItem
-            admin={admin!}
-            key={i}
-            messages={messages}
-            user={
-              users?.find(
-                (u) => u.userId === messages[0].senderId,
-              ) as ProfileType
-            }
-          />
-        ))}
+        {users &&
+          usersMessages &&
+          admin &&
+          usersMessages?.map((messages, i) => (
+            <ChatListItem
+              admin={admin!}
+              key={i}
+              messages={messages}
+              user={
+                users?.find(
+                  (u) => u.userId === messages[0].senderId,
+                ) as ProfileType
+              }
+            />
+          ))}
       </div>
     </ScrollArea>
   );

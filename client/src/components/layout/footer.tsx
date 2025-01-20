@@ -7,7 +7,7 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-8 px-[5%] text-center">
+    <footer className="mt-8 py-4 px-[5%] text-center">
       <div className="flex flex-wrap items-center justify-center lg:justify-between gap-2">
         <div className="">
           <Button asChild variant={"link"}>
@@ -71,7 +71,7 @@ export default function Footer() {
         </div>
       </div>
       {/* Main Text */}
-      <p className="my-2 text-sm leading-7">© {currentYear} Andika</p>
+      <p className="text-xs leading-7 text-right">© {currentYear} Andika</p>
     </footer>
   );
 }
