@@ -33,10 +33,18 @@ export class ProjectService {
         projectType: data.projectType,
         startDate: data.startDate,
         dueDate: data.dueDate,
-        ownerId: data.ownerId,
+        owner: {
+          connect: {
+            id: data.ownerId,
+          },
+        },
         status: data.status,
         fee: data.fee,
-        assignedPMId: adminId,
+        assignedPM: {
+          connect: {
+            userId: adminId,
+          },
+        },
       },
     });
 
