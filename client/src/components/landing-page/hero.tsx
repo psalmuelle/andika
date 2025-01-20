@@ -11,8 +11,8 @@ export default function Hero() {
       {/* For medium and larger screens */}
       <img
         className="hidden rounded-t-lg md:block"
-        src="/dashboard.png"
-        alt="Andika dashboard for managing projects"
+        src="/dashboard-large.png"
+        alt="Andika dashboard for managing projects (Desktop view)"
       />
     </div>
   );

@@ -27,7 +27,7 @@ export function ChatListItem({ messages, user, admin }: ChatListItemProps) {
   return (
     <div
       onClick={() => setActiveChatId(user.userId)}
-      className={`flex cursor-pointer items-center gap-3 p-4 hover:bg-zinc-100 ${activeChatId === user.userId ? "bg-zinc-100" : ""}`}
+      className={`flex cursor-pointer items-center gap-3 p-4 hover:bg-zinc-100 ${user && activeChatId === user.userId ? "bg-zinc-100" : ""}`}
     >
       <Avatar>
         <AvatarImage src={user.avatar} alt={user.name} />
@@ -87,9 +87,10 @@ export function ChatList({
               key={i}
               messages={messages}
               user={
-                users?.find(
+                users &&
+                (users?.find(
                   (u) => u.userId === messages[0].senderId,
-                ) as ProfileType
+                ) as ProfileType)
               }
             />
           ))}
