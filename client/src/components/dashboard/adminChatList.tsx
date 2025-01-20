@@ -26,13 +26,13 @@ export function ChatListItem({ messages, user, admin }: ChatListItemProps) {
   const { activeChatId, setActiveChatId } = useActiveChat();
   return (
     <div
-      onClick={() => setActiveChatId(user.userId)}
-      className={`flex cursor-pointer items-center gap-3 p-4 hover:bg-zinc-100 ${user && activeChatId === user.userId ? "bg-zinc-100" : ""}`}
+      onClick={() => setActiveChatId(user?.userId)}
+      className={`flex cursor-pointer items-center gap-3 p-4 hover:bg-zinc-100 ${activeChatId === user?.userId ? "bg-zinc-100" : ""}`}
     >
       <Avatar>
-        <AvatarImage src={user.avatar} alt={user.name} />
+        <AvatarImage src={user?.avatar} alt={user?.name} />
         <AvatarFallback>
-          {user.name
+          {user?.name
             .split(" ")
             .map((n) => n[0])
             .join("")}
@@ -40,7 +40,7 @@ export function ChatListItem({ messages, user, admin }: ChatListItemProps) {
       </Avatar>
       <div className="min-w-0 flex-1 text-sm">
         <div className="flex items-center justify-between">
-          <h3 className="truncate font-semibold">{user.name}</h3>
+          <h3 className="truncate font-semibold">{user?.name}</h3>
           <span className="text-xs text-slate-500">
             {timeAgo(messages[messages.length - 1]?.createdAt)}
           </span>
@@ -57,7 +57,7 @@ export function ChatListItem({ messages, user, admin }: ChatListItemProps) {
         <div className="flex h-5 w-5 items-center justify-center rounded-full bg-primary text-xs text-white">
           {
             messages.filter(
-              (m) => m.isRead === false && m.receiverId === admin.userId,
+              (m) => m.isRead === false && m.receiverId === admin?.userId,
             ).length
           }
         </div>
