@@ -75,9 +75,6 @@ export function ChatList({
   usersMessages: MessageType[][] | undefined;
   users: ProfileType[] | undefined;
 }) {
-  console.log("users", users);
-  console.log("userMessages", usersMessages);
-  console.log("amdin", admin);
   return (
     <ScrollArea className="h-[70vh]">
       <div className="flex flex-col">
@@ -91,7 +88,9 @@ export function ChatList({
               messages={messages}
               user={
                 users?.find(
-                  (u) => u.userId === messages[0].senderId,
+                  (u) =>
+                    u.userId === messages[0].senderId ||
+                    u.userId === messages[0].receiverId,
                 ) as ProfileType
               }
             />
