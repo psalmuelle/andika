@@ -110,9 +110,23 @@ body {
     0 0,
     22px 22px;
   background-color: #f5f5f5;
+  animation: move-bg 10s linear infinite;
 }
 
 .custom-select-placeholder .ant-select-selection-placeholder {
   color: black !important;
   cursor: pointer !important;
+}
+
+@keyframes move-bg {
+  0% {
+    background-position:
+      0 0,
+      22px 22px;
+  }
+  100% {
+    background-position:
+      44px 44px,
+      66px 66px;
+  }
 }

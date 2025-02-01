@@ -48,7 +48,7 @@ export default function Home() {
           impactful content that speaks to your audience.
         </Typography>
         <div className="mx-auto mt-6 flex w-fit flex-wrap items-center justify-center gap-4 px-[5%]">
-          <Button size={"lg"} variant={"outline"} className="rounded-full">
+          <Button size={"lg"} variant={"outline"} className="rounded-full py-2">
             <Link
               href={"/contact"}
               className="flex w-full items-center justify-center"
@@ -56,7 +56,7 @@ export default function Home() {
               Contact Us <ChatBubbleIcon className="ml-2 font-bold" />
             </Link>
           </Button>
-          <Button size={"lg"} className="rounded-full" asChild>
+          <Button size={"lg"} className="rounded-full py-2" asChild>
             <Link href={"/auth/login"}>
               Get Started <ArrowRightIcon className="ml-2 font-bold" />
             </Link>

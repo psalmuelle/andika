@@ -7,8 +7,8 @@ export default function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="mt-8 py-4 px-[5%] text-center">
-      <div className="flex flex-wrap items-center justify-center lg:justify-between gap-2">
+    <footer className="mt-8 px-[5%] py-4 text-center">
+      <div className="flex flex-wrap items-center justify-center gap-2 lg:justify-between">
         <div className="">
           <Button asChild variant={"link"}>
             <Link href="/privacy-policy">Privacy Policy</Link>
@@ -23,7 +23,7 @@ export default function Footer() {
         <div className="flex justify-center gap-4">
           <Button variant={"ghost"} asChild>
             <a
-              href="#"
+              href="https://www.linkedin.com/company/andika-docs/"
               target="_blank"
               rel="noreferrer"
               className="flex items-center"
@@ -35,7 +35,7 @@ export default function Footer() {
 
           <Button variant={"ghost"} asChild>
             <a
-              href="#"
+              href="https://www.facebook.com/andikadocs.tech"
               target="_blank"
               rel="noreferrer"
               className="flex items-center"
@@ -53,7 +53,7 @@ export default function Footer() {
 
           <Button variant={"ghost"} asChild>
             <a
-              href="#"
+              href="https://x.com/andika_docs"
               target="_blank"
               rel="noreferrer"
               className="flex items-center"
@@ -71,7 +71,7 @@ export default function Footer() {
         </div>
       </div>
       {/* Main Text */}
-      <p className="text-xs leading-7 text-right">© {currentYear} Andika</p>
+      <p className="text-right text-xs leading-7">© {currentYear} Andika</p>
     </footer>
   );
 }

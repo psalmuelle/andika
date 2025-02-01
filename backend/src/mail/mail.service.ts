@@ -37,7 +37,7 @@ export class MailService {
   ): Promise<void> {
     try {
       const mailOptions = {
-        from: '"AndikaDocs Support" <sam@andikadocs.tech>', // Sender email
+        from: '"AndikaDocs Team" <sam@andikadocs.tech>', // Sender email
         to, // Recipient(s)
         subject, // Subject line
         text, // Plain text body
@@ -60,7 +60,7 @@ export class MailService {
           message,
         },
       });
-      return;
+      return createdMessage;
     } catch (err) {
       console.error('Error reaching out to the team:', err);
       throw err;
@@ -94,7 +94,7 @@ export class MailService {
       await this.prismaSevice.contactTeam.delete({
         where: {
           id: parseInt(id),
-        }
+        },
       });
     } catch (err) {
       console.log('Error marking contact team as read:', err);

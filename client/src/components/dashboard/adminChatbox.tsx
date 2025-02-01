@@ -9,7 +9,6 @@ import { Input } from "react-chat-elements";
 import useActiveChat from "@/context/activeChat";
 import { ProfileType } from "types";
 import { Socket } from "socket.io-client";
-import socketInstance from "@/config/socket";
 import { ReloadIcon } from "@radix-ui/react-icons";
 
 interface MessageType {

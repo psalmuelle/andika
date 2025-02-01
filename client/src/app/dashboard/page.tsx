@@ -64,6 +64,8 @@ export default function Dashboard() {
       </div>
 
       <FloatButton
+        style={{ width: "48px", height: "48px", bottom: "30px", right: "20px" }}
+        type={"primary"}
         icon={<Mail className="h-5 w-5" />}
         className="md:hidden"
         badge={{ count: unreadMessages.length, color: "red" }}
@@ -71,8 +73,17 @@ export default function Dashboard() {
       />
 
       {openChatWidget && (
-        <div className="fixed bottom-24 right-[6%] h-[70vh] w-[80%] md:hidden">
-          <ChatWidget />
+        <div
+          className="fixed left-0 top-0 z-50 h-full w-full bg-black bg-opacity-50"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              setOpenChatWidget(false);
+            }
+          }}
+        >
+          <div className="fixed bottom-[84px] right-[5%] h-[80vh] w-[90%] md:hidden">
+            <ChatWidget />
+          </div>
         </div>
       )}
     </div>

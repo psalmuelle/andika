@@ -1,5 +1,5 @@
 export class OnboardingMessage {
-  message() {
+  message(name: string) {
     return `
 <!DOCTYPE html>
 <html lang="en">
@@ -41,52 +41,43 @@ export class OnboardingMessage {
 <body>
   <div class="container">
     <h1>Welcome to Andika!</h1>
-    <p>Hi [Client's First Name],</p>
+    <p>Hi <strong>${name}</strong>,</p>
 
-    <p>We welcome you to Andika, where you can effortlessly request high-quality technical articles to spotlight your product, brand or idea.</p>
-    
-    <p>Our mission is simple: to bridge the gap between technology and its audience. We deliver technical articles that explain the how and highlight the why so your product resonates with developers, users, and decision-makers alike.</p>
+    <p>Welcome to <strong>Andika</strong>, your trusted partner in crafting high-quality technical documentation and articles that spotlight your product, brand, or idea.</p>
 
-    <h2>Here's What to Expect from Us:</h2>
-    <h3>1. Discovery and Planning</h3>
-    <p>Our first step is to understand your product inside and out. We'll start wih a kickoff meeting to dive into your goals, key features, and the core problems your product solves.</p>
+    <p>At Andika, our mission is simple: to bridge the gap between technology and its audience. We specialize in creating documentation and articles that explain the "how" and emphasize the "why," helping your product resonate with developers, users, and decision-makers alike.</p>
 
-    <h3>2. Tailored Content Strategy</h3>
-    <p>Based on our discussion, we’ll create a content plan specifically designed for your audience. Every article, guide, and blog post will serve a purpose—whether it’s to explain complex concepts, demonstrate use cases, or inspire adoption.</p>
+    <h2>Our Process</h2>
+    <p>Our process is simple and efficient. Here’s how it works:</p>
 
-    <h3>3. End-to-End Article Creation</h3>
-    <p>From research to revisions, our team takes care of everything. We work closely with you for feedback and ensure that each piece aligns with your brand’s voice and vision.</p>
+    <ul>
+      <li><strong>Submit Your Request</strong>: Begin by filling out our project request form at <a href="https://www.andikadocs.tech/projects/create">https://andikadocs.tech/projects/create</a>.</li>
+      <li><strong>Project Review</strong>: We’ll promptly review your request and contact you to discuss the project details. This typically takes less than 5 minutes.</li>
+      <li><strong>Agreement and Payment</strong>: Once we agree on the project scope, we’ll send you a payment invoice. To begin, we require partial payment upfront. We accept payments in USD, EUR, and cryptocurrency.</li>
+      <li><strong>First Draft Delivery</strong>: Our expert team of writers will work on your project and deliver the first draft within the agreed timeline.</li>
+      <li><strong>Feedback and Revisions</strong>: You’ll have the opportunity to review the draft and provide feedback. We’ll revise the document as needed until you’re 100% satisfied.</li>
+      <li><strong>Final Delivery</strong>: Once approved, we’ll deliver the final document in your preferred format.</li>
+      <li><strong>Share Your Story</strong>: Use your new documentation to showcase your product to the world!</li>
+    </ul>
 
-    <h3>4. Optimized for Reach</h3>
-    <p>We understand that great content only works if it reaches the right audience. Our articles are optimized for search engines and social platforms, making it easy for developers and users to discover your product.</p>
+    <h2>What’s Next?</h2>
+    <p>Getting started is as easy as visiting <a href="https://andikadocs.tech/projects/create">https://andikadocs.tech/projects/create</a> to submit your request. We’ll get back to you promptly and begin the process.</p>
 
-    <h2>Next Steps</h2>
-    <ol>
-      <li><strong>Complete Our Onboarding Questionnaire</strong>  
-        <p>This will help us understand your product better and streamline our process.</p></li>
-      <li><strong>Schedule a Kickoff Call</strong>  
-        <p>Book a time that works best for you to go over initial ideas and answer any questions.</p></li>
-    </ol>
+    <h2>Need Assistance?</h2>
+    <p>Have questions or specific requests? We’re here to help! Reach out to us anytime at <a href="mailto:sam@andikadocs.tech">sam@andikadocs.tech</a>. You can also use the chatbox in your dashboard for real-time assistance.</p>
 
-    <h2>Need Help?</h2>
-    <p>Have any questions about the process or specific requests? Reach out to us anytime at <a href="mailto:support@agencyname.com">support@agencyname.com</a>.</p>
+    <p>Thank you for trusting <strong>Andika</strong> to bring your product’s story to life. We’re excited to partner with you and showcase your innovation to the world!</p>
 
-    <p>Thank you for trusting Andika with your product’s story. We’re excited to work together to bring your innovation to the world!</p>
-
-      <div class="footer">
-        <p>Warm regards,</p>
-        <p
-          >Team Andika<br />
-          <br />
-          <a href="[Website URL]">[Website URL]</a> |
-          <a href="mailto:[Contact Email]">[Contact Email]</a> | [Phone
-          Number]</p
-        >
-      </div>
+    <div class="footer">
+      <p>Warm regards,</p>
+      <p>
+        <strong>Team Andika</strong><br />
+        <a href="https://www.andikadocs.tech">andikadocs.tech</a> | <a href="mailto:sam@andikadocs.tech">sam@andikadocs.tech</a>
+      </p>
+    </div>
   </div>
 </body>
 </html>
-
 `;
   }
 }

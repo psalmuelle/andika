@@ -45,7 +45,7 @@ export class ProfileService {
         newProfile.user.email,
         'Welcome To Andika',
         "Welcome to Andika! We're excited to have you on board. Let's get started by creating your first project. Head over to dashboard to create your first project.",
-        this.onboardingMsg.message(),
+        this.onboardingMsg.message(newProfile.name),
       );
       return newProfile;
     } catch (err) {

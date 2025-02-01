@@ -107,10 +107,7 @@ function ChatWidget() {
     newSocket.emit("joinRoom", roomData);
     setSocket(newSocket);
 
-    return () => {
-      newSocket.emit("leaveRoom", roomData);
-      newSocket.disconnect();
-    };
+    return () => {};
   }, [user, admin]);
 
   useEffect(() => {
@@ -204,7 +201,7 @@ function ChatWidget() {
           <div className="flex items-center gap-3">
             <Image
               src={admin?.avatar || "https://avatar.iran.liara.run/public/23"}
-              alt={admin?.name}
+              alt={admin?.name || 'Admin'}
               width={32}
               height={32}
               className="h-8 w-8 rounded-full object-cover"

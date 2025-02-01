@@ -172,12 +172,12 @@ export default function Contact() {
                 <h3 className="font-medium text-gray-900">Social Media</h3>
                 <p className="text-sm text-gray-600">
                   Follow us on:{" "}
-                  <a href="#" className="text-blue-600 hover:underline">
+                  <a href="https://x.com/andika_docs" className="text-blue-600 hover:underline">
                     Twitter
                   </a>
                   ,{" "}
                   <a
-                    href="https://linkedin.com/company/andika"
+                    href="https://www.linkedin.com/company/andika-docs/"
                     className="text-blue-600 hover:underline"
                   >
                     LinkedIn
