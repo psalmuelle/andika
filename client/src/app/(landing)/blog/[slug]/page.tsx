@@ -80,7 +80,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </Button>
         </Link>
         <div className="space-y-4">
-          <h1 className="text-5xl leading-5 font-bold max-sm:text-3xl">{post.title}</h1>
+          <h1 className="text-5xl font-bold max-sm:text-3xl">{post.title}</h1>
 
           <div className="flex flex-wrap gap-2">
             {post.tags.map((tag) => (
