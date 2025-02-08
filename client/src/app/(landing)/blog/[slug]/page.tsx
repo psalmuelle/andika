@@ -71,7 +71,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   }
 
   return (
-    <article className="mx-auto max-w-3xl space-y-12 px-8 pb-14 pt-10">
+    <article className="mx-auto max-w-3xl space-y-12 px-2 pb-14 pt-10">
       <header className="space-y-8">
         <Link href="/blog">
           <Button variant="ghost" size="sm">
@@ -80,7 +80,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
           </Button>
         </Link>
         <div className="space-y-4">
-          <h1 className="text-5xl font-bold max-sm:text-3xl">{post.title}</h1>
+          <h1 className="text-5xl leading-5 font-bold max-sm:text-3xl">{post.title}</h1>
 
           <div className="flex flex-wrap gap-2">
             {post.tags.map((tag) => (
