@@ -1,18 +1,18 @@
 const clients = [
   {
     id: 1,
-    name: "Aboo",
-    image: "/company-1.jpg",
-  },
-  {
-    id: 2,
     name: "Virtua Systems",
     image: "/company-2.png",
   },
   {
-    id: 4,
+    id: 2,
     name: "Mon AI",
     image: "/company-4.jpg",
+  },
+  {
+    id: 3,
+    name: "Aboo",
+    image: "/company-1.jpg",
   },
 ];
 const offers = [
@@ -78,7 +78,7 @@ const stats = [
 const testimonials = [
   {
     id: 1,
-    name: "Alex Johnson",
+    name: "Lotanna Johnson",
     title: "CEO, TechWave Inc.",
     image: "/images/testimonial-alex.png",
     comment:
@@ -107,7 +107,7 @@ const pricelist = [
     id: 1,
     title: "Technical Articles",
     description: "In-depth articles explaining complex technical concepts.",
-    price: "$249",
+    price: "$149",
     unit: "/article",
     features: [
       "SEO-optimized content",
@@ -133,8 +133,8 @@ const pricelist = [
     id: 3,
     title: "Editing & Proofreading",
     description: "Improve the quality and accuracy of your technical content.",
-    price: "$149",
-    unit: "/document",
+    price: "$49",
+    unit: "/content",
     features: [
       "Grammar and syntax checks",
       "Technical accuracy review",

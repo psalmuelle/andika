@@ -1,6 +1,11 @@
 "use client";
 
-import { likeBlogPost, unlikeBlogPost, hasLikedBlogPost } from "@/lib/blog";
+import {
+  likeBlogPost,
+  unlikeBlogPost,
+  hasLikedBlogPost,
+  getBlogPost,
+} from "@/lib/blog";
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -8,16 +13,18 @@ import { useToast } from "@/hooks/use-toast";
 
 interface LikeButtonProps {
   slug: string;
-  initialLikes: number;
 }
 
-export function LikeButton({ slug, initialLikes }: LikeButtonProps) {
+export function LikeButton({ slug }: LikeButtonProps) {
   const { toast } = useToast();
   const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(initialLikes);
+  const [likeCount, setLikeCount] = useState<number>();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    getBlogPost(slug).then((post) => {
+      setLikeCount(post._count.likes);
+    });
     hasLikedBlogPost(slug)
       .then((hasLiked) => {
         setLiked(hasLiked);
@@ -32,7 +39,8 @@ export function LikeButton({ slug, initialLikes }: LikeButtonProps) {
     try {
       if (!liked) {
         await likeBlogPost(slug);
-        setLikeCount((prev) => prev + 1);
+        const blog = await getBlogPost(slug);
+        setLikeCount(blog._count.likes);
         setLiked(true);
         toast({
           title: "Liked post",

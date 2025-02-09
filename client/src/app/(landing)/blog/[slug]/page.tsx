@@ -129,7 +129,7 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       </div>
 
       <footer className="flex justify-center">
-        <LikeButton slug={params.slug} initialLikes={post._count.likes} />
+        <LikeButton slug={params.slug}/>
       </footer>
     </article>
   );

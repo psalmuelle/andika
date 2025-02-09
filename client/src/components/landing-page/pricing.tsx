@@ -32,7 +32,8 @@ export default function PriceCard({ tag }: CardProps) {
       </CardHeader>
       <CardContent className="grid gap-4">
         <p className="text-3xl font-bold">
-          {tag.price} <span className="text-base font-normal">{tag.unit}</span>
+          <span className="font-mono text-lg">FROM</span> {tag.price}{" "}
+          <span className="text-base font-normal">{tag.unit}</span>
         </p>
         <Button size={"lg"} className="mb-2 w-full" asChild>
           <Link href={tag.link}>Get Started</Link>
