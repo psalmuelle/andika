@@ -1,10 +1,12 @@
+"use client";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { ArrowRightIcon, Heart } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import { BlogPost } from "@/lib/blog";
+import { BlogPost, getBlogPost } from "@/lib/blog";
 
 interface BlogPreviewCardProps {
   blog: BlogPost;
@@ -12,6 +14,16 @@ interface BlogPreviewCardProps {
 }
 
 export function PublicBlogCard({ blog, className }: BlogPreviewCardProps) {
+  const [likes, setLikes] = useState<number>(0);
+  useEffect(() => {
+    if (!blog) return;
+    const getBlog = async () => {
+      const fetchedBlog = await getBlogPost(blog.slug);
+      setLikes(fetchedBlog._count.likes);
+    };
+
+    getBlog();
+  }, [blog]);
   return (
     <Card className={cn("flex h-full flex-col", className)}>
       {blog.featuredImage && (
@@ -46,7 +58,7 @@ export function PublicBlogCard({ blog, className }: BlogPreviewCardProps) {
           </div>
           <div className="ml-auto flex items-center gap-x-1 font-medium">
             <Heart className="h-4 w-4 text-red-500" />
-            {blog._count.likes}
+            {likes}
           </div>
         </div>
       </CardHeader>
