@@ -130,7 +130,7 @@ const SkeletonThree = () => {
 const SkeletonFour = () => {
   const first = {
     initial: {
-      x: 20,
+      x: 16,
       rotate: -5,
     },
     hover: {
@@ -140,7 +140,7 @@ const SkeletonFour = () => {
   };
   const second = {
     initial: {
-      x: -20,
+      x: -16,
       rotate: 5,
     },
     hover: {
@@ -153,7 +153,7 @@ const SkeletonFour = () => {
       initial="initial"
       animate="animate"
       whileHover="hover"
-      className="dark:bg-dot-white/[0.2] bg-dot-black/[0.2] flex h-full min-h-[6rem] w-full flex-1 flex-row space-x-2"
+      className="dark:bg-dot-white/[0.2] bg-dot-black/[0.2] mx-auto flex h-full min-h-[6rem] w-full gap-2"
     >
       <motion.div
         variants={first}
@@ -185,7 +185,7 @@ const SkeletonFour = () => {
           Technical instructions
         </p>
         <p className="mt-4 rounded-full border border-orange-500 bg-orange-100 px-2 py-0.5 text-base text-orange-600 dark:bg-orange-900/20">
-          Instructions
+          T.I
         </p>
       </motion.div>
     </motion.div>
@@ -242,7 +242,7 @@ const SkeletonFive = () => {
 
 export function OfferList() {
   return (
-    <div className="w-full mx-auto px-[4%]">
+    <div className="mx-auto w-full px-[4%]">
       <div className="">
         <section className="mt-16 flex items-center justify-center gap-10">
           <div className="max-w-2xl">
@@ -274,7 +274,7 @@ export function OfferList() {
 
       <div className="">
         <section className="mt-16 flex items-center justify-center gap-10">
-          <div className="dark:bg-dot-white/[0.2] bg-dot-black/[0.2] my-8 flex h-full min-h-[6rem] flex-1 flex-col w-full space-y-2 max-md:hidden">
+          <div className="dark:bg-dot-white/[0.2] bg-dot-black/[0.2] my-8 flex h-full min-h-[6rem] w-full flex-1 flex-col space-y-2 max-md:hidden">
             <SkeletonTwo />
           </div>
 
@@ -283,7 +283,7 @@ export function OfferList() {
 
             {/*  */}
 
-            <div className="dark:bg-dot-white/[0.2] bg-dot-black/[0.2] my-8 flex h-full min-h-[6rem] flex-1 flex-col w-full space-y-2 md:hidden">
+            <div className="dark:bg-dot-white/[0.2] bg-dot-black/[0.2] my-8 flex h-full min-h-[6rem] w-full flex-1 flex-col space-y-2 md:hidden">
               <SkeletonTwo />
             </div>
             {/*  */}
@@ -334,7 +334,7 @@ export function OfferList() {
       <div className="">
         <section className="mt-16 flex items-center justify-center gap-10">
           <div className="max-md:hidden">
-            <div className="dark:bg-dot-white/[0.2] bg-dot-black/[0.2] h-full min-h-[6rem]">
+            <div className="h-full min-h-[6rem]">
               <SkeletonFour />
             </div>
           </div>
@@ -343,7 +343,7 @@ export function OfferList() {
             <h3 className="text-3xl font-semibold">User Guides and Manuals</h3>
 
             {/*  */}
-            <div className="dark:bg-dot-white/[0.2] bg-dot-black/[0.2] my-8 flex h-full min-h-[6rem] flex-1 flex-col space-y-2 md:hidden">
+            <div className="mx-auto my-8 h-full min-h-[6rem] w-[82vw] md:hidden">
               <SkeletonFour />
             </div>
 

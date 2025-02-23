@@ -1,25 +1,18 @@
-import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import Typography from "@/components/ui/typography";
-import { clients, pricelist, stats } from "@/constant/landingPage";
-import Link from "next/link";
-import PriceCard from "@/components/landing-page/pricing";
 import Faq from "@/components/landing-page/faq";
 import Testimonials from "@/components/landing-page/testimonial";
 import BlogPreview from "@/components/blog/landing-page-preview";
 import Hero from "@/components/landing-page/hero";
 import IntroSection from "@/components/landing-page/introSection";
-import { Divider, Rate } from "antd";
+import { Divider } from "antd";
 import AboutAndika from "@/components/landing-page/subHero";
 import {
-  BadgeCheck,
   BookOpenIcon,
   CircleHelpIcon,
   LayoutGridIcon,
   LightbulbIcon,
-  PowerIcon,
   ReceiptIcon,
-  RocketIcon,
   SmileIcon,
 } from "lucide-react";
 import { OfferList } from "@/components/landing-page/offersList";
@@ -106,9 +99,9 @@ export default function Home() {
             Follow our simple steps to get started quickly and efficiently with
             AndikaDocs&apos;s seamless process.
           </Typography>
-        </div>
 
-        <OurProcess />
+          <OurProcess />
+        </div>
       </section>
 
       <Divider />
