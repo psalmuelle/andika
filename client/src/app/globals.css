@@ -93,40 +93,18 @@ body {
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
-
-.hero-bg {
-  background-image: radial-gradient(#a1a1aa 1px, transparent 1px),
-    radial-gradient(#a1a1aa 1px, transparent 1px);
-  background-size: 44px 44px;
-  background-position:
-    0 0,
-    22px 22px;
-  background-color: #f5f5f5;
-  animation: move-bg 10s linear infinite;
-}
-
 .custom-select-placeholder .ant-select-selection-placeholder {
   color: black !important;
   cursor: pointer !important;
 }
 
-@keyframes move-bg {
-  0% {
-    background-position:
-      0 0,
-      22px 22px;
+
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-  100% {
-    background-position:
-      44px 44px,
-      66px 66px;
+  body {
+    @apply bg-background text-foreground;
   }
 }

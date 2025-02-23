@@ -13,7 +13,7 @@ export default function Header() {
   const [openMobileMenu, setOpenMobileMenu] = useState(false);
 
   return (
-    <header className="sticky top-8 z-20 mx-auto mt-8 max-w-5xl px-5">
+    <header className="sticky top-8 z-50 mx-auto mt-8 max-w-5xl px-5">
       <div className="relative flex items-center justify-between gap-2 rounded-full bg-primary/90 p-3 shadow-sm backdrop-blur">
         <Button
           asChild
